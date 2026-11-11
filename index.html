@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koperasi Jamaya - Database Excel Viewer</title>
+    <title>Koperasi Jamaya - Auto Load Database</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- SheetJS CDN -->
@@ -30,25 +30,27 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col selection:bg-emerald-600 selection:text-white">
 
-    <!-- WELCOME / SYNC REQUIRED SCREEN (JIKA BELUM ADA FILE DISYNC) -->
-    <div id="sync-screen" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 text-center space-y-6 border border-slate-200">
-            <div class="w-20 h-20 bg-emerald-600 rounded-3xl mx-auto flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-emerald-600/30">
-                <i class="fa-solid fa-file-excel"></i>
+    <!-- LOADING / AUTO-LOAD SCREEN -->
+    <div id="sync-screen" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 text-center space-y-6 border border-slate-200">
+            <div class="w-16 h-16 bg-emerald-600 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-emerald-600/30">
+                <i class="fa-solid fa-database animate-pulse"></i>
             </div>
             <div>
-                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Koperasi Jamaya</h1>
-                <p class="text-slate-600 text-xs mt-2">Sistem membaca murni dari file database <strong>FILE SYNC.xlsx</strong>. Silakan pilih file excel Anda untuk memuat data.</p>
+                <h1 class="text-xl font-black text-slate-900 tracking-tight">Koperasi Jamaya</h1>
+                <p id="load-status-text" class="text-slate-600 text-xs mt-2">Sedang memuat database <strong>FILE SYNC.xlsx</strong> dari folder...</p>
             </div>
 
-            <div class="pt-2">
+            <div id="manual-load-box" class="hidden pt-2 space-y-3">
+                <p class="text-[11px] text-amber-700 bg-amber-50 p-3 rounded-xl border border-amber-200 font-medium">
+                    Browser memblokir pembacaan otomatis file lokal. Silakan klik tombol di bawah sekali saja untuk menghubungkan database:
+                </p>
                 <input type="file" id="initial-excel-input" accept=".xlsx, .xls" class="hidden" onchange="loadExcelDatabase(event)">
-                <button onclick="document.getElementById('initial-excel-input').click()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg transition flex items-center justify-center gap-2.5 text-sm">
-                    <i class="fa-solid fa-folder-open text-base"></i>
-                    <span>Pilih & Muat FILE SYNC.xlsx</span>
+                <button onclick="document.getElementById('initial-excel-input').click()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2 text-xs">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Pilih FILE SYNC.xlsx di Folder</span>
                 </button>
             </div>
-            <p class="text-[11px] text-slate-500">Data tidak ditanam di kode, selalu merujuk pada file Excel.</p>
         </div>
     </div>
 
@@ -64,7 +66,7 @@
                     </div>
                     <div>
                         <h2 class="font-black text-slate-900 text-sm sm:text-base tracking-tight">Koperasi Jamaya</h2>
-                        <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-extrabold rounded border border-emerald-200 uppercase">Excel Viewer</span>
+                        <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-extrabold rounded border border-emerald-200 uppercase">Folder Database</span>
                     </div>
                 </div>
             </div>
@@ -101,13 +103,12 @@
             <div class="p-4 border-t border-slate-200 bg-slate-50 hidden lg:block">
                 <div class="flex items-center justify-between">
                     <div class="overflow-hidden">
-                        <div class="text-xs font-bold text-slate-900 truncate">Database Terhubung</div>
-                        <div id="db-filename" class="text-[10px] text-emerald-800 font-bold truncate">FILE SYNC.xlsx</div>
+                        <div class="text-xs font-bold text-slate-900 truncate">Database Folder</div>
+                        <div class="text-[10px] text-emerald-800 font-bold truncate">FILE SYNC.xlsx</div>
                     </div>
-                    <button onclick="document.getElementById('reupload-excel-input').click()" title="Ganti / Update File Excel" class="w-9 h-9 rounded-xl bg-white border border-slate-300 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 text-slate-700 flex items-center justify-center transition shrink-0 shadow-2xs">
+                    <button onclick="location.reload()" title="Refresh / Muat Ulang Data" class="w-9 h-9 rounded-xl bg-white border border-slate-300 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 text-slate-700 flex items-center justify-center transition shrink-0 shadow-2xs">
                         <i class="fa-solid fa-rotate text-xs"></i>
                     </button>
-                    <input type="file" id="reupload-excel-input" accept=".xlsx, .xls" class="hidden" onchange="loadExcelDatabase(event)">
                 </div>
             </div>
         </aside>
@@ -119,14 +120,13 @@
             <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-25 px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between no-print shadow-2xs">
                 <div>
                     <h1 id="page-title" class="text-base sm:text-lg font-black text-slate-900">Dashboard Utama</h1>
-                    <p id="page-subtitle" class="text-[11px] sm:text-xs text-slate-600 hidden sm:block">Membaca langsung dari file Excel FILE SYNC.xlsx</p>
+                    <p id="page-subtitle" class="text-[11px] sm:text-xs text-slate-600 hidden sm:block">Membaca langsung dari FILE SYNC.xlsx di folder bersama</p>
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3">
-                    <input type="file" id="top-excel-input" accept=".xlsx, .xls" class="hidden" onchange="loadExcelDatabase(event)">
-                    <button onclick="document.getElementById('top-excel-input').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5 sm:gap-2">
-                        <i class="fa-solid fa-file-excel text-xs sm:text-sm"></i>
-                        <span>Sync / Ganti File Excel</span>
+                    <button onclick="location.reload()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5 sm:gap-2">
+                        <i class="fa-solid fa-rotate text-xs"></i>
+                        <span>Muat Ulang Data Excel</span>
                     </button>
                 </div>
             </header>
@@ -493,7 +493,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT: PURE EXCEL PARSER (TANPA DATABASE TERTANAM DI KODE) -->
+    <!-- JAVASCRIPT: OTOMATIS BACA FILE EXCEL DI FOLDER YANG SAMA -->
     <script>
         let appData = {
             members: [],
@@ -501,124 +501,140 @@
             loans: []
         };
 
+        // Otomatis fetch file "FILE SYNC.xlsx" dari folder yang sama saat halaman dibuka
+        window.onload = function() {
+            fetch('FILE SYNC.xlsx')
+                .then(response => {
+                    if (!response.ok) throw new Error("File tidak ditemukan otomatis.");
+                    return response.arrayBuffer();
+                })
+                .then(buffer => {
+                    processWorkbook(buffer);
+                })
+                .catch(err => {
+                    console.log("Auto-load gagal (keamanan browser lokal), menampilkan opsi pilih file:", err);
+                    document.getElementById('load-status-text').innerText = "Silakan hubungkan file database di folder:";
+                    document.getElementById('manual-load-box').classList.remove('hidden');
+                });
+        };
+
         function loadExcelDatabase(e) {
             const file = e.target.files[0];
             if (!file) return;
 
-            document.getElementById('db-filename').innerText = file.name;
-
             const reader = new FileReader();
             reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-
-                    let parsedMembers = [];
-                    let parsedTransactions = [];
-                    let parsedLoans = [];
-
-                    if (workbook.Sheets["ANGGOTA"]) {
-                        const rowsA = XLSX.utils.sheet_to_json(workbook.Sheets["ANGGOTA"], { header: 1 });
-                        for (let i = 1; i < rowsA.length; i++) {
-                            const r = rowsA[i];
-                            const nama = r[5] ? String(r[5]).trim() : '';
-                            if (nama) {
-                                parsedMembers.push({
-                                    noMasuk: r[0] ? String(r[0]).trim() : '-',
-                                    noKeluar: r[1] ? String(r[1]).trim() : '-',
-                                    tglGabung: typeof r[2] === 'number' ? excelDateToJSDate(r[2]) : (r[2] || '-'),
-                                    noAgt: r[3] !== undefined ? String(r[3]).trim() : String(i),
-                                    nik: r[4] ? String(r[4]).trim() : '-',
-                                    nama: nama,
-                                    tglLahir: typeof r[6] === 'number' ? excelDateToJSDate(r[6]) : (r[6] || '-'),
-                                    bagian: r[7] ? String(r[7]).trim() : '-',
-                                    jabatan: r[8] ? String(r[8]).trim() : 'Anggota',
-                                    rek: r[9] ? String(r[9]).trim() : '-',
-                                    bank: r[10] ? String(r[10]).trim() : '-',
-                                    hp: r[11] ? String(r[11]).trim() : '-',
-                                    alamat: r[12] ? String(r[12]).trim() : '-',
-                                    jk: r[13] ? String(r[13]).trim() : '-'
-                                });
-                            }
-                        }
-                    }
-
-                    if (workbook.Sheets["TRANSAKSI"]) {
-                        const rowsT = XLSX.utils.sheet_to_json(workbook.Sheets["TRANSAKSI"], { header: 1 });
-                        for (let i = 1; i < rowsT.length; i++) {
-                            const r = rowsT[i];
-                            const noTrx = r[0] ? String(r[0]).trim() : '';
-                            if (noTrx || r[5] || r[6]) {
-                                parsedTransactions.push({
-                                    noTrx: noTrx || `TX00${i}`,
-                                    tgl: typeof r[1] === 'number' ? excelDateToJSDate(r[1]) : (r[1] || '-'),
-                                    noAgt: r[2] !== undefined ? String(r[2]).trim() : '-',
-                                    noReff: r[3] !== undefined ? String(r[3]).trim() : '0',
-                                    kodeTrans: r[4] ? String(r[4]).trim() : '-',
-                                    masuk: parseFloat(r[5]) || 0,
-                                    keluar: parseFloat(r[6]) || 0,
-                                    ket: r[7] ? String(r[7]).trim() : '-',
-                                    kodeSaldo: r[8] ? String(r[8]).trim() : '-',
-                                    nama: r[9] ? String(r[9]).trim() : 'Umum',
-                                    jenisSimpanan: r[10] ? String(r[10]).trim() : '-',
-                                    saldoGlobal: parseFloat(r[11]) || 0,
-                                    saldoRek: parseFloat(r[12]) || 0,
-                                    saldoCash: parseFloat(r[13]) || 0
-                                });
-                            }
-                        }
-                    }
-
-                    if (workbook.Sheets["PINJAMAN"]) {
-                        const rowsP = XLSX.utils.sheet_to_json(workbook.Sheets["PINJAMAN"], { header: 1 });
-                        for (let i = 1; i < rowsP.length; i++) {
-                            const r = rowsP[i];
-                            const noPj = r[0] ? String(r[0]).trim() : '';
-                            if (noPj) {
-                                parsedLoans.push({
-                                    noPj: noPj,
-                                    kodeTr: r[1] ? String(r[1]).trim() : '-',
-                                    tgl: typeof r[2] === 'number' ? excelDateToJSDate(r[2]) : (r[2] || '-'),
-                                    noAgt: r[3] !== undefined ? String(r[3]).trim() : '-',
-                                    nama: r[4] ? String(r[4]).trim() : '-',
-                                    jumlah: parseFloat(r[5]) || 0,
-                                    keperluan: r[6] ? String(r[6]).trim() : '-',
-                                    tenor: r[7] || 0,
-                                    angsuranPokok: parseFloat(r[8]) || 0,
-                                    angsuranAdm: parseFloat(r[9]) || 0,
-                                    jumlahPerBulan: parseFloat(r[10]) || 0,
-                                    totalPengembalian: parseFloat(r[11]) || 0,
-                                    pembayaran: r[14] ? String(r[14]).trim() : '-',
-                                    ttd: r[15] ? String(r[15]).trim() : '-',
-                                    jaminan: r[16] ? String(r[16]).trim() : '-',
-                                    potPj: r[17] || '-',
-                                    potWajib: r[18] || '-',
-                                    potKasbon: r[19] || '-',
-                                    tenorAwal: r[20] || '-',
-                                    catatan: r[21] ? String(r[21]).trim() : '-',
-                                    angsuranMasuk: parseFloat(r[22]) || 0
-                                });
-                            }
-                        }
-                    }
-
-                    appData.members = parsedMembers;
-                    appData.transactions = parsedTransactions;
-                    appData.loans = parsedLoans;
-
-                    // Hilangkan layar selamat datang, tampilkan aplikasi
-                    document.getElementById('sync-screen').classList.add('hidden');
-                    document.getElementById('app-view').classList.remove('hidden');
-
-                    renderAllViews();
-                    alert("Berhasil memuat data dari " + file.name + "!");
-
-                } catch (err) {
-                    console.error(err);
-                    alert("Gagal membaca file Excel. Pastikan sheet ANGGOTA, TRANSAKSI, dan PINJAMAN tersedia.");
-                }
+                processWorkbook(e.target.result);
             };
             reader.readAsArrayBuffer(file);
+        }
+
+        function processWorkbook(arrayBuffer) {
+            try {
+                const data = new Uint8Array(arrayBuffer);
+                const workbook = XLSX.read(data, { type: 'array' });
+
+                let parsedMembers = [];
+                let parsedTransactions = [];
+                let parsedLoans = [];
+
+                if (workbook.Sheets["ANGGOTA"]) {
+                    const rowsA = XLSX.utils.sheet_to_json(workbook.Sheets["ANGGOTA"], { header: 1 });
+                    for (let i = 1; i < rowsA.length; i++) {
+                        const r = rowsA[i];
+                        const nama = r[5] ? String(r[5]).trim() : '';
+                        if (nama) {
+                            parsedMembers.push({
+                                noMasuk: r[0] ? String(r[0]).trim() : '-',
+                                noKeluar: r[1] ? String(r[1]).trim() : '-',
+                                tglGabung: typeof r[2] === 'number' ? excelDateToJSDate(r[2]) : (r[2] || '-'),
+                                noAgt: r[3] !== undefined ? String(r[3]).trim() : String(i),
+                                nik: r[4] ? String(r[4]).trim() : '-',
+                                nama: nama,
+                                tglLahir: typeof r[6] === 'number' ? excelDateToJSDate(r[6]) : (r[6] || '-'),
+                                bagian: r[7] ? String(r[7]).trim() : '-',
+                                jabatan: r[8] ? String(r[8]).trim() : 'Anggota',
+                                rek: r[9] ? String(r[9]).trim() : '-',
+                                bank: r[10] ? String(r[10]).trim() : '-',
+                                hp: r[11] ? String(r[11]).trim() : '-',
+                                alamat: r[12] ? String(r[12]).trim() : '-',
+                                jk: r[13] ? String(r[13]).trim() : '-'
+                            });
+                        }
+                    }
+                }
+
+                if (workbook.Sheets["TRANSAKSI"]) {
+                    const rowsT = XLSX.utils.sheet_to_json(workbook.Sheets["TRANSAKSI"], { header: 1 });
+                    for (let i = 1; i < rowsT.length; i++) {
+                        const r = rowsT[i];
+                        const noTrx = r[0] ? String(r[0]).trim() : '';
+                        if (noTrx || r[5] || r[6]) {
+                            parsedTransactions.push({
+                                noTrx: noTrx || `TX00${i}`,
+                                tgl: typeof r[1] === 'number' ? excelDateToJSDate(r[1]) : (r[1] || '-'),
+                                noAgt: r[2] !== undefined ? String(r[2]).trim() : '-',
+                                noReff: r[3] !== undefined ? String(r[3]).trim() : '0',
+                                kodeTrans: r[4] ? String(r[4]).trim() : '-',
+                                masuk: parseFloat(r[5]) || 0,
+                                keluar: parseFloat(r[6]) || 0,
+                                ket: r[7] ? String(r[7]).trim() : '-',
+                                kodeSaldo: r[8] ? String(r[8]).trim() : '-',
+                                nama: r[9] ? String(r[9]).trim() : 'Umum',
+                                jenisSimpanan: r[10] ? String(r[10]).trim() : '-',
+                                saldoGlobal: parseFloat(r[11]) || 0,
+                                saldoRek: parseFloat(r[12]) || 0,
+                                saldoCash: parseFloat(r[13]) || 0
+                            });
+                        }
+                    }
+                }
+
+                if (workbook.Sheets["PINJAMAN"]) {
+                    const rowsP = XLSX.utils.sheet_to_json(workbook.Sheets["PINJAMAN"], { header: 1 });
+                    for (let i = 1; i < rowsP.length; i++) {
+                        const r = rowsP[i];
+                        const noPj = r[0] ? String(r[0]).trim() : '';
+                        if (noPj) {
+                            parsedLoans.push({
+                                noPj: noPj,
+                                kodeTr: r[1] ? String(r[1]).trim() : '-',
+                                tgl: typeof r[2] === 'number' ? excelDateToJSDate(r[2]) : (r[2] || '-'),
+                                noAgt: r[3] !== undefined ? String(r[3]).trim() : '-',
+                                nama: r[4] ? String(r[4]).trim() : '-',
+                                jumlah: parseFloat(r[5]) || 0,
+                                keperluan: r[6] ? String(r[6]).trim() : '-',
+                                tenor: r[7] || 0,
+                                angsuranPokok: parseFloat(r[8]) || 0,
+                                angsuranAdm: parseFloat(r[9]) || 0,
+                                jumlahPerBulan: parseFloat(r[10]) || 0,
+                                totalPengembalian: parseFloat(r[11]) || 0,
+                                pembayaran: r[14] ? String(r[14]).trim() : '-',
+                                ttd: r[15] ? String(r[15]).trim() : '-',
+                                jaminan: r[16] ? String(r[16]).trim() : '-',
+                                potPj: r[17] || '-',
+                                potWajib: r[18] || '-',
+                                potKasbon: r[19] || '-',
+                                tenorAwal: r[20] || '-',
+                                catatan: r[21] ? String(r[21]).trim() : '-',
+                                angsuranMasuk: parseFloat(r[22]) || 0
+                            });
+                        }
+                    }
+                }
+
+                appData.members = parsedMembers;
+                appData.transactions = parsedTransactions;
+                appData.loans = parsedLoans;
+
+                document.getElementById('sync-screen').classList.add('hidden');
+                document.getElementById('app-view').classList.remove('hidden');
+
+                renderAllViews();
+            } catch (err) {
+                console.error(err);
+                alert("Gagal memproses file Excel database. Pastikan format sheet sesuai.");
+            }
         }
 
         function getMemberBalances(memberNoAgt, memberName) {
