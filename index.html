@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Koperasi Jamaya V.01 - Professional Edition</title>
+    <title>Koperasi Jamaya - Database Excel Viewer</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- SheetJS CDN -->
@@ -14,15 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; color: #0f172a; }
-        
-        /* CSS khusus untuk mode cetak agar bersih dan tajam */
         @media print {
             aside, header, .no-print { display: none !important; }
             body { background: white !important; color: #000000 !important; }
             #app-view { display: block !important; }
             #view-loans { display: block !important; }
             #loan-detail-card { display: block !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: 100% !important; }
-            #loan-detail-card > div:first-child { display: none !important; } /* Sembunyikan header modal & tombol print di dalam card */
+            #loan-detail-card > div:first-child { display: none !important; }
             #loan-print-container { border: none !important; padding: 0 !important; width: 100% !important; }
             table { width: 100% !important; border-collapse: collapse !important; }
             th, td { border: 1px solid #475569 !important; color: #000000 !important; padding: 6px 8px !important; font-size: 11px !important; }
@@ -32,53 +30,25 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col selection:bg-emerald-600 selection:text-white">
 
-    <!-- LOGIN MODAL / VIEW -->
-    <div id="login-view" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200">
-            <div class="text-center mb-6 sm:mb-8">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-emerald-600 rounded-2xl mx-auto flex items-center justify-center text-white text-xl sm:text-2xl font-bold shadow-md shadow-emerald-600/20 mb-4">
-                    <i class="fa-solid fa-vault"></i>
-                </div>
-                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Koperasi Jamaya</h1>
-                <p class="text-slate-600 text-xs mt-1">Sistem Informasi Manajemen & Keuangan Terpadu</p>
+    <!-- WELCOME / SYNC REQUIRED SCREEN (JIKA BELUM ADA FILE DISYNC) -->
+    <div id="sync-screen" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-8 text-center space-y-6 border border-slate-200">
+            <div class="w-20 h-20 bg-emerald-600 rounded-3xl mx-auto flex items-center justify-center text-white text-3xl font-bold shadow-lg shadow-emerald-600/30">
+                <i class="fa-solid fa-file-excel"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Koperasi Jamaya</h1>
+                <p class="text-slate-600 text-xs mt-2">Sistem membaca murni dari file database <strong>FILE SYNC.xlsx</strong>. Silakan pilih file excel Anda untuk memuat data.</p>
             </div>
 
-            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nomor Anggota / ID Pengurus</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
-                            <i class="fa-solid fa-id-card text-xs"></i>
-                        </span>
-                        <input type="text" id="login-id" required placeholder="Contoh: 2 atau admin" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/10 transition">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Password (Tgl Lahir ddmmyyyy)</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
-                            <i class="fa-solid fa-lock text-xs"></i>
-                        </span>
-                        <input type="password" id="login-pass" required placeholder="Contoh: 23081989" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/10 transition">
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-1">*Anggota: Tgl lahir ddmmyyyy. Bendahara: Akses penuh.</p>
-                </div>
-
-                <div id="login-error" class="hidden text-xs text-rose-700 bg-rose-50 p-3 rounded-xl font-bold border border-rose-200 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-exclamation"></i>
-                    <span>ID atau Password salah! Periksa kembali data Anda.</span>
-                </div>
-
-                <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm mt-2">
-                    <span>Masuk ke Sistem</span>
-                    <i class="fa-solid fa-arrow-right text-xs"></i>
+            <div class="pt-2">
+                <input type="file" id="initial-excel-input" accept=".xlsx, .xls" class="hidden" onchange="loadExcelDatabase(event)">
+                <button onclick="document.getElementById('initial-excel-input').click()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg transition flex items-center justify-center gap-2.5 text-sm">
+                    <i class="fa-solid fa-folder-open text-base"></i>
+                    <span>Pilih & Muat FILE SYNC.xlsx</span>
                 </button>
-            </form>
-
-            <div class="mt-6 sm:mt-8 pt-6 border-t border-slate-100 text-center text-[11px] text-slate-500 font-semibold">
-                PT. Jamaya Plastik Industri Perkasa &copy; 2026
             </div>
+            <p class="text-[11px] text-slate-500">Data tidak ditanam di kode, selalu merujuk pada file Excel.</p>
         </div>
     </div>
 
@@ -94,7 +64,7 @@
                     </div>
                     <div>
                         <h2 class="font-black text-slate-900 text-sm sm:text-base tracking-tight">Koperasi Jamaya</h2>
-                        <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-extrabold rounded border border-emerald-200 uppercase">Professional</span>
+                        <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-extrabold rounded border border-emerald-200 uppercase">Excel Viewer</span>
                     </div>
                 </div>
             </div>
@@ -131,12 +101,13 @@
             <div class="p-4 border-t border-slate-200 bg-slate-50 hidden lg:block">
                 <div class="flex items-center justify-between">
                     <div class="overflow-hidden">
-                        <div id="logged-user-name" class="text-xs font-bold text-slate-900 truncate">Bang Adi</div>
-                        <div id="logged-user-role" class="text-[10px] text-emerald-800 font-bold truncate">Administrator</div>
+                        <div class="text-xs font-bold text-slate-900 truncate">Database Terhubung</div>
+                        <div id="db-filename" class="text-[10px] text-emerald-800 font-bold truncate">FILE SYNC.xlsx</div>
                     </div>
-                    <button onclick="handleLogout()" title="Keluar" class="w-9 h-9 rounded-xl bg-white border border-slate-300 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-700 text-slate-700 flex items-center justify-center transition shrink-0 shadow-2xs">
-                        <i class="fa-solid fa-power-off text-xs"></i>
+                    <button onclick="document.getElementById('reupload-excel-input').click()" title="Ganti / Update File Excel" class="w-9 h-9 rounded-xl bg-white border border-slate-300 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 text-slate-700 flex items-center justify-center transition shrink-0 shadow-2xs">
+                        <i class="fa-solid fa-rotate text-xs"></i>
                     </button>
+                    <input type="file" id="reupload-excel-input" accept=".xlsx, .xls" class="hidden" onchange="loadExcelDatabase(event)">
                 </div>
             </div>
         </aside>
@@ -148,35 +119,20 @@
             <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-25 px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between no-print shadow-2xs">
                 <div>
                     <h1 id="page-title" class="text-base sm:text-lg font-black text-slate-900">Dashboard Utama</h1>
-                    <p id="page-subtitle" class="text-[11px] sm:text-xs text-slate-600 hidden sm:block">Ringkasan cepat aktivitas dan sisa saldo keuangan koperasi.</p>
+                    <p id="page-subtitle" class="text-[11px] sm:text-xs text-slate-600 hidden sm:block">Membaca langsung dari file Excel FILE SYNC.xlsx</p>
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3">
-                    <div id="user-badge-mobile" class="lg:hidden text-right mr-1">
-                        <div id="mobile-user-name" class="text-[11px] font-bold text-slate-900">Bang Adi</div>
-                        <button onclick="handleLogout()" class="text-[10px] text-rose-700 font-bold underline">Keluar</button>
-                    </div>
-                    <input type="file" id="excel-file-input" accept=".xlsx, .xls" class="hidden" onchange="processExcelFile(event)">
-                    <button id="btn-sync-file" onclick="document.getElementById('excel-file-input').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5 sm:gap-2">
+                    <input type="file" id="top-excel-input" accept=".xlsx, .xls" class="hidden" onchange="loadExcelDatabase(event)">
+                    <button onclick="document.getElementById('top-excel-input').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5 sm:gap-2">
                         <i class="fa-solid fa-file-excel text-xs sm:text-sm"></i>
-                        <span class="hidden sm:inline">Sinkron FILE SYNC.xlsx</span>
-                        <span class="sm:hidden">Sync</span>
+                        <span>Sync / Ganti File Excel</span>
                     </button>
                 </div>
             </header>
 
             <!-- MAIN CONTAINER -->
             <main class="p-4 sm:p-6 lg:p-8 space-y-6 flex-1">
-
-                <!-- SYNC NOTIFICATION BANNER -->
-                <div id="sync-notice" class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3 text-emerald-950 text-xs sm:text-sm shadow-2xs no-print">
-                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5">
-                        <i class="fa-solid fa-circle-check text-xs"></i>
-                    </div>
-                    <div class="flex-1" id="sync-notice-text">
-                        <strong class="font-bold text-slate-900">Sistem Aktif & Terkini!</strong> Data master siap diakses di perangkat mana pun tanpa perlu sinkron ulang.
-                    </div>
-                </div>
 
                 <!-- TAB 1: DASHBOARD -->
                 <section id="view-dashboard" class="space-y-6">
@@ -386,9 +342,7 @@
                                                 <th class="p-3 text-right pr-4">Jumlah Bayar (Rp)</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="loan-installments-tbody" class="divide-y divide-slate-200 text-slate-900 font-semibold">
-                                            <!-- Populated dynamically -->
-                                        </tbody>
+                                        <tbody id="loan-installments-tbody" class="divide-y divide-slate-200 text-slate-900 font-semibold"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -426,8 +380,7 @@
                         </div>
 
                         <!-- Member Profile & Subtotals -->
-                        <div id="member-profile-card" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                        </div>
+                        <div id="member-profile-card" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs"></div>
 
                         <!-- Member Transactions Table -->
                         <div class="overflow-x-auto border border-slate-200 rounded-xl">
@@ -505,8 +458,8 @@
                                     <span id="rep-total-trx" class="font-bold text-slate-900">0 Transaksi</span>
                                 </div>
                                 <div class="flex justify-between py-1.5">
-                                    <span class="text-slate-600">Status Sistem:</span>
-                                    <span id="rep-sync-status" class="font-bold text-emerald-700">Aktif & Sinkron (Session Valid)</span>
+                                    <span class="text-slate-600">Status Sumber File:</span>
+                                    <span id="rep-sync-status" class="font-bold text-emerald-700">Murni dari FILE SYNC.xlsx</span>
                                 </div>
                             </div>
                         </div>
@@ -540,174 +493,19 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <!-- JAVASCRIPT: PURE EXCEL PARSER (TANPA DATABASE TERTANAM DI KODE) -->
     <script>
         let appData = {
             members: [],
             transactions: [],
-            loans: [],
-            currentUser: null,
-            isSynced: false
+            loans: []
         };
 
-        function initApp() {
-            const savedData = localStorage.getItem('jamaya_koperasi_data');
-            if (savedData) {
-                try {
-                    const parsed = JSON.parse(savedData);
-                    appData.members = parsed.members || [];
-                    appData.transactions = parsed.transactions || [];
-                    appData.loans = parsed.loans || [];
-                    appData.isSynced = true;
-                } catch(e) {
-                    console.error("Gagal memuat local storage:", e);
-                    loadDefaultData();
-                }
-            } else {
-                loadDefaultData();
-            }
-
-            const activeSession = sessionStorage.getItem('jamaya_active_session');
-            if (activeSession) {
-                try {
-                    appData.currentUser = JSON.parse(activeSession);
-                    initAppSession();
-                    return;
-                } catch(e) {
-                    sessionStorage.removeItem('jamaya_active_session');
-                }
-            }
-        }
-
-        function loadDefaultData() {
-            appData.members = [
-                { noMasuk: "001/REG/VI/2026", noKeluar: "-", tglGabung: "30-May-2026", noAgt: "1", nik: "3603181009710017", nama: "A. Syamsul Falah", tglLahir: "09-Oct-1971", bagian: "PPIC", jabatan: "PENGAWAS", rek: "3194139581", bank: "BCA", hp: "08111221867", alamat: "Kp. Cirewed - Cikupa", jk: "L" },
-                { noMasuk: "002/REG/VI/2026", noKeluar: "-", tglGabung: "30-May-2026", noAgt: "2", nik: "1803042308890003", nama: "Adi Muhtar", tglLahir: "23-Aug-1989", bagian: "QC Lab", jabatan: "BENDAHARA", rek: "0231177484", bank: "BCA", hp: "085311254227", alamat: "Dusun Jambe - Jambe", jk: "L" },
-                { noMasuk: "003/REG/VI/2026", noKeluar: "-", tglGabung: "30-May-2026", noAgt: "3", nik: "3201191308940005", nama: "Aep Sobari", tglLahir: "13-Aug-1994", bagian: "Produksi", jabatan: "Anggota", rek: "0658257288", bank: "BCA", hp: "0658257288", alamat: "Tangerang", jk: "L" }
-            ];
-
-            appData.transactions = [
-                { noTrx: "TX0001", tgl: "30-May-2026", noAgt: "1", noReff: "0", kodeTrans: "WA", masuk: 150000, keluar: 0, ket: "Wajib 1 Jun 2026", kodeSaldo: "R", nama: "A. Syamsul Falah", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 150000, saldoRek: 150000, saldoCash: 0 },
-                { noTrx: "TX0002", tgl: "30-May-2026", noAgt: "2", noReff: "0", kodeTrans: "WA", masuk: 150000, keluar: 0, ket: "Wajib 1 Jun 2026", kodeSaldo: "R", nama: "Adi Muhtar", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 300000, saldoRek: 300000, saldoCash: 0 },
-                { noTrx: "TX0026", tgl: "05-Jun-2026", noAgt: "1", noReff: "PJ0001", kodeTrans: "PJ", masuk: 0, keluar: 5000000, ket: "Buat tambahan acara Besanan", kodeSaldo: "R", nama: "A. Syamsul Falah", jenisSimpanan: "PJ - Pinjaman (Besar/Cicilan)", saldoGlobal: 2226008, saldoRek: 2226008, saldoCash: 0 },
-                { noTrx: "TX0039", tgl: "15-Jun-2026", noAgt: "1", noReff: "PJ0001", kodeTrans: "CI", masuk: 835000, keluar: 0, ket: "Angsuran ke-1 dari 6", kodeSaldo: "C", nama: "A. Syamsul Falah", jenisSimpanan: "CI - Cicilan Pokok", saldoGlobal: 3061008, saldoRek: 2226008, saldoCash: 835000 }
-            ];
-
-            appData.loans = [
-                { noPj: "PJ0001", kodeTr: "TX0026", tgl: "05-Jun-2026", noAgt: "1", nama: "A. Syamsul Falah", jumlah: 5000000, keperluan: "Buat tambahan acara Besanan", tenor: 6, angsuranPokok: 833333, angsuranAdm: 25000, jumlahPerBulan: 858333, totalPengembalian: 5150000, pembayaran: "Cash", ttd: "Supandi", jaminan: "Sertifikat / ATM", potPj: "-", potWajib: "-", potKasbon: "-", tenorAwal: 6, catatan: "Lancar", angsuranMasuk: 835000 }
-            ];
-
-            localStorage.setItem('jamaya_koperasi_data', JSON.stringify({
-                members: appData.members,
-                transactions: appData.transactions,
-                loans: appData.loans
-            }));
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const idInput = document.getElementById('login-id').value.trim();
-            const passInput = document.getElementById('login-pass').value.trim();
-            const errorDiv = document.getElementById('login-error');
-
-            const isAdmin = (idInput.toLowerCase() === 'admin' || idInput === '2' || idInput.toLowerCase() === 'bendahara') && (passInput === 'jamaya2026' || passInput === '23081989');
-
-            let sessionUser = null;
-            if (isAdmin) {
-                sessionUser = { id: idInput, name: "Adi Muhtar (Bendahara / Admin)", role: "Admin" };
-            } else {
-                let foundMember = appData.members.find(m => m.noAgt === idInput || m.nama.toLowerCase().includes(idInput.toLowerCase()));
-                if (foundMember) {
-                    sessionUser = { id: foundMember.noAgt, name: foundMember.nama, role: "Anggota" };
-                } else if (idInput === "3" && passInput === "13081994") {
-                    sessionUser = { id: "3", name: "Aep Sobari", role: "Anggota" };
-                }
-            }
-
-            if (sessionUser) {
-                appData.currentUser = sessionUser;
-                sessionStorage.setItem('jamaya_active_session', JSON.stringify(sessionUser));
-                initAppSession();
-                return;
-            }
-
-            errorDiv.classList.remove('hidden');
-        }
-
-        function initAppSession() {
-            document.getElementById('login-view').classList.add('hidden');
-            document.getElementById('app-view').classList.remove('hidden');
-            
-            document.getElementById('logged-user-name').innerText = appData.currentUser.name;
-            document.getElementById('logged-user-role').innerText = appData.currentUser.role;
-            document.getElementById('mobile-user-name').innerText = appData.currentUser.name;
-
-            const btnSync = document.getElementById('btn-sync-file');
-            if (appData.currentUser.role !== "Admin") {
-                btnSync.style.display = 'none';
-            } else {
-                btnSync.style.display = 'flex';
-            }
-
-            renderAllViews();
-        }
-
-        function handleLogout() {
-            appData.currentUser = null;
-            sessionStorage.removeItem('jamaya_active_session');
-            document.getElementById('app-view').classList.add('hidden');
-            document.getElementById('login-view').classList.remove('hidden');
-            document.getElementById('login-form').reset();
-            document.getElementById('login-error').classList.add('hidden');
-        }
-
-        const tabTitles = {
-            'dashboard': ['Dashboard Utama', 'Ringkasan cepat aktivitas dan sisa saldo keuangan koperasi.'],
-            'members': ['Data Anggota', 'Daftar lengkap master anggota koperasi beserta rincian saldo pribadi.'],
-            'transactions': ['Data Transaksi', 'Seluruh catatan arus kas masuk dan keluar (Terbaru ke Terlama).'],
-            'loans': ['Data Pinjaman', 'Daftar rincian pinjaman anggota lengkap bersumber dari sheet PINJAMAN.'],
-            'member-report': ['Laporan Per Anggota', 'Profil pribadi lengkap, sub-total, dan sisa saldo pribadi anggota.'],
-            'reports': ['Rekap Saldo & Laporan', 'Analisis keuangan mendalam, saldo global, rekening, dan cash.']
-        };
-
-        function switchTab(tabId) {
-            const tabs = ['dashboard', 'members', 'transactions', 'loans', 'member-report', 'reports'];
-            tabs.forEach(t => {
-                document.getElementById(`view-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('bg-emerald-600', 'text-white', 'shadow-sm');
-                document.getElementById(`tab-${t}`).classList.add('text-slate-700', 'hover:bg-slate-100', 'hover:text-slate-900');
-            });
-
-            document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).classList.add('bg-emerald-600', 'text-white', 'shadow-sm');
-            document.getElementById(`tab-${tabId}`).classList.remove('text-slate-700', 'hover:bg-slate-100', 'hover:text-slate-900');
-
-            if (tabTitles[tabId]) {
-                document.getElementById('page-title').innerText = tabTitles[tabId][0];
-                document.getElementById('page-subtitle').innerText = tabTitles[tabId][1];
-            }
-        }
-
-        function formatRupiah(num) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
-        }
-
-        function excelDateToJSDate(serial) {
-            if (!serial || isNaN(serial)) return '-';
-            const utc_days = Math.floor(serial - 25569);
-            const utc_value = utc_days * 86400;
-            const date_info = new Date(utc_value * 1000);
-            return date_info.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-        }
-
-        function processExcelFile(e) {
-            if (appData.currentUser.role !== "Admin") {
-                alert("Akses ditolak! Hanya Admin / Bendahara yang dapat melakukan sinkronisasi file.");
-                return;
-            }
-
+        function loadExcelDatabase(e) {
             const file = e.target.files[0];
             if (!file) return;
+
+            document.getElementById('db-filename').innerText = file.name;
 
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -804,24 +602,16 @@
                         }
                     }
 
-                    if (parsedMembers.length > 0) appData.members = parsedMembers;
-                    if (parsedTransactions.length > 0) appData.transactions = parsedTransactions;
-                    if (parsedLoans.length > 0) appData.loans = parsedLoans;
-                    
-                    appData.isSynced = true;
+                    appData.members = parsedMembers;
+                    appData.transactions = parsedTransactions;
+                    appData.loans = parsedLoans;
 
-                    localStorage.setItem('jamaya_koperasi_data', JSON.stringify({
-                        members: appData.members,
-                        transactions: appData.transactions,
-                        loans: appData.loans
-                    }));
-
-                    document.getElementById('sync-notice-text').innerHTML = `
-                        <strong class="font-bold text-slate-900">Sinkronisasi Berhasil!</strong> Data baru tersimpan permanen dan langsung dapat diakses oleh semua perangkat.
-                    `;
+                    // Hilangkan layar selamat datang, tampilkan aplikasi
+                    document.getElementById('sync-screen').classList.add('hidden');
+                    document.getElementById('app-view').classList.remove('hidden');
 
                     renderAllViews();
-                    alert("Sinkronisasi FILE SYNC.xlsx berhasil dilakukan!");
+                    alert("Berhasil memuat data dari " + file.name + "!");
 
                 } catch (err) {
                     console.error(err);
@@ -832,31 +622,18 @@
         }
 
         function getMemberBalances(memberNoAgt, memberName) {
-            let simpananWajib = 0;
-            let tabungan = 0;
-            let pinjaman = 0;
-            let kasbon = 0;
-
+            let simpananWajib = 0, tabungan = 0, pinjaman = 0, kasbon = 0;
             appData.transactions.forEach(t => {
                 const match = String(t.noAgt) === String(memberNoAgt) || t.nama.toLowerCase() === memberName.toLowerCase();
                 if (match) {
                     const js = String(t.jenisSimpanan).toUpperCase();
                     const kt = String(t.kodeTrans).toUpperCase();
-                    if (js.includes('WAJIB') || kt === 'WA') {
-                        simpananWajib += t.masuk;
-                    }
-                    if (js.includes('TABUNGAN') || js.includes('TB') || kt === 'TB') {
-                        tabungan += t.masuk;
-                    }
-                    if (js.includes('PINJAMAN') || kt === 'PJ') {
-                        pinjaman += t.keluar;
-                    }
-                    if (js.includes('KASBON') || kt === 'KA') {
-                        kasbon += t.keluar;
-                    }
+                    if (js.includes('WAJIB') || kt === 'WA') simpananWajib += t.masuk;
+                    if (js.includes('TABUNGAN') || js.includes('TB') || kt === 'TB') tabungan += t.masuk;
+                    if (js.includes('PINJAMAN') || kt === 'PJ') pinjaman += t.keluar;
+                    if (js.includes('KASBON') || kt === 'KA') kasbon += t.keluar;
                 }
             });
-
             return { simpananWajib, tabungan, pinjaman, kasbon };
         }
 
@@ -1024,7 +801,6 @@
 
             const member = appData.members.find(m => m.noAgt === String(loan.noAgt) || m.nama.toLowerCase() === loan.nama.toLowerCase());
 
-            // Sembunyikan tabel daftar pinjaman utama agar tidak ikut terprint
             document.getElementById('loan-list-wrapper').classList.add('no-print');
 
             const detailCard = document.getElementById('loan-detail-card');
@@ -1058,11 +834,10 @@
                 </div>
             `;
 
-            // AMBIL DATA ANGSURAN CICILAN DARI SHEET TRANSAKSI (KODE "CI" & NO REFF = NO PJ)
             const installments = appData.transactions.filter(t => t.kodeTrans === 'CI' && String(t.noReff) === String(noPj));
             let instHtml = '';
             if (installments.length > 0) {
-                installments.forEach((ins, idx) => {
+                installments.forEach(ins => {
                     instHtml += `
                         <tr class="hover:bg-slate-50">
                             <td class="p-2.5 pl-4 font-mono font-bold text-slate-900">${ins.noTrx}</td>
@@ -1149,6 +924,45 @@
             document.getElementById('member-trx-tbody').innerHTML = trxHtml || `<tr><td colspan="7" class="p-4 text-center text-slate-500 font-semibold">Belum ada riwayat transaksi.</td></tr>`;
         }
 
+        const tabTitles = {
+            'dashboard': ['Dashboard Utama', 'Ringkasan cepat aktivitas dan sisa saldo keuangan koperasi.'],
+            'members': ['Data Anggota', 'Daftar lengkap master anggota koperasi beserta rincian saldo pribadi.'],
+            'transactions': ['Data Transaksi', 'Seluruh catatan arus kas masuk dan keluar (Terbaru ke Terlama).'],
+            'loans': ['Data Pinjaman', 'Daftar rincian pinjaman anggota lengkap bersumber dari sheet PINJAMAN.'],
+            'member-report': ['Laporan Per Anggota', 'Profil pribadi lengkap, sub-total, dan sisa saldo pribadi anggota.'],
+            'reports': ['Rekap Saldo & Laporan', 'Analisis keuangan mendalam, saldo global, rekening, dan cash.']
+        };
+
+        function switchTab(tabId) {
+            const tabs = ['dashboard', 'members', 'transactions', 'loans', 'member-report', 'reports'];
+            tabs.forEach(t => {
+                document.getElementById(`view-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).classList.remove('bg-emerald-600', 'text-white', 'shadow-sm');
+                document.getElementById(`tab-${t}`).classList.add('text-slate-700', 'hover:bg-slate-100', 'hover:text-slate-900');
+            });
+
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('bg-emerald-600', 'text-white', 'shadow-sm');
+            document.getElementById(`tab-${tabId}`).classList.remove('text-slate-700', 'hover:bg-slate-100', 'hover:text-slate-900');
+
+            if (tabTitles[tabId]) {
+                document.getElementById('page-title').innerText = tabTitles[tabId][0];
+                document.getElementById('page-subtitle').innerText = tabTitles[tabId][1];
+            }
+        }
+
+        function formatRupiah(num) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num || 0);
+        }
+
+        function excelDateToJSDate(serial) {
+            if (!serial || isNaN(serial)) return '-';
+            const utc_days = Math.floor(serial - 25569);
+            const utc_value = utc_days * 86400;
+            const date_info = new Date(utc_value * 1000);
+            return date_info.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
         function filterMembers() {
             const query = document.getElementById('member-search').value.toLowerCase();
             const filtered = appData.members.filter(m => m.nama.toLowerCase().includes(query) || m.nik.toLowerCase().includes(query));
@@ -1166,10 +980,6 @@
             const filtered = appData.loans.filter(l => l.nama.toLowerCase().includes(query) || l.keperluan.toLowerCase().includes(query) || l.noPj.toLowerCase().includes(query));
             renderLoansTable(filtered);
         }
-
-        window.onload = function() {
-            initApp();
-        };
     </script>
 </body>
 </html>
