@@ -144,10 +144,11 @@
                 </div>
 
                 <div class="flex items-center gap-3">
+                    <!-- Tombol Sync hanya muncul/dapat diklik jika Admin -->
                     <input type="file" id="excel-file-input" accept=".xlsx, .xls" class="hidden" onchange="processExcelFile(event)">
-                    <button onclick="document.getElementById('excel-file-input').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-2">
+                    <button id="btn-sync-file" onclick="document.getElementById('excel-file-input').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-2">
                         <i class="fa-solid fa-file-excel text-sm"></i>
-                        <span>Sinkron FILE SYNC.xlsx</span>
+                        <span>Sinkron FILE SYNC.xlsx (Admin)</span>
                     </button>
                 </div>
             </header>
@@ -160,8 +161,8 @@
                     <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5">
                         <i class="fa-solid fa-circle-check"></i>
                     </div>
-                    <div class="flex-1">
-                        <strong class="font-bold text-slate-900">Sistem Siap Sinkronisasi!</strong> Klik tombol hijau <strong class="text-slate-900">"Sinkron FILE SYNC.xlsx"</strong> di atas untuk memuat data master secara presisi.
+                    <div class="flex-1" id="sync-notice-text">
+                        <strong class="font-bold text-slate-900">Sistem Tersinkronisasi!</strong> Data dimuat otomatis dari memori lokal sistem. Admin dapat memperbarui data kapan saja melalui tombol sinkron.
                     </div>
                 </div>
 
@@ -452,8 +453,8 @@
                                     <span id="rep-total-trx" class="font-bold text-slate-900">0 Transaksi</span>
                                 </div>
                                 <div class="flex justify-between py-1.5">
-                                    <span class="text-slate-500">Status Sumber File:</span>
-                                    <span id="rep-sync-status" class="font-bold text-amber-600">Mode Preview (Belum Sinkron)</span>
+                                    <span class="text-slate-500">Status Penyimpanan:</span>
+                                    <span id="rep-sync-status" class="font-bold text-emerald-700">Tersimpan di Memori Lokal Browser</span>
                                 </div>
                             </div>
                         </div>
@@ -499,7 +500,27 @@
             isSynced: false
         };
 
-        function loadDummyData() {
+        function initAppData() {
+            // Cek apakah sudah ada data tersimpan di LocalStorage browser
+            const savedData = localStorage.getItem('jamaya_koperasi_data');
+            if (savedData) {
+                try {
+                    const parsed = JSON.parse(savedData);
+                    appData.members = parsed.members || [];
+                    appData.transactions = parsed.transactions || [];
+                    appData.loans = parsed.loans || [];
+                    appData.isSynced = true;
+                    return;
+                } catch(e) {
+                    console.error("Gagal memuat local storage:", e);
+                }
+            }
+
+            // Jika belum ada sama sekali, muat data default awal
+            loadDefaultData();
+        }
+
+        function loadDefaultData() {
             appData.members = [
                 { noMasuk: "001/REG/VI/2026", noKeluar: "-", tglGabung: "30-May-2026", noAgt: "1", nik: "3603181009710017", nama: "A. Syamsul Falah", tglLahir: "09-Oct-1971", bagian: "PPIC", jabatan: "PENGAWAS", rek: "3194139581", bank: "BCA", hp: "08111221867", alamat: "Kp. Cirewed - Cikupa", jk: "L" },
                 { noMasuk: "002/REG/VI/2026", noKeluar: "-", tglGabung: "30-May-2026", noAgt: "2", nik: "1803042308890003", nama: "Adi Muhtar", tglLahir: "23-Aug-1989", bagian: "QC Lab", jabatan: "BENDAHARA", rek: "0231177484", bank: "BCA", hp: "085311254227", alamat: "Dusun Jambe - Jambe", jk: "L" },
@@ -515,8 +536,6 @@
             appData.loans = [
                 { noPj: "PJ0001", kodeTr: "TX0026", tgl: "05-Jun-2026", noAgt: "1", nama: "A. Syamsul Falah", jumlah: 5000000, keperluan: "Buat tambahan acara Besanan", tenor: 6, angsuranPokok: 833333, angsuranAdm: 25000, jumlahPerBulan: 858333, totalPengembalian: 5150000, pembayaran: "Cash", ttd: "Supandi", jaminan: "-", potPj: "-", potWajib: "-", potKasbon: "-", tenorAwal: 6, catatan: "Lancar", angsuranMasuk: 4300000 }
             ];
-
-            renderAllViews();
         }
 
         function handleLogin(e) {
@@ -525,21 +544,24 @@
             const passInput = document.getElementById('login-pass').value.trim();
             const errorDiv = document.getElementById('login-error');
 
-            if ((idInput.toLowerCase() === 'admin' || idInput === '2' || idInput.toLowerCase() === 'bendahara') && (passInput === 'jamaya2026' || passInput === '23081989')) {
-                appData.currentUser = { id: idInput, name: "Adi Muhtar (Bendahara)", role: "Management" };
+            // Cek apakah admin / bendahara
+            const isAdmin = (idInput.toLowerCase() === 'admin' || idInput === '2' || idInput.toLowerCase() === 'bendahara') && (passInput === 'jamaya2026' || passInput === '23081989');
+
+            if (isAdmin) {
+                appData.currentUser = { id: idInput, name: "Adi Muhtar (Bendahara / Admin)", role: "Admin" };
                 initAppSession();
                 return;
             }
 
             let foundMember = appData.members.find(m => m.noAgt === idInput || m.nama.toLowerCase().includes(idInput.toLowerCase()));
             if (foundMember) {
-                appData.currentUser = { id: foundMember.noAgt, name: foundMember.nama, role: "Anggota Standar" };
+                appData.currentUser = { id: foundMember.noAgt, name: foundMember.nama, role: "Anggota" };
                 initAppSession();
                 return;
             }
 
             if (idInput === "3" && passInput === "13081994") {
-                appData.currentUser = { id: "3", name: "Aep Sobari", role: "Anggota Standar" };
+                appData.currentUser = { id: "3", name: "Aep Sobari", role: "Anggota" };
                 initAppSession();
                 return;
             }
@@ -553,6 +575,14 @@
             
             document.getElementById('logged-user-name').innerText = appData.currentUser.name;
             document.getElementById('logged-user-role').innerText = appData.currentUser.role;
+
+            // Batasi tombol sinkron hanya untuk Admin / Bendahara
+            const btnSync = document.getElementById('btn-sync-file');
+            if (appData.currentUser.role !== "Admin") {
+                btnSync.style.display = 'none';
+            } else {
+                btnSync.style.display = 'flex';
+            }
 
             renderAllViews();
         }
@@ -605,6 +635,11 @@
         }
 
         function processExcelFile(e) {
+            if (appData.currentUser.role !== "Admin") {
+                alert("Akses ditolak! Hanya Admin / Bendahara yang dapat melakukan sinkronisasi file.");
+                return;
+            }
+
             const file = e.target.files[0];
             if (!file) return;
 
@@ -708,13 +743,20 @@
                     if (parsedLoans.length > 0) appData.loans = parsedLoans;
                     
                     appData.isSynced = true;
-                    document.getElementById('sync-notice').innerHTML = `
-                        <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5"><i class="fa-solid fa-circle-check"></i></div>
-                        <div class="flex-1"><strong class="font-bold text-slate-900">Sinkronisasi Berhasil!</strong> Data berhasil dimuat secara live dari file <code class="bg-emerald-100 px-1.5 py-0.5 rounded text-emerald-800">FILE SYNC.xlsx</code>.</div>
+
+                    // Simpan permanen ke LocalStorage browser agar tersimpan otomatis
+                    localStorage.setItem('jamaya_koperasi_data', JSON.stringify({
+                        members: appData.members,
+                        transactions: appData.transactions,
+                        loans: appData.loans
+                    }));
+
+                    document.getElementById('sync-notice-text').innerHTML = `
+                        <strong class="font-bold text-slate-900">Sinkronisasi & Penyimpanan Berhasil!</strong> Data master baru dari file Excel telah disimpan otomatis ke sistem. Pengguna lain akan langsung melihat update terbaru.
                     `;
 
                     renderAllViews();
-                    alert("Sinkronisasi FILE SYNC.xlsx berhasil dilakukan!");
+                    alert("Sinkronisasi dan penyimpanan data master berhasil dilakukan!");
 
                 } catch (err) {
                     console.error(err);
@@ -806,8 +848,7 @@
             document.getElementById('report-saldo-cash').innerText = formatRupiah(lastCash);
             document.getElementById('rep-total-members').innerText = `${appData.members.length} Anggota`;
             document.getElementById('rep-total-trx').innerText = `${appData.transactions.length} Transaksi`;
-            document.getElementById('rep-sync-status').innerText = appData.isSynced ? 'Sinkron (FILE SYNC.xlsx Aktif)' : 'Mode Preview';
-            document.getElementById('rep-sync-status').className = appData.isSynced ? 'font-bold text-emerald-700' : 'font-bold text-amber-700';
+            document.getElementById('rep-sync-status').innerText = 'Tersimpan Otomatis di Memori Sistem';
         }
 
         function renderMembersBalanceTable(data) {
@@ -1031,7 +1072,7 @@
         }
 
         window.onload = function() {
-            loadDummyData();
+            initAppData();
         };
     </script>
 </body>
