@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koperasi Jamaya - Professional Edition</title>
+    <title>Koperasi Jamaya - Blue Edition</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- SheetJS CDN -->
@@ -15,7 +15,40 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
         
-        /* CSS KHUSUS CETAK / PRINT YANG PRESISI DAN BERSIH UNTUK SEMUA HALAMAN */
+        /* Animasi Modern & Efek Galak / Halus */
+        .menu-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-btn:hover {
+            transform: translateX(4px);
+        }
+        .menu-btn::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: #3b82f6;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .menu-btn.active::after {
+            opacity: 1;
+        }
+
+        /* Spacing Tabel Padat Compact */
+        table th, table td {
+            padding-top: 7px !important;
+            padding-bottom: 7px !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            font-size: 11.5px !important;
+        }
+
+        /* CSS Cetak / Print Presisi */
         @media print {
             body * { visibility: hidden; }
             #loan-print-container, #loan-print-container *, 
@@ -35,58 +68,56 @@
             }
             .no-print { display: none !important; }
             table { width: 100% !important; border-collapse: collapse !important; }
-            th, td { border: 1px solid #334155 !important; color: #000000 !important; padding: 6px 8px !important; font-size: 11px !important; }
+            th, td { border: 1px solid #334155 !important; color: #000000 !important; padding: 5px 6px !important; font-size: 10.5px !important; }
             th { background-color: #e2e8f0 !important; font-weight: 700 !important; }
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col selection:bg-emerald-600 selection:text-white">
+<body class="antialiased min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
 
-    <!-- LOGIN MODAL / VIEW (WAJIB LOGIN TERLEBIH DAHULU) -->
-    <div id="login-view" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <!-- LOGIN MODAL DENGAN PILIHAN NAMA ANGGOTA & PASSWORD 12345 -->
+    <div id="login-view" class="fixed inset-0 bg-slate-900/70 backdrop-blur-xs z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200">
-            <div class="text-center mb-6 sm:mb-8">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-emerald-600 rounded-2xl mx-auto flex items-center justify-center text-white text-xl sm:text-2xl font-bold shadow-md shadow-emerald-600/30 mb-4">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-gradient-to-tr from-blue-700 to-blue-500 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-blue-600/30 mb-3">
                     <i class="fa-solid fa-vault"></i>
                 </div>
-                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Koperasi Jamaya</h1>
-                <p class="text-slate-600 text-xs mt-1">Sistem Informasi Manajemen & Keuangan Terpadu</p>
+                <h1 class="text-2xl font-black text-slate-900 tracking-tight">Koperasi Jamaya</h1>
+                <p class="text-slate-500 text-xs mt-1">Silakan pilih nama Anda untuk masuk ke sistem</p>
             </div>
 
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nomor Anggota / ID Pengurus</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
-                            <i class="fa-solid fa-id-card text-xs"></i>
-                        </span>
-                        <input type="text" id="login-id" required placeholder="Contoh: 2 atau nomor anggota" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/10 transition">
-                    </div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Pilih Nama Anggota / Admin</label>
+                    <select id="login-member-select" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/10 transition">
+                        <option value="">-- Memuat Daftar Anggota & Admin --</option>
+                        <option value="ADMIN">ADMIN / BENDAHARA (Adi Muhtar)</option>
+                    </select>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Password (Tgl Lahir ddmmyyyy)</label>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Password</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                             <i class="fa-solid fa-lock text-xs"></i>
                         </span>
-                        <input type="password" id="login-pass" required placeholder="Contoh: 23081989" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/10 transition">
+                        <input type="password" id="login-pass" required value="12345" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/10 transition">
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1">*Masukkan No Anggota dan Password Tanggal Lahir Anda.</p>
+                    <p class="text-[11px] text-slate-400 mt-1">*Password default otomatis: <strong class="text-blue-600">12345</strong></p>
                 </div>
 
                 <div id="login-error" class="hidden text-xs text-rose-700 bg-rose-50 p-3 rounded-xl font-bold border border-rose-200 flex items-center gap-2">
                     <i class="fa-solid fa-circle-exclamation"></i>
-                    <span>ID atau Password salah! Periksa kembali data Anda.</span>
+                    <span>Password salah! Gunakan password "12345".</span>
                 </div>
 
-                <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2 text-sm mt-2">
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-blue-700 to-blue-600 hover:from-blue-800 hover:to-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-600/20 transition flex items-center justify-center gap-2 text-sm mt-2">
                     <span>Masuk ke Sistem</span>
                     <i class="fa-solid fa-arrow-right text-xs"></i>
                 </button>
             </form>
 
-            <div class="mt-6 sm:mt-8 pt-6 border-t border-slate-100 text-center text-[11px] text-slate-500 font-semibold">
+            <div class="mt-6 pt-5 border-t border-slate-100 text-center text-[11px] text-slate-400 font-semibold">
                 PT. Jamaya Plastik Industri Perkasa &copy; 2026
             </div>
         </div>
@@ -95,56 +126,56 @@
     <!-- MAIN APP WRAPPER -->
     <div id="app-view" class="hidden flex-1 flex flex-col lg:flex-row min-h-screen">
         
-        <!-- SIDEBAR NAVIGATION (RESPONSIVE & MOBILE FRIENDLY) -->
-        <aside class="w-full lg:w-72 bg-white border-r border-slate-200 flex flex-col shrink-0 lg:h-screen lg:sticky lg:top-0 no-print shadow-xs">
-            <div class="p-4 sm:p-6 border-b border-slate-200 flex items-center justify-between lg:justify-start gap-3.5">
+        <!-- SIDEBAR NAVIGATION (MODERN & ELEGAN DENGAN NUANSA BIRU SOFT & STRONG) -->
+        <aside class="w-full lg:w-72 bg-slate-900 text-slate-300 border-r border-slate-800 flex flex-col shrink-0 lg:h-screen lg:sticky lg:top-0 no-print shadow-md">
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between lg:justify-start gap-3.5 bg-slate-950/40">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 sm:w-11 sm:h-11 bg-emerald-600 rounded-2xl flex items-center justify-center text-white font-bold shadow-md shrink-0">
-                        <i class="fa-solid fa-chart-pie text-sm sm:text-base"></i>
+                    <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-cyan-500 rounded-2xl flex items-center justify-center text-white font-bold shadow-md shadow-blue-600/30 shrink-0">
+                        <i class="fa-solid fa-chart-pie text-sm"></i>
                     </div>
                     <div>
-                        <h2 class="font-black text-slate-900 text-sm sm:text-base tracking-tight">Koperasi Jamaya</h2>
-                        <span class="px-2 py-0.5 bg-emerald-50 text-emerald-800 text-[10px] font-extrabold rounded border border-emerald-200 uppercase">Sistem Terpadu</span>
+                        <h2 class="font-black text-white text-sm tracking-tight">Koperasi Jamaya</h2>
+                        <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-extrabold rounded border border-blue-500/30 uppercase">Blue Edition</span>
                     </div>
                 </div>
             </div>
 
-            <!-- SCROLLABLE MENU ON MOBILE -->
-            <div class="p-3 sm:p-4 flex-1 flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-y-auto no-scrollbar">
-                <p class="hidden lg:block px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-2">Menu Utama</p>
+            <!-- MENU UTAMA DENGAN ANIMASI HOVER GALAK -->
+            <div class="p-3 flex-1 flex lg:flex-col gap-1.5 overflow-x-auto lg:overflow-y-auto no-scrollbar">
+                <p class="hidden lg:block px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-500 mb-2">Navigasi Menu</p>
                 
-                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="sidebar-btn shrink-0 lg:w-full flex items-center gap-2.5 lg:gap-3 px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-sm">
+                <button onclick="switchTab('dashboard')" id="tab-dashboard" class="menu-btn active shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition bg-blue-600 text-white shadow-md shadow-blue-600/20">
                     <i class="fa-solid fa-gauge-high w-5 text-center"></i>
                     <span class="whitespace-nowrap">Dashboard</span>
                 </button>
-                <button onclick="switchTab('members')" id="tab-members" class="sidebar-btn shrink-0 lg:w-full flex items-center gap-2.5 lg:gap-3 px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-xl text-xs font-bold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <button onclick="switchTab('members')" id="tab-members" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-users-rectangle w-5 text-center"></i>
                     <span class="whitespace-nowrap">Anggota</span>
                 </button>
-                <button onclick="switchTab('transactions')" id="tab-transactions" class="sidebar-btn shrink-0 lg:w-full flex items-center gap-2.5 lg:gap-3 px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-xl text-xs font-bold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <button onclick="switchTab('transactions')" id="tab-transactions" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-wallet w-5 text-center"></i>
                     <span class="whitespace-nowrap">Transaksi</span>
                 </button>
-                <button onclick="switchTab('loans')" id="tab-loans" class="sidebar-btn shrink-0 lg:w-full flex items-center gap-2.5 lg:gap-3 px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-xl text-xs font-bold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <button onclick="switchTab('loans')" id="tab-loans" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-hand-holding-dollar w-5 text-center"></i>
                     <span class="whitespace-nowrap">Pinjaman</span>
                 </button>
-                <button onclick="switchTab('member-report')" id="tab-member-report" class="sidebar-btn shrink-0 lg:w-full flex items-center gap-2.5 lg:gap-3 px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-xl text-xs font-bold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <button onclick="switchTab('member-report')" id="tab-member-report" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-id-badge w-5 text-center"></i>
                     <span class="whitespace-nowrap">Laporan Anggota</span>
                 </button>
-                <button onclick="switchTab('reports')" id="tab-reports" class="sidebar-btn shrink-0 lg:w-full flex items-center gap-2.5 lg:gap-3 px-3.5 lg:px-4 py-2.5 lg:py-3 rounded-xl text-xs font-bold transition text-slate-600 hover:bg-slate-100 hover:text-slate-900">
+                <button onclick="switchTab('reports')" id="tab-reports" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i>
                     <span class="whitespace-nowrap">Rekap Saldo</span>
                 </button>
             </div>
 
-            <div class="p-4 border-t border-slate-200 bg-slate-50 hidden lg:flex items-center justify-between">
+            <div class="p-4 border-t border-slate-800 bg-slate-950/40 hidden lg:flex items-center justify-between">
                 <div class="overflow-hidden">
-                    <div id="logged-user-name" class="text-xs font-bold text-slate-900 truncate">Nama User</div>
-                    <div id="logged-user-role" class="text-[10px] text-emerald-700 font-bold truncate">Peran</div>
+                    <div id="logged-user-name" class="text-xs font-bold text-white truncate">User</div>
+                    <div id="logged-user-role" class="text-[10px] text-blue-400 font-bold truncate">Peran</div>
                 </div>
-                <button onclick="handleLogout()" title="Keluar" class="w-9 h-9 rounded-xl bg-white border border-slate-300 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-700 text-slate-700 flex items-center justify-center transition shrink-0 shadow-2xs">
+                <button onclick="handleLogout()" title="Keluar" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-rose-600 hover:text-white text-slate-300 flex items-center justify-center transition shrink-0">
                     <i class="fa-solid fa-power-off text-xs"></i>
                 </button>
             </div>
@@ -153,23 +184,23 @@
         <!-- CONTENT AREA -->
         <div class="flex-1 flex flex-col min-w-0">
             
-            <!-- TOP BAR (DINAMIS & ELEGAN) -->
+            <!-- TOP BAR -->
             <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-25 px-4 sm:px-6 h-18 sm:h-20 flex items-center justify-between no-print shadow-2xs">
                 <div>
                     <h1 id="page-title" class="text-sm sm:text-lg font-black text-slate-900">Dashboard Utama</h1>
-                    <p id="page-subtitle" class="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Sistem informasi keuangan Koperasi Jamaya</p>
+                    <p id="page-subtitle" class="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Sistem Informasi Keuangan Koperasi Jamaya</p>
                 </div>
 
                 <div class="flex items-center gap-3">
                     <div class="lg:hidden text-right">
                         <div id="mobile-user-name" class="text-xs font-bold text-slate-900">User</div>
-                        <button onclick="handleLogout()" class="text-[10px] text-rose-700 font-bold underline">Keluar</button>
+                        <button onclick="handleLogout()" class="text-[10px] text-rose-600 font-bold underline">Keluar</button>
                     </div>
 
-                    <!-- TOMBOL SYNC HANYA MUNCUL UNTUK USER NO 2 (ADMIN / BFA) -->
+                    <!-- TOMBOL SYNC HANYA UNTUK ADMIN NO 2 -->
                     <div id="admin-sync-container" class="hidden">
                         <input type="file" id="top-excel-input" accept=".xlsx, .xls" class="hidden" onchange="loadExcelDatabaseManual(event)">
-                        <button onclick="document.getElementById('top-excel-input').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5 sm:gap-2">
+                        <button onclick="document.getElementById('top-excel-input').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold shadow-md shadow-blue-600/20 transition flex items-center gap-1.5 sm:gap-2">
                             <i class="fa-solid fa-file-excel text-xs sm:text-sm"></i>
                             <span>Sync File</span>
                         </button>
@@ -183,60 +214,60 @@
                 <!-- TAB 1: DASHBOARD -->
                 <section id="view-dashboard" class="space-y-6">
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                        <div class="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-2xs">
-                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Anggota Aktif</p>
+                        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-2xs">
+                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">Anggota Aktif</p>
                             <h3 id="stat-active-members" class="text-xl sm:text-2xl font-black text-slate-900 mt-1">0</h3>
                         </div>
-                        <div class="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-2xs">
-                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Transaksi</p>
+                        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-2xs">
+                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Transaksi</p>
                             <h3 id="stat-total-trx" class="text-xl sm:text-2xl font-black text-slate-900 mt-1">0</h3>
                         </div>
-                        <div class="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-2xs">
-                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Pemasukan</p>
-                            <h3 id="stat-total-in" class="text-xs sm:text-xl font-black text-emerald-700 mt-1 truncate">Rp 0</h3>
+                        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-2xs">
+                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Pemasukan</p>
+                            <h3 id="stat-total-in" class="text-xs sm:text-xl font-black text-blue-600 mt-1 truncate">Rp 0</h3>
                         </div>
-                        <div class="bg-white border border-slate-200 p-4 sm:p-5 rounded-2xl shadow-2xs">
-                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Pengeluaran</p>
-                            <h3 id="stat-total-out" class="text-xs sm:text-xl font-black text-rose-700 mt-1 truncate">Rp 0</h3>
+                        <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-2xs">
+                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Pengeluaran</p>
+                            <h3 id="stat-total-out" class="text-xs sm:text-xl font-black text-rose-600 mt-1 truncate">Rp 0</h3>
                         </div>
                     </div>
 
-                    <!-- SISA SALDO CARDS -->
+                    <!-- SISA SALDO CARDS (NUANSA BIRU SOFT & STRONG) -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-                        <div class="bg-emerald-50/70 border border-emerald-200 p-4 sm:p-5 rounded-2xl shadow-2xs">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Sisa Saldo Global Saat Ini</span>
-                            <h4 id="dash-saldo-global" class="text-base sm:text-xl font-black text-slate-900 mt-1">Rp 0</h4>
+                        <div class="bg-blue-50/80 border border-blue-200 p-4 rounded-2xl shadow-2xs">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-800">Sisa Saldo Global Saat Ini</span>
+                            <h4 id="dash-saldo-global" class="text-base sm:text-xl font-black text-blue-950 mt-1">Rp 0</h4>
                         </div>
-                        <div class="bg-blue-50/70 border border-blue-200 p-4 sm:p-5 rounded-2xl shadow-2xs">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-800">Sisa Saldo Rekening Bank</span>
-                            <h4 id="dash-saldo-rek" class="text-base sm:text-xl font-black text-slate-900 mt-1">Rp 0</h4>
+                        <div class="bg-indigo-50/80 border border-indigo-200 p-4 rounded-2xl shadow-2xs">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-800">Sisa Saldo Rekening Bank</span>
+                            <h4 id="dash-saldo-rek" class="text-base sm:text-xl font-black text-indigo-950 mt-1">Rp 0</h4>
                         </div>
-                        <div class="bg-amber-50/70 border border-amber-200 p-4 sm:p-5 rounded-2xl shadow-2xs">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800">Sisa Saldo Cash Saat Ini</span>
-                            <h4 id="dash-saldo-cash" class="text-base sm:text-xl font-black text-slate-900 mt-1">Rp 0</h4>
+                        <div class="bg-sky-50/80 border border-sky-200 p-4 rounded-2xl shadow-2xs">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-sky-800">Sisa Saldo Cash Saat Ini</span>
+                            <h4 id="dash-saldo-cash" class="text-base sm:text-xl font-black text-sky-950 mt-1">Rp 0</h4>
                         </div>
                     </div>
 
                     <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs printable-area">
-                        <div class="p-4 sm:p-6 border-b border-slate-200 flex items-center justify-between">
+                        <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between">
                             <h3 class="font-bold text-slate-900 text-sm sm:text-base">Aktivitas Transaksi Terbaru</h3>
                             <div class="flex items-center gap-2">
                                 <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs no-print">
                                     <i class="fa-solid fa-print"></i> Cetak
                                 </button>
-                                <button onclick="switchTab('transactions')" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 no-print">Semua &rarr;</button>
+                                <button onclick="switchTab('transactions')" class="text-xs font-bold text-blue-600 hover:text-blue-700 no-print">Semua &rarr;</button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-xs">
+                            <table class="w-full text-left border-collapse">
                                <thead>
                                     <tr class="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
-                                        <th class="p-3 sm:p-4 pl-4 sm:pl-6">No Trx</th>
-                                        <th class="p-3 sm:p-4">Tanggal</th>
-                                        <th class="p-3 sm:p-4">Nama Anggota</th>
-                                        <th class="p-3 sm:p-4">Jenis Simpanan</th>
-                                        <th class="p-3 sm:p-4 text-right">Masuk (Rp)</th>
-                                        <th class="p-3 sm:p-4 text-right pr-4 sm:pr-6">Keluar (Rp)</th>
+                                        <th class="pl-4">No Trx</th>
+                                        <th>Tanggal</th>
+                                        <th>Nama Anggota</th>
+                                        <th>Jenis Simpanan</th>
+                                        <th class="text-right">Masuk (Rp)</th>
+                                        <th class="text-right pr-4">Keluar (Rp)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="recent-trx-tbody" class="divide-y divide-slate-100 text-slate-900 font-medium"></tbody>
@@ -248,31 +279,31 @@
                 <!-- TAB 2: MEMBERS DATA -->
                 <section id="view-members" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs printable-area">
-                        <div class="p-4 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
+                        <div class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
                             <div>
                                 <h3 class="font-bold text-slate-900 text-sm sm:text-base">Daftar Anggota & Rincian Saldo Pribadi</h3>
                                 <p class="text-xs text-slate-500 mt-0.5">Sumber Data: Sheet ANGGOTA & Rekapitulasi Saldo</p>
                             </div>
                             <div class="flex items-center gap-3 w-full sm:w-auto">
-                                <input type="text" id="member-search" onkeyup="filterMembers()" placeholder="Cari nama atau NIK..." class="w-full sm:w-64 px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-emerald-600">
-                                <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs shrink-0">
+                                <input type="text" id="member-search" onkeyup="filterMembers()" placeholder="Cari nama atau NIK..." class="w-full sm:w-64 px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-blue-600">
+                                <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs shrink-0">
                                     <i class="fa-solid fa-print"></i>
                                     <span>Cetak</span>
                                 </button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-xs">
+                            <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
-                                        <th class="p-3 sm:p-4 pl-4 sm:pl-6">No Agt</th>
-                                        <th class="p-3 sm:p-4">Nama Lengkap</th>
-                                        <th class="p-3 sm:p-4">Bagian / Jabatan</th>
-                                        <th class="p-3 sm:p-4 text-right">Simpanan Wajib</th>
-                                        <th class="p-3 sm:p-4 text-right">Tabungan</th>
-                                        <th class="p-3 sm:p-4 text-right">Pinjaman</th>
-                                        <th class="p-3 sm:p-4 text-right">Kasbon</th>
-                                        <th class="p-3 sm:p-4 text-center pr-4 sm:pr-6 no-print">Aksi</th>
+                                        <th class="pl-4">No Agt</th>
+                                        <th>Nama Lengkap</th>
+                                        <th>Bagian / Jabatan</th>
+                                        <th class="text-right">Simpanan Wajib</th>
+                                        <th class="text-right">Tabungan</th>
+                                        <th class="text-right">Pinjaman</th>
+                                        <th class="text-right">Kasbon</th>
+                                        <th class="text-center pr-4 no-print">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="members-balance-tbody" class="divide-y divide-slate-100 text-slate-900 font-medium"></tbody>
@@ -281,35 +312,36 @@
                     </div>
                 </section>
 
-                <!-- TAB 3: TRANSACTIONS DATA -->
+                <!-- TAB 3: TRANSACTIONS DATA (DENGAN KOLOM SALDO GLOBAL, REK, CASH & JENIS TRANSAKSI) -->
                 <section id="view-transactions" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs printable-area">
-                        <div class="p-4 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
+                        <div class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
                             <div>
-                                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Riwayat Transaksi (Terbaru ke Terlama)</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Seluruh catatan arus kas masuk dan keluar koperasi.</p>
+                                <h3 class="font-bold text-slate-900 text-sm sm:text-base">Riwayat Transaksi Lengkap</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Dilengkapi rincian saldo global, rekening, cash, dan jenis transaksi.</p>
                             </div>
                             <div class="flex items-center gap-3 w-full sm:w-auto">
-                                <input type="text" id="trx-search" onkeyup="filterTransactions()" placeholder="Cari transaksi / anggota..." class="w-full sm:w-64 px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-emerald-600">
-                                <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs shrink-0">
+                                <input type="text" id="trx-search" onkeyup="filterTransactions()" placeholder="Cari transaksi / anggota..." class="w-full sm:w-64 px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-blue-600">
+                                <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs shrink-0">
                                     <i class="fa-solid fa-print"></i>
                                     <span>Cetak</span>
                                 </button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-xs">
+                            <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
-                                        <th class="p-3 sm:p-4 pl-4 sm:pl-6">No Trx</th>
-                                        <th class="p-3 sm:p-4">Tanggal</th>
-                                        <th class="p-3 sm:p-4">No Agt</th>
-                                        <th class="p-3 sm:p-4">Nama Anggota</th>
-                                        <th class="p-3 sm:p-4">Jenis Simpanan</th>
-                                        <th class="p-3 sm:p-4 text-right">Masuk (Rp)</th>
-                                        <th class="p-3 sm:p-4 text-right">Keluar (Rp)</th>
-                                        <th class="p-3 sm:p-4">Keterangan</th>
-                                        <th class="p-3 sm:p-4 text-center pr-4 sm:pr-6 no-print">Bukti Detil</th>
+                                        <th class="pl-4">No Trx</th>
+                                        <th>Tanggal</th>
+                                        <th>Nama Anggota</th>
+                                        <th>Simpanan</th>
+                                        <th class="text-right">Masuk</th>
+                                        <th class="text-right">Keluar</th>
+                                        <th class="text-center">Jenis (C/R)</th>
+                                        <th class="text-right">Saldo Global</th>
+                                        <th class="text-right">Saldo Rek</th>
+                                        <th class="text-right pr-4">Saldo Cash</th>
                                     </tr>
                                 </thead>
                                 <tbody id="transactions-full-tbody" class="divide-y divide-slate-100 text-slate-900 font-medium"></tbody>
@@ -321,31 +353,31 @@
                 <!-- TAB 4: LOANS -->
                 <section id="view-loans" class="hidden space-y-6">
                     <div id="loan-list-wrapper" class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs printable-area">
-                        <div class="p-4 sm:p-6 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div>
                                 <h3 class="font-bold text-slate-900 text-sm sm:text-base">Daftar Pinjaman (Sheet PINJAMAN)</h3>
                                 <p class="text-xs text-slate-500 mt-0.5">Sumber Data Presisi: Sheet PINJAMAN Lengkap</p>
                             </div>
                             <div class="flex items-center gap-3 w-full sm:w-auto">
-                                <input type="text" id="loan-search" onkeyup="filterLoans()" placeholder="Cari peminjam / keperluan..." class="w-full sm:w-64 px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-emerald-600">
-                                <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs shrink-0 no-print">
+                                <input type="text" id="loan-search" onkeyup="filterLoans()" placeholder="Cari peminjam / keperluan..." class="w-full sm:w-64 px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-blue-600">
+                                <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs shrink-0 no-print">
                                     <i class="fa-solid fa-print"></i>
                                     <span>Cetak</span>
                                 </button>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse text-xs">
+                            <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
-                                        <th class="p-3 sm:p-4 pl-4 sm:pl-6">No PJ</th>
-                                        <th class="p-3 sm:p-4">Kode TR</th>
-                                        <th class="p-3 sm:p-4">Nama Anggota</th>
-                                        <th class="p-3 sm:p-4 text-right">Jumlah Pinjam</th>
-                                        <th class="p-3 sm:p-4">Keperluan</th>
-                                        <th class="p-3 sm:p-4 text-center">Tenor</th>
-                                        <th class="p-3 sm:p-4 text-right">Angsuran / Bln</th>
-                                        <th class="p-3 sm:p-4 text-center pr-4 sm:pr-6 no-print">Formulir Penuh</th>
+                                        <th class="pl-4">No PJ</th>
+                                        <th>Kode TR</th>
+                                        <th>Nama Anggota</th>
+                                        <th class="text-right">Jumlah Pinjam</th>
+                                        <th>Keperluan</th>
+                                        <th class="text-center">Tenor</th>
+                                        <th class="text-right">Angsuran / Bln</th>
+                                        <th class="text-center pr-4 no-print">Formulir Penuh</th>
                                     </tr>
                                 </thead>
                                 <tbody id="loans-tbody" class="divide-y divide-slate-100 text-slate-900 font-medium"></tbody>
@@ -357,11 +389,11 @@
                     <div id="loan-detail-card" class="hidden bg-white border border-slate-300 rounded-2xl p-6 sm:p-10 space-y-6 shadow-xl">
                         <div class="flex items-center justify-between pb-4 border-b border-slate-200 no-print">
                             <div>
-                                <span class="px-2.5 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-extrabold uppercase">Formulir Peminjaman Resmi Koperasi</span>
+                                <span class="px-2.5 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-extrabold uppercase">Formulir Peminjaman Resmi Koperasi</span>
                                 <h3 class="text-base sm:text-lg font-black text-slate-900 mt-2">Pratinjau Formulir Pinjaman Utuh</h3>
                             </div>
                             <div class="flex items-center gap-2">
-                                <button onclick="printSpecificLoan()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
+                                <button onclick="printSpecificLoan()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
                                     <i class="fa-solid fa-print"></i> Cetak Formulir Ini
                                 </button>
                                 <button onclick="closeLoanDetail()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 hover:text-slate-900 flex items-center justify-center font-bold">
@@ -370,27 +402,26 @@
                             </div>
                         </div>
 
-                        <!-- KOP SURAT FORMULIR PINJAMAN UTUH UNTUK PRINT -->
+                        <!-- KOP SURAT FORMULIR PINJAMAN UTUH -->
                         <div id="loan-print-container" class="space-y-6 text-slate-900 bg-white p-2 sm:p-6 rounded-2xl">
                             <div class="text-center pb-6 border-b-2 border-slate-900 space-y-1">
                                 <h2 class="text-base sm:text-xl font-black uppercase tracking-wider text-slate-900">KOPERASI KARYAWAN PT. JAMAYA PLASTIK INDUSTRI PERKASA</h2>
                                 <p class="text-xs font-bold text-slate-700">Jl. Industri Cikupa, Tangerang - Banten</p>
-                                <h3 class="text-sm sm:text-base font-extrabold uppercase mt-3 underline tracking-wide text-emerald-900">FORMULIR PERMOHONAN & BUKTI PINJAMAN ANGGOTA</h3>
+                                <h3 class="text-sm sm:text-base font-extrabold uppercase mt-3 underline tracking-wide text-blue-900">FORMULIR PERMOHONAN & BUKTI PINJAMAN ANGGOTA</h3>
                             </div>
 
                             <div id="loan-full-content" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm"></div>
 
-                            <!-- TABEL RIWAYAT ANGSURAN (DARI KODE TRANSAKSI "CI" & NO REFF = NO PJ) -->
                             <div class="space-y-3 pt-4">
-                                <h4 class="font-black text-slate-900 text-xs sm:text-sm uppercase tracking-wide underline text-emerald-900">C. Riwayat Pembayaran / Angsuran Pokok (CI)</h4>
+                                <h4 class="font-black text-slate-900 text-xs sm:text-sm uppercase tracking-wide underline text-blue-900">C. Riwayat Pembayaran / Angsuran Pokok (CI)</h4>
                                 <div class="overflow-x-auto border border-slate-300 rounded-xl">
-                                    <table class="w-full text-left border-collapse text-xs">
+                                    <table class="w-full text-left border-collapse">
                                         <thead>
                                             <tr class="bg-slate-100 text-slate-900 font-bold uppercase tracking-wider border-b border-slate-300">
-                                                <th class="p-3 pl-4">No Transaksi</th>
-                                                <th class="p-3">Tanggal</th>
-                                                <th class="p-3">Keterangan Angsuran</th>
-                                                <th class="p-3 text-right pr-4">Jumlah Bayar (Rp)</th>
+                                                <th class="pl-4">No Transaksi</th>
+                                                <th>Tanggal</th>
+                                                <th>Keterangan Angsuran</th>
+                                                <th class="text-right pr-4">Jumlah Bayar (Rp)</th>
                                             </tr>
                                         </thead>
                                         <tbody id="loan-installments-tbody" class="divide-y divide-slate-200 text-slate-900 font-semibold"></tbody>
@@ -412,18 +443,18 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: MEMBER REPORT -->
+                <!-- TAB 5: MEMBER REPORT (KODE "CA" DIKECUALIKAN, DEFAULT TIDAK LANGSUNG NO.1) -->
                 <section id="view-member-report" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-2xs space-y-6 printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
                             <div>
                                 <h3 class="font-bold text-slate-900 text-sm sm:text-base">Laporan Rinci Per Anggota</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Menampilkan sub-total transaksi pribadi dan sisa saldo khusus anggota.</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Transaksi cicilan admin (kode "CA") otomatis dikecualikan dari saldo pribadi.</p>
                             </div>
                             <div class="flex items-center gap-3 w-full sm:w-auto">
-                                <select id="member-selector" onchange="renderMemberDetail()" class="w-full sm:w-64 px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-emerald-600">
+                                <select id="member-selector" onchange="renderMemberDetail()" class="w-full sm:w-64 px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600">
                                 </select>
-                                <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs shrink-0">
+                                <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs shrink-0">
                                     <i class="fa-solid fa-print"></i>
                                     <span>Cetak</span>
                                 </button>
@@ -431,23 +462,27 @@
                         </div>
 
                         <!-- Member Profile & Subtotals -->
-                        <div id="member-profile-card" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs"></div>
+                        <div id="member-profile-card" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                            <div class="text-slate-400 italic">Silakan pilih nama anggota terlebih dahulu pada pilihan di atas.</div>
+                        </div>
 
                         <!-- Member Transactions Table -->
                         <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                            <table class="w-full text-left border-collapse text-xs">
+                            <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="bg-slate-100 text-slate-700 font-bold uppercase tracking-wider border-b border-slate-200">
-                                        <th class="p-3 pl-4">No Trx</th>
-                                        <th class="p-3">Tanggal</th>
-                                        <th class="p-3">Jenis Simpanan</th>
-                                        <th class="p-3">Keterangan</th>
-                                        <th class="p-3 text-right">Masuk (Rp)</th>
-                                        <th class="p-3 text-right">Keluar (Rp)</th>
-                                        <th class="p-3 text-right pr-4">Sisa Saldo Pribadi</th>
+                                        <th class="pl-4">No Trx</th>
+                                        <th>Tanggal</th>
+                                        <th>Jenis Simpanan</th>
+                                        <th>Keterangan</th>
+                                        <th class="text-right">Masuk (Rp)</th>
+                                        <th class="text-right">Keluar (Rp)</th>
+                                        <th class="text-right pr-4">Sisa Saldo Pribadi</th>
                                     </tr>
                                 </thead>
-                                <tbody id="member-trx-tbody" class="divide-y divide-slate-100 text-slate-900 font-medium"></tbody>
+                                <tbody id="member-trx-tbody" class="divide-y divide-slate-100 text-slate-900 font-medium">
+                                    <tr><td colspan="7" class="p-6 text-center text-slate-400 italic">Belum ada anggota yang dipilih.</td></tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -461,56 +496,56 @@
                                 <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">Rekap Saldo Keuangan & Sisa Saldo Rinci</h3>
                                 <p class="text-xs text-slate-500 mt-0.5">Analisis arus kas global, rekening bank, dan cash operasional koperasi</p>
                             </div>
-                            <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-2xs">
+                            <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
                                 <i class="fa-solid fa-print"></i>
                                 <span>Cetak / PDF</span>
                             </button>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Akumulasi Masuk</span>
-                                <h4 id="report-total-in" class="text-lg sm:text-xl font-black text-emerald-700 mt-1">Rp 0</h4>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Akumulasi Masuk</span>
+                                <h4 id="report-total-in" class="text-lg sm:text-xl font-black text-blue-600 mt-1">Rp 0</h4>
                             </div>
-                            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Akumulasi Keluar</span>
-                                <h4 id="report-total-out" class="text-lg sm:text-xl font-black text-rose-700 mt-1">Rp 0</h4>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Akumulasi Keluar</span>
+                                <h4 id="report-total-out" class="text-lg sm:text-xl font-black text-rose-600 mt-1">Rp 0</h4>
                             </div>
-                            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Selisih Arus Kas Net</span>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Selisih Arus Kas Net</span>
                                 <h4 id="report-net-cash" class="text-lg sm:text-xl font-black text-slate-900 mt-1">Rp 0</h4>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Saldo Global Terakhir</span>
-                                <h4 id="report-saldo-global" class="text-base sm:text-lg font-black text-emerald-700 mt-1">Rp 0</h4>
+                            <div class="bg-blue-50/50 p-4 rounded-2xl border border-blue-200">
+                                <span class="text-[11px] font-bold text-blue-800 uppercase tracking-wider">Total Saldo Global Terakhir</span>
+                                <h4 id="report-saldo-global" class="text-base sm:text-lg font-black text-blue-950 mt-1">Rp 0</h4>
                             </div>
-                            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Saldo Rekening Bank</span>
-                                <h4 id="report-saldo-rek" class="text-base sm:text-lg font-black text-blue-700 mt-1">Rp 0</h4>
+                            <div class="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-200">
+                                <span class="text-[11px] font-bold text-indigo-800 uppercase tracking-wider">Total Saldo Rekening Bank</span>
+                                <h4 id="report-saldo-rek" class="text-base sm:text-lg font-black text-indigo-950 mt-1">Rp 0</h4>
                             </div>
-                            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                                <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Saldo Cash</span>
-                                <h4 id="report-saldo-cash" class="text-base sm:text-lg font-black text-amber-700 mt-1">Rp 0</h4>
+                            <div class="bg-sky-50/50 p-4 rounded-2xl border border-sky-200">
+                                <span class="text-[11px] font-bold text-sky-800 uppercase tracking-wider">Total Saldo Cash</span>
+                                <h4 id="report-saldo-cash" class="text-base sm:text-lg font-black text-sky-950 mt-1">Rp 0</h4>
                             </div>
                         </div>
 
                         <div class="pt-2">
                             <h4 class="font-bold text-slate-900 text-sm mb-3">Ringkasan Sistem & Master Data</h4>
-                            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 text-xs text-slate-800 space-y-3 font-medium">
-                                <div class="flex justify-between py-1.5 border-b border-slate-200">
+                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-xs text-slate-800 space-y-3 font-medium">
+                                <div class="flex justify-between py-1 border-b border-slate-200">
                                     <span class="text-slate-500">Total Anggota Terdaftar:</span>
                                     <span id="rep-total-members" class="font-bold text-slate-900">0 Anggota</span>
                                 </div>
-                                <div class="flex justify-between py-1.5 border-b border-slate-200">
+                                <div class="flex justify-between py-1 border-b border-slate-200">
                                     <span class="text-slate-500">Total Catatan Transaksi:</span>
                                     <span id="rep-total-trx" class="font-bold text-slate-900">0 Transaksi</span>
                                 </div>
-                                <div class="flex justify-between py-1.5">
+                                <div class="flex justify-between py-1">
                                     <span class="text-slate-500">Status Sumber File:</span>
-                                    <span id="rep-sync-status" class="font-bold text-emerald-700">FILE SYNC.xlsx</span>
+                                    <span id="rep-sync-status" class="font-bold text-blue-600">FILE SYNC.xlsx</span>
                                 </div>
                             </div>
                         </div>
@@ -520,24 +555,24 @@
             </main>
 
             <!-- FOOTER -->
-            <footer class="bg-white border-t border-slate-200 py-6 px-6 sm:px-8 text-center text-xs text-slate-500 font-semibold no-print">
-                Koperasi Jamaya &bull; Dikelola oleh Pengurus & Bendahara &bull; Versi 1.0 (2026)
+            <footer class="bg-white border-t border-slate-200 py-5 px-6 text-center text-xs text-slate-400 font-semibold no-print">
+                Koperasi Jamaya &bull; Dikelola oleh Pengurus & Bendahara &bull; Versi 2026 (Blue Edition)
             </footer>
         </div>
     </div>
 
     <!-- TRANSACTION DETAIL PRINT MODAL -->
     <div id="trx-print-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-        <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-xl">
-            <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+        <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-xl">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-200">
                 <h3 class="font-extrabold text-slate-900 text-base">Bukti / Detil Transaksi Resmi</h3>
                 <button onclick="closeTrxModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 hover:text-slate-900 flex items-center justify-center font-bold">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <div id="trx-modal-content" class="space-y-3 text-xs text-slate-800 font-semibold"></div>
-            <div class="pt-4 flex justify-end gap-3 no-print">
-                <button onclick="window.print()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
+            <div id="trx-modal-content" class="space-y-2.5 text-xs text-slate-800 font-semibold"></div>
+            <div class="pt-3 flex justify-end gap-3 no-print">
+                <button onclick="window.print()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
                     <i class="fa-solid fa-print"></i> Cetak Bukti Transaksi
                 </button>
             </div>
@@ -595,6 +630,7 @@
                 { noPj: "PJ0001", kodeTr: "TX0026", tgl: "05-Jun-2026", noAgt: "1", nama: "A. Syamsul Falah", jumlah: 5000000, keperluan: "Buat tambahan acara Besanan", tenor: 6, angsuranPokok: 833333, angsuranAdm: 25000, jumlahPerBulan: 858333, totalPengembalian: 5150000, pembayaran: "Cash", ttd: "Supandi", jaminan: "Sertifikat / ATM", potPj: "-", potWajib: "-", potKasbon: "-", tenorAwal: 6, catatan: "Lancar", angsuranMasuk: 835000 }
             ];
 
+            populateLoginDropdown();
             if (isLoggedIn) {
                 initAppSession();
             } else {
@@ -710,6 +746,7 @@
                 if (parsedTransactions.length > 0) appData.transactions = parsedTransactions;
                 if (parsedLoans.length > 0) appData.loans = parsedLoans;
 
+                populateLoginDropdown();
                 if (isLoggedIn) {
                     initAppSession();
                 } else {
@@ -721,23 +758,33 @@
             }
         }
 
+        function populateLoginDropdown() {
+            const select = document.getElementById('login-member-select');
+            let html = `<option value="ADMIN">ADMIN / BENDAHARA (Adi Muhtar)</option>`;
+            appData.members.forEach(m => {
+                html += `<option value="${m.noAgt}">[No. ${m.noAgt}] ${m.nama} (${m.jabatan})</option>`;
+            });
+            select.innerHTML = html;
+        }
+
         function handleLogin(e) {
             e.preventDefault();
-            const idInput = document.getElementById('login-id').value.trim();
+            const selectedVal = document.getElementById('login-member-select').value;
             const passInput = document.getElementById('login-pass').value.trim();
             const errorDiv = document.getElementById('login-error');
 
-            let sessionUser = null;
+            if (passInput !== '12345') {
+                errorDiv.classList.remove('hidden');
+                return;
+            }
 
-            // Cek khusus user no 2 (Adi Muhtar) atau admin
-            const isAdmin = (idInput === '2' || idInput.toLowerCase() === 'admin' || idInput.toLowerCase() === 'bendahara');
-            if (isAdmin && (passInput === '23081989' || passInput === 'jamaya2026')) {
+            let sessionUser = null;
+            if (selectedVal === 'ADMIN') {
                 sessionUser = { id: '2', name: "Adi Muhtar", role: "Administrator" };
             } else {
-                let foundMember = appData.members.find(m => String(m.noAgt) === idInput);
-                if (foundMember) {
-                    // Validasi password tgl lahir ddmmyyyy atau format lain yang cocok
-                    sessionUser = { id: foundMember.noAgt, name: foundMember.nama, role: "Anggota" };
+                let found = appData.members.find(m => String(m.noAgt) === selectedVal);
+                if (found) {
+                    sessionUser = { id: found.noAgt, name: found.nama, role: "Anggota" };
                 }
             }
 
@@ -759,7 +806,7 @@
             document.getElementById('logged-user-role').innerText = appData.currentUser.role;
             document.getElementById('mobile-user-name').innerText = appData.currentUser.name;
 
-            // ATUR HAK AKSES TOMBOL SYNC: HANYA MUNCUL JIKA ID USER == '2' (ADMIN)
+            // TOMBOL SYNC HANYA UNTUK USER NO 2 / ADMIN
             if (String(appData.currentUser.id) === '2' || appData.currentUser.role === 'Administrator') {
                 document.getElementById('admin-sync-container').classList.remove('hidden');
             } else {
@@ -775,6 +822,7 @@
             document.getElementById('app-view').classList.add('hidden');
             document.getElementById('login-view').classList.remove('hidden');
             document.getElementById('login-form').reset();
+            document.getElementById('login-pass').value = "12345";
             document.getElementById('login-error').classList.add('hidden');
         }
 
@@ -822,22 +870,21 @@
             recentTrx.forEach(t => {
                 recentHtml += `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3 sm:p-4 pl-4 sm:pl-6 font-mono font-bold text-slate-900">${t.noTrx}</td>
-                        <td class="p-3 sm:p-4 text-slate-600 font-semibold">${t.tgl}</td>
-                        <td class="p-3 sm:p-4 font-bold text-slate-900">${t.nama}</td>
-                        <td class="p-3 sm:p-4"><span class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[11px] font-bold">${t.jenisSimpanan}</span></td>
-                        <td class="p-3 sm:p-4 text-right font-bold text-emerald-700">${t.masuk > 0 ? formatRupiah(t.masuk) : '-'}</td>
-                        <td class="p-3 sm:p-4 text-right pr-4 sm:pr-6 font-bold text-rose-700">${t.keluar > 0 ? formatRupiah(t.keluar) : '-'}</td>
+                        <td class="pl-4 font-mono font-bold text-slate-900">${t.noTrx}</td>
+                        <td class="text-slate-600 font-semibold">${t.tgl}</td>
+                        <td class="font-bold text-slate-900">${t.nama}</td>
+                        <td><span class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[11px] font-bold">${t.jenisSimpanan}</span></td>
+                        <td class="text-right font-bold text-blue-600">${t.masuk > 0 ? formatRupiah(t.masuk) : '-'}</td>
+                        <td class="text-right pr-4 font-bold text-rose-600">${t.keluar > 0 ? formatRupiah(t.keluar) : '-'}</td>
                     </tr>
                 `;
             });
-            document.getElementById('recent-trx-tbody').innerHTML = recentHtml || `<tr><td colspan="6" class="p-6 text-center text-slate-500 font-semibold">Belum ada data.</td></tr>`;
+            document.getElementById('recent-trx-tbody').innerHTML = recentHtml || `<tr><td colspan="6" class="p-6 text-center text-slate-400 font-semibold">Belum ada data.</td></tr>`;
 
             renderMembersBalanceTable(appData.members);
             renderTransactionsFullTable([...appData.transactions].reverse());
             renderLoansTable(appData.loans);
-            populateMemberSelector();
-            renderMemberDetail();
+            populateMemberReportSelector();
 
             document.getElementById('report-total-in').innerText = formatRupiah(totalIn);
             document.getElementById('report-total-out').innerText = formatRupiah(totalOut);
@@ -855,22 +902,22 @@
                 const bal = getMemberBalances(m.noAgt, m.nama);
                 html += `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3 sm:p-4 pl-4 sm:pl-6 font-mono font-bold text-emerald-800">${m.noAgt}</td>
-                        <td class="p-3 sm:p-4 font-bold text-slate-900">${m.nama}</td>
-                        <td class="p-3 sm:p-4 text-slate-600 font-semibold">${m.bagian} (${m.jabatan})</td>
-                        <td class="p-3 sm:p-4 text-right font-mono text-emerald-700 font-bold">${formatRupiah(bal.simpananWajib)}</td>
-                        <td class="p-3 sm:p-4 text-right font-mono text-blue-700 font-bold">${formatRupiah(bal.tabungan)}</td>
-                        <td class="p-3 sm:p-4 text-right font-mono text-rose-700 font-bold">${formatRupiah(bal.pinjaman)}</td>
-                        <td class="p-3 sm:p-4 text-right font-mono text-amber-700 font-bold">${formatRupiah(bal.kasbon)}</td>
-                        <td class="p-3 sm:p-4 text-center pr-4 sm:pr-6 no-print">
-                            <button onclick="selectMemberForReport('${m.noAgt}')" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-2xs">
+                        <td class="pl-4 font-mono font-bold text-blue-700">${m.noAgt}</td>
+                        <td class="font-bold text-slate-900">${m.nama}</td>
+                        <td class="text-slate-600 font-semibold">${m.bagian} (${m.jabatan})</td>
+                        <td class="text-right font-mono text-blue-600 font-bold">${formatRupiah(bal.simpananWajib)}</td>
+                        <td class="text-right font-mono text-indigo-600 font-bold">${formatRupiah(bal.tabungan)}</td>
+                        <td class="text-right font-mono text-rose-600 font-bold">${formatRupiah(bal.pinjaman)}</td>
+                        <td class="text-right font-mono text-amber-600 font-bold">${formatRupiah(bal.kasbon)}</td>
+                        <td class="text-center pr-4 no-print">
+                            <button onclick="selectMemberForReport('${m.noAgt}')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-2xs">
                                 <i class="fa-solid fa-file-lines text-[10px]"></i> Lap
                             </button>
                         </td>
                     </tr>
                 `;
             });
-            document.getElementById('members-balance-tbody').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-500 font-semibold">Tidak ada data anggota.</td></tr>`;
+            document.getElementById('members-balance-tbody').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-400 font-semibold">Tidak ada data anggota.</td></tr>`;
         }
 
         function selectMemberForReport(noAgt) {
@@ -882,51 +929,34 @@
         function renderTransactionsFullTable(data) {
             let html = '';
             data.forEach(t => {
+                // Tentukan jenis transaksi dari kodeSaldo (C = Cash, R = Rekening)
+                let jenisTrxLabel = '-';
+                let badgeColor = 'bg-slate-100 text-slate-800';
+                const ks = String(t.kodeSaldo).trim().toUpperCase();
+                if (ks === 'C') {
+                    jenisTrxLabel = 'Cash';
+                    badgeColor = 'bg-sky-100 text-sky-800 border border-sky-200';
+                } else if (ks === 'R') {
+                    jenisTrxLabel = 'Rekening';
+                    badgeColor = 'bg-indigo-100 text-indigo-800 border border-indigo-200';
+                }
+
                 html += `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3 sm:p-4 pl-4 sm:pl-6 font-mono font-bold text-slate-900">${t.noTrx}</td>
-                        <td class="p-3 sm:p-4 text-slate-600 font-semibold">${t.tgl}</td>
-                        <td class="p-3 sm:p-4 font-mono font-bold text-slate-900">${t.noAgt}</td>
-                        <td class="p-3 sm:p-4 font-bold text-slate-900">${t.nama}</td>
-                        <td class="p-3 sm:p-4"><span class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[11px] font-bold">${t.jenisSimpanan}</span></td>
-                        <td class="p-3 sm:p-4 text-right font-bold text-emerald-700">${t.masuk > 0 ? formatRupiah(t.masuk) : '-'}</td>
-                        <td class="p-3 sm:p-4 text-right font-bold text-rose-700">${t.keluar > 0 ? formatRupiah(t.keluar) : '-'}</td>
-                        <td class="p-3 sm:p-4 text-slate-600 font-semibold">${t.ket}</td>
-                        <td class="p-3 sm:p-4 text-center pr-4 sm:pr-6 no-print">
-                            <button onclick="printTrxDetail('${t.noTrx}')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-emerald-900 rounded-lg text-xs font-bold transition flex items-center gap-1 mx-auto shadow-2xs">
-                                <i class="fa-solid fa-print"></i> Detil
-                            </button>
-                        </td>
+                        <td class="pl-4 font-mono font-bold text-slate-900">${t.noTrx}</td>
+                        <td class="text-slate-600 font-semibold">${t.tgl}</td>
+                        <td class="font-bold text-slate-900">${t.nama}</td>
+                        <td><span class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[11px] font-bold">${t.jenisSimpanan}</span></td>
+                        <td class="text-right font-bold text-blue-600">${t.masuk > 0 ? formatRupiah(t.masuk) : '-'}</td>
+                        <td class="text-right font-bold text-rose-600">${t.keluar > 0 ? formatRupiah(t.keluar) : '-'}</td>
+                        <td class="text-center"><span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${badgeColor}">${jenisTrxLabel}</span></td>
+                        <td class="text-right font-mono font-bold text-blue-900">${formatRupiah(t.saldoGlobal)}</td>
+                        <td class="text-right font-mono text-indigo-900 font-bold">${formatRupiah(t.saldoRek)}</td>
+                        <td class="text-right pr-4 font-mono font-bold text-sky-900">${formatRupiah(t.saldoCash)}</td>
                     </tr>
                 `;
             });
-            document.getElementById('transactions-full-tbody').innerHTML = html || `<tr><td colspan="9" class="p-6 text-center text-slate-500 font-semibold">Tidak ada data transaksi.</td></tr>`;
-        }
-
-        function printTrxDetail(noTrx) {
-            const t = appData.transactions.find(x => x.noTrx === noTrx);
-            if (!t) return;
-
-            const modalContent = document.getElementById('trx-modal-content');
-            modalContent.innerHTML = `
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-300 space-y-2">
-                    <div class="flex justify-between border-b border-slate-200 pb-2"><span class="text-slate-500 font-bold">No Transaksi:</span><span class="font-black text-slate-900 font-mono">${t.noTrx}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500 font-bold">Tanggal:</span><span class="text-slate-900 font-semibold">${t.tgl}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500 font-bold">No Anggota / Nama:</span><span class="text-slate-900 font-bold">${t.noAgt} - ${t.nama}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500 font-bold">Jenis Layanan:</span><span class="text-emerald-800 font-bold">${t.jenisSimpanan}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500 font-bold">Keterangan:</span><span class="text-slate-900 font-semibold">${t.ket}</span></div>
-                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500 font-bold">Masuk (Rp):</span><span class="font-bold text-emerald-700">${formatRupiah(t.masuk)}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500 font-bold">Keluar (Rp):</span><span class="font-bold text-rose-700">${formatRupiah(t.keluar)}</span></div>
-                    <div class="flex justify-between border-t border-slate-200 pt-2"><span class="text-slate-500 font-bold">Sisa Saldo Global:</span><span class="font-mono font-bold text-emerald-800">${formatRupiah(t.saldoGlobal)}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500 font-bold">Sisa Saldo Rekening:</span><span class="font-mono text-blue-800 font-bold">${formatRupiah(t.saldoRek)}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500 font-bold">Sisa Saldo Cash:</span><span class="font-mono text-amber-800 font-bold">${formatRupiah(t.saldoCash)}</span></div>
-                </div>
-            `;
-            document.getElementById('trx-print-modal').classList.remove('hidden');
-        }
-
-        function closeTrxModal() {
-            document.getElementById('trx-print-modal').classList.add('hidden');
+            document.getElementById('transactions-full-tbody').innerHTML = html || `<tr><td colspan="10" class="p-6 text-center text-slate-400 font-semibold">Tidak ada data transaksi.</td></tr>`;
         }
 
         function renderLoansTable(data) {
@@ -934,22 +964,22 @@
             data.forEach((l) => {
                 html += `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3 sm:p-4 pl-4 sm:pl-6 font-mono font-bold text-slate-900">${l.noPj}</td>
-                        <td class="p-3 sm:p-4"><code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-900 font-bold">${l.kodeTr}</code></td>
-                        <td class="p-3 sm:p-4 font-bold text-slate-900">${l.nama} <span class="text-slate-500 font-semibold">(${l.noAgt})</span></td>
-                        <td class="p-3 sm:p-4 text-right font-mono font-bold text-rose-700">${formatRupiah(l.jumlah)}</td>
-                        <td class="p-3 sm:p-4 text-slate-600 font-semibold">${l.keperluan}</td>
-                        <td class="p-3 sm:p-4 text-center font-bold text-slate-900">${l.tenor} Bln</td>
-                        <td class="p-3 sm:p-4 text-right font-mono text-emerald-700 font-bold">${formatRupiah(l.jumlahPerBulan)}</td>
-                        <td class="p-3 sm:p-4 text-center pr-4 sm:pr-6 no-print">
-                            <button onclick="showLoanDetail('${l.noPj}')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition shadow-2xs flex items-center gap-1 mx-auto">
+                        <td class="pl-4 font-mono font-bold text-slate-900">${l.noPj}</td>
+                        <td><code class="bg-slate-100 px-1.5 py-0.5 rounded text-slate-900 font-bold">${l.kodeTr}</code></td>
+                        <td class="font-bold text-slate-900">${l.nama} <span class="text-slate-400 font-semibold">(${l.noAgt})</span></td>
+                        <td class="text-right font-mono font-bold text-rose-600">${formatRupiah(l.jumlah)}</td>
+                        <td class="text-slate-600 font-semibold">${l.keperluan}</td>
+                        <td class="text-center font-bold text-slate-900">${l.tenor} Bln</td>
+                        <td class="text-right font-mono text-blue-600 font-bold">${formatRupiah(l.jumlahPerBulan)}</td>
+                        <td class="text-center pr-4 no-print">
+                            <button onclick="showLoanDetail('${l.noPj}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition shadow-2xs flex items-center gap-1 mx-auto">
                                 <i class="fa-solid fa-file-invoice text-[10px]"></i> Formulir Utuh
                             </button>
                         </td>
                     </tr>
                 `;
             });
-            document.getElementById('loans-tbody').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-500 font-semibold">Tidak ada data pinjaman dari sheet PINJAMAN.</td></tr>`;
+            document.getElementById('loans-tbody').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-400 font-semibold">Tidak ada data pinjaman.</td></tr>`;
         }
 
         function showLoanDetail(noPj) {
@@ -966,26 +996,26 @@
             document.getElementById('print-pengurus-name').innerText = `( ${loan.ttd || 'Supandi'} / Bendahara )`;
 
             document.getElementById('loan-full-content').innerHTML = `
-                <div class="space-y-3 bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-300">
-                    <h4 class="font-black text-slate-900 text-xs sm:text-sm border-b border-slate-300 pb-2 uppercase tracking-wide text-emerald-900">A. Data Anggota Peminjam</h4>
+                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-300">
+                    <h4 class="font-black text-slate-900 text-xs sm:text-sm border-b border-slate-300 pb-2 uppercase tracking-wide text-blue-900">A. Data Anggota Peminjam</h4>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">No Anggota:</span><span class="font-mono font-bold text-slate-900">${loan.noAgt}</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">Nama Lengkap:</span><span class="font-bold text-slate-900">${loan.nama}</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">Bagian / Jabatan:</span><span class="text-slate-900 font-semibold">${member ? member.bagian + ' / ' + member.jabatan : '-'}</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">No HP / Telp:</span><span class="text-slate-900 font-semibold">${member ? member.hp : '-'}</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">Rekening Bank:</span><span class="text-slate-900 font-semibold">${member ? member.rek + ' (' + member.bank + ')' : '-'}</span></div>
                 </div>
-                <div class="space-y-3 bg-slate-50 p-4 sm:p-5 rounded-xl border border-slate-300">
-                    <h4 class="font-black text-slate-900 text-xs sm:text-sm border-b border-slate-300 pb-2 uppercase tracking-wide text-emerald-900">B. Rincian & Persyaratan Pinjaman</h4>
+                <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-300">
+                    <h4 class="font-black text-slate-900 text-xs sm:text-sm border-b border-slate-300 pb-2 uppercase tracking-wide text-blue-900">B. Rincian & Persyaratan Pinjaman</h4>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">No PJ / Transaksi:</span><span class="font-mono font-bold text-slate-900">${loan.noPj} (${loan.kodeTr})</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">Tanggal Pencairan:</span><span class="text-slate-900 font-bold">${loan.tgl}</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">Untuk Keperluan:</span><span class="text-slate-900 font-bold">${loan.keperluan}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-600 font-bold">Jumlah Pinjaman:</span><span class="text-rose-700 font-black">${formatRupiah(loan.jumlah)}</span></div>
+                    <div class="flex justify-between"><span class="text-slate-600 font-bold">Jumlah Pinjaman:</span><span class="text-rose-600 font-black">${formatRupiah(loan.jumlah)}</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">Tenor / Jangka Waktu:</span><span class="text-slate-900 font-bold">${loan.tenor} Bulan</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">Angsuran Pokok / Bln:</span><span class="text-slate-900 font-mono font-semibold">${formatRupiah(loan.angsuranPokok)}</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">Angsuran ADM / Bln:</span><span class="text-slate-900 font-mono font-semibold">${formatRupiah(loan.angsuranAdm)}</span></div>
-                    <div class="flex justify-between border-t border-slate-200 pt-1.5"><span class="text-slate-900 font-black">Total Angsuran / Bln:</span><span class="text-emerald-800 font-black">${formatRupiah(loan.jumlahPerBulan)}</span></div>
+                    <div class="flex justify-between border-t border-slate-200 pt-1.5"><span class="text-slate-900 font-black">Total Angsuran / Bln:</span><span class="text-blue-700 font-black">${formatRupiah(loan.jumlahPerBulan)}</span></div>
                     <div class="flex justify-between"><span class="text-slate-600 font-bold">Total Pengembalian:</span><span class="text-slate-900 font-bold">${formatRupiah(loan.totalPengembalian)}</span></div>
-                    <div class="flex justify-between"><span class="text-slate-600 font-bold">Jaminan / Catatan:</span><span class="text-amber-800 font-bold">${loan.jaminan} (${loan.catatan})</span></div>
+                    <div class="flex justify-between"><span class="text-slate-600 font-bold">Jaminan / Catatan:</span><span class="text-amber-700 font-bold">${loan.jaminan} (${loan.catatan})</span></div>
                 </div>
             `;
 
@@ -995,15 +1025,15 @@
                 installments.forEach(ins => {
                     instHtml += `
                         <tr class="hover:bg-slate-50">
-                            <td class="p-2.5 pl-4 font-mono font-bold text-slate-900">${ins.noTrx}</td>
-                            <td class="p-2.5 text-slate-700 font-semibold">${ins.tgl}</td>
-                            <td class="p-2.5 text-slate-700 font-semibold">${ins.ket || 'Angsuran Cicilan Pokok'}</td>
-                            <td class="p-2.5 text-right pr-4 font-mono font-bold text-emerald-700">${formatRupiah(ins.masuk)}</td>
+                            <td class="pl-4 font-mono font-bold text-slate-900">${ins.noTrx}</td>
+                            <td class="text-slate-700 font-semibold">${ins.tgl}</td>
+                            <td class="text-slate-700 font-semibold">${ins.ket || 'Angsuran Cicilan Pokok'}</td>
+                            <td class="text-right pr-4 font-mono font-bold text-blue-600">${formatRupiah(ins.masuk)}</td>
                         </tr>
                     `;
                 });
             } else {
-                instHtml = `<tr><td colspan="4" class="p-4 text-center text-slate-500 font-semibold italic">Belum ada catatan angsuran cicilan tercatat untuk pinjaman ini.</td></tr>`;
+                instHtml = `<tr><td colspan="4" class="p-4 text-center text-slate-400 font-semibold italic">Belum ada catatan angsuran cicilan tercatat.</td></tr>`;
             }
             document.getElementById('loan-installments-tbody').innerHTML = instHtml;
         }
@@ -1016,9 +1046,10 @@
             window.print();
         }
 
-        function populateMemberSelector() {
+        function populateMemberReportSelector() {
             const selector = document.getElementById('member-selector');
-            let html = '';
+            // DEFAULT TIDAK LANGSUNG MENAMPILKAN NO.1, DIBUAT PILIHAN KOSONG / PENGANTAR
+            let html = `<option value="">-- Pilih Anggota Terlebih Dahulu --</option>`;
             appData.members.forEach(m => {
                 html += `<option value="${m.noAgt}">${m.noAgt} - ${m.nama} (${m.jabatan})</option>`;
             });
@@ -1027,33 +1058,45 @@
 
         function renderMemberDetail() {
             const noAgt = document.getElementById('member-selector').value;
+            if (!noAgt) {
+                document.getElementById('member-profile-card').innerHTML = `<div class="text-slate-400 italic">Silakan pilih nama anggota terlebih dahulu pada pilihan di atas.</div>`;
+                document.getElementById('member-trx-tbody').innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400 italic">Belum ada anggota yang dipilih.</td></tr>`;
+                return;
+            }
+
             const member = appData.members.find(m => m.noAgt === noAgt);
             if (!member) return;
 
             const bal = getMemberBalances(member.noAgt, member.nama);
-            const memTrx = appData.transactions.filter(t => String(t.noAgt) === String(noAgt) || t.nama.toLowerCase() === member.nama.toLowerCase()).reverse();
+            
+            // KODE "CA" (CICILAN ADMIN) DIKECUALIKAN DARI LAPORAN & SALDO PRIBADI
+            const memTrx = appData.transactions.filter(t => {
+                const matchAgt = String(t.noAgt) === String(noAgt) || t.nama.toLowerCase() === member.nama.toLowerCase();
+                const isCA = String(t.kodeTrans).toUpperCase() === 'CA';
+                return matchAgt && !isCA;
+            }).reverse();
             
             const totalMasuk = memTrx.reduce((acc, curr) => acc + curr.masuk, 0);
             const totalKeluar = memTrx.reduce((acc, curr) => acc + curr.keluar, 0);
 
             document.getElementById('member-profile-card').innerHTML = `
                 <div class="space-y-1">
-                    <span class="text-slate-500 uppercase font-bold text-[10px]">Profil Anggota</span>
+                    <span class="text-slate-400 uppercase font-bold text-[10px]">Profil Anggota</span>
                     <h4 class="text-slate-900 font-black text-sm">${member.nama}</h4>
-                    <p class="text-slate-600 font-semibold">No Agt: <strong class="text-emerald-700">${member.noAgt}</strong> | Reg: ${member.noMasuk}</p>
+                    <p class="text-slate-600 font-semibold">No Agt: <strong class="text-blue-600">${member.noAgt}</strong> | Reg: ${member.noMasuk}</p>
                     <p class="text-slate-700 font-semibold">Bagian: ${member.bagian} (${member.jabatan})</p>
                 </div>
                 <div class="space-y-1 border-y md:border-y-0 md:border-x border-slate-200 py-3 md:py-0 md:px-4">
-                    <span class="text-slate-500 uppercase font-bold text-[10px]">Sub-Total Keuangan Pribadi</span>
-                    <p class="text-emerald-700 font-bold">Simpanan Wajib: ${formatRupiah(bal.simpananWajib)}</p>
-                    <p class="text-blue-700 font-bold">Tabungan: ${formatRupiah(bal.tabungan)}</p>
-                    <p class="text-rose-700 font-bold">Pinjaman: ${formatRupiah(bal.pinjaman)} | Kasbon: ${formatRupiah(bal.kasbon)}</p>
+                    <span class="text-slate-400 uppercase font-bold text-[10px]">Sub-Total Keuangan (Kecuali CA)</span>
+                    <p class="text-blue-600 font-bold">Simpanan Wajib: ${formatRupiah(bal.simpananWajib)}</p>
+                    <p class="text-indigo-600 font-bold">Tabungan: ${formatRupiah(bal.tabungan)}</p>
+                    <p class="text-rose-600 font-bold">Pinjaman: ${formatRupiah(bal.pinjaman)} | Kasbon: ${formatRupiah(bal.kasbon)}</p>
                 </div>
                 <div class="space-y-1">
-                    <span class="text-slate-500 uppercase font-bold text-[10px]">Ringkasan Arus Kas Member</span>
-                    <p class="text-slate-900 font-semibold">Total Setoran Masuk: <span class="font-bold text-emerald-700">${formatRupiah(totalMasuk)}</span></p>
-                    <p class="text-slate-900 font-semibold">Total Pencairan Keluar: <span class="font-bold text-rose-700">${formatRupiah(totalKeluar)}</span></p>
-                    <p class="text-emerald-800 font-black mt-1">Sisa Saldo Pribadi (Net): ${formatRupiah(totalMasuk - totalKeluar)}</p>
+                    <span class="text-slate-400 uppercase font-bold text-[10px]">Ringkasan Arus Kas Member</span>
+                    <p class="text-slate-900 font-semibold">Total Setoran Masuk: <span class="font-bold text-blue-600">${formatRupiah(totalMasuk)}</span></p>
+                    <p class="text-slate-900 font-semibold">Total Pencairan Keluar: <span class="font-bold text-rose-600">${formatRupiah(totalKeluar)}</span></p>
+                    <p class="text-blue-700 font-black mt-1">Sisa Saldo Pribadi (Net): ${formatRupiah(totalMasuk - totalKeluar)}</p>
                 </div>
             `;
 
@@ -1064,24 +1107,24 @@
                 runningBalance += (t.masuk - t.keluar);
                 trxHtml = `
                     <tr class="hover:bg-slate-50 transition">
-                        <td class="p-3 pl-4 font-mono font-bold text-slate-900">${t.noTrx}</td>
-                        <td class="p-3 text-slate-600 font-semibold">${t.tgl}</td>
-                        <td class="p-3"><span class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[10px] font-bold">${t.jenisSimpanan}</span></td>
-                        <td class="p-3 text-slate-600 font-semibold">${t.ket}</td>
-                        <td class="p-3 text-right font-bold text-emerald-700">${t.masuk > 0 ? formatRupiah(t.masuk) : '-'}</td>
-                        <td class="p-3 text-right font-bold text-rose-700">${t.keluar > 0 ? formatRupiah(t.keluar) : '-'}</td>
-                        <td class="p-3 text-right pr-4 font-mono font-black text-slate-900">${formatRupiah(runningBalance)}</td>
+                        <td class="pl-4 font-mono font-bold text-slate-900">${t.noTrx}</td>
+                        <td class="text-slate-600 font-semibold">${t.tgl}</td>
+                        <td><span class="px-2 py-0.5 bg-slate-100 text-slate-800 rounded text-[10px] font-bold">${t.jenisSimpanan}</span></td>
+                        <td class="text-slate-600 font-semibold">${t.ket}</td>
+                        <td class="text-right font-bold text-blue-600">${t.masuk > 0 ? formatRupiah(t.masuk) : '-'}</td>
+                        <td class="text-right font-bold text-rose-600">${t.keluar > 0 ? formatRupiah(t.keluar) : '-'}</td>
+                        <td class="text-right pr-4 font-mono font-black text-slate-900">${formatRupiah(runningBalance)}</td>
                     </tr>
                 ` + trxHtml;
             });
 
-            document.getElementById('member-trx-tbody').innerHTML = trxHtml || `<tr><td colspan="7" class="p-4 text-center text-slate-500 font-semibold">Belum ada riwayat transaksi.</td></tr>`;
+            document.getElementById('member-trx-tbody').innerHTML = trxHtml || `<tr><td colspan="7" class="p-4 text-center text-slate-400 font-semibold">Belum ada riwayat transaksi.</td></tr>`;
         }
 
         const tabTitles = {
             'dashboard': ['Dashboard Utama', 'Ringkasan cepat aktivitas dan sisa saldo keuangan koperasi.'],
             'members': ['Data Anggota', 'Daftar lengkap master anggota koperasi beserta rincian saldo pribadi.'],
-            'transactions': ['Data Transaksi', 'Seluruh catatan arus kas masuk dan keluar (Terbaru ke Terlama).'],
+            'transactions': ['Data Transaksi', 'Seluruh catatan arus kas masuk dan keluar beserta jenis saldo.'],
             'loans': ['Data Pinjaman', 'Daftar rincian pinjaman anggota lengkap bersumber dari sheet PINJAMAN.'],
             'member-report': ['Laporan Per Anggota', 'Profil pribadi lengkap, sub-total, dan sisa saldo pribadi anggota.'],
             'reports': ['Rekap Saldo & Laporan', 'Analisis keuangan mendalam, saldo global, rekening, dan cash.']
@@ -1091,13 +1134,15 @@
             const tabs = ['dashboard', 'members', 'transactions', 'loans', 'member-report', 'reports'];
             tabs.forEach(t => {
                 document.getElementById(`view-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('bg-emerald-600', 'text-white', 'shadow-sm');
-                document.getElementById(`tab-${t}`).classList.add('text-slate-600', 'hover:bg-slate-100', 'hover:text-slate-900');
+                const btn = document.getElementById(`tab-${t}`);
+                btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20', 'active');
+                btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
             });
 
             document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).classList.add('bg-emerald-600', 'text-white', 'shadow-sm');
-            document.getElementById(`tab-${tabId}`).classList.remove('text-slate-600', 'hover:bg-slate-100', 'hover:text-slate-900');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.add('bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/20', 'active');
+            activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
 
             if (tabTitles[tabId]) {
                 document.getElementById('page-title').innerText = tabTitles[tabId][0];
