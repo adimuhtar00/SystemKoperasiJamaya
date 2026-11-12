@@ -100,7 +100,6 @@
                         </span>
                         <input type="password" id="login-pass" required placeholder="Masukkan password Anda" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/10 transition">
                     </div>
-                    <!-- PASSWORD ADMIN DISEMBUNYIKAN, PASSWORD ANGGOTA TETAP TAMPIL 12345 -->
                     <p class="text-[11px] text-slate-500 mt-1">💡 Password Anggota: <strong class="text-blue-600">12345</strong></p>
                 </div>
 
@@ -165,6 +164,10 @@
                     <i class="fa-solid fa-credit-card w-5 text-center"></i>
                     <span class="whitespace-nowrap">💳 Rekening Admin</span>
                 </button>
+                <button onclick="switchTab('loan-submission')" id="tab-loan-submission" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-brands fa-whatsapp w-5 text-center text-emerald-400"></i>
+                    <span class="whitespace-nowrap">💬 Pengajuan Pinjaman (WA)</span>
+                </button>
                 <button onclick="switchTab('reports')" id="tab-reports" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i>
                     <span class="whitespace-nowrap">📈 Rekap Saldo & Kas</span>
@@ -220,11 +223,27 @@
             <!-- MAIN CONTAINER -->
             <main class="p-3 sm:p-6 lg:p-8 space-y-6 flex-1">
 
-                <!-- TAB 1: DASHBOARD -->
+                <!-- TAB 1: DASHBOARD (SISA SALDO GLOBAL PALING ATAS DENGAN UKURAN BESAR) -->
                 <section id="view-dashboard" class="space-y-6">
+                    <!-- SISA SALDO GLOBAL UTAMA BESAR DI ATAS -->
+                    <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 border border-blue-700 p-6 sm:p-8 rounded-3xl shadow-xl text-white">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                            <div>
+                                <span class="px-3 py-1 bg-blue-500/30 text-cyan-300 border border-blue-400/30 rounded-xl text-[11px] font-extrabold uppercase tracking-wider">💎 Ringkasan Utama Keuangan</span>
+                                <h3 class="text-xs uppercase tracking-widest text-blue-200 font-bold mt-3">Sisa Saldo Global Saat Ini</h3>
+                                <h2 id="dash-saldo-global" class="text-3xl sm:text-5xl font-black text-white mt-1 tracking-tight">Rp 0</h2>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 w-full sm:w-auto text-left sm:text-right space-y-1">
+                                <p class="text-xs text-blue-200 font-semibold">Total Anggota Aktif: <strong id="dash-active-count" class="text-white">0</strong></p>
+                                <p class="text-xs text-blue-200 font-semibold">Total Seluruh Transaksi: <strong id="dash-trx-count" class="text-white">0</strong></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4 KOTAK STATISTIK -->
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                         <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-2xs">
-                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">👥 Anggota Aktif</p>
+                            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-400">👥 Anggota Terdaftar</p>
                             <h3 id="stat-active-members" class="text-xl sm:text-2xl font-black text-slate-900 mt-1">0</h3>
                         </div>
                         <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-2xs">
@@ -241,19 +260,25 @@
                         </div>
                     </div>
 
-                    <!-- SISA SALDO CARDS -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
-                        <div class="bg-blue-50/80 border border-blue-200 p-4 rounded-2xl shadow-2xs">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-blue-800">💎 Sisa Saldo Global Saat Ini</span>
-                            <h4 id="dash-saldo-global" class="text-base sm:text-xl font-black text-blue-950 mt-1">Rp 0</h4>
+                    <!-- SALDO REKENING & CASH DI BAWAHNYA -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                        <div class="bg-indigo-50/80 border border-indigo-200 p-5 rounded-2xl shadow-2xs flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-800">🏦 Sisa Saldo Rekening Bank</span>
+                                <h4 id="dash-saldo-rek" class="text-lg sm:text-2xl font-black text-indigo-950 mt-1">Rp 0</h4>
+                            </div>
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-xl flex items-center justify-center text-lg font-bold shadow-md">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
                         </div>
-                        <div class="bg-indigo-50/80 border border-indigo-200 p-4 rounded-2xl shadow-2xs">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-800">🏦 Sisa Saldo Rekening Bank</span>
-                            <h4 id="dash-saldo-rek" class="text-base sm:text-xl font-black text-indigo-950 mt-1">Rp 0</h4>
-                        </div>
-                        <div class="bg-sky-50/80 border border-sky-200 p-4 rounded-2xl shadow-2xs">
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-sky-800">💵 Sisa Saldo Cash Saat Ini</span>
-                            <h4 id="dash-saldo-cash" class="text-base sm:text-xl font-black text-sky-950 mt-1">Rp 0</h4>
+                        <div class="bg-sky-50/80 border border-sky-200 p-5 rounded-2xl shadow-2xs flex items-center justify-between">
+                            <div>
+                                <span class="text-[11px] font-bold uppercase tracking-wider text-sky-800">💵 Sisa Saldo Cash Saat Ini</span>
+                                <h4 id="dash-saldo-cash" class="text-lg sm:text-2xl font-black text-sky-950 mt-1">Rp 0</h4>
+                            </div>
+                            <div class="w-12 h-12 bg-sky-600 text-white rounded-xl flex items-center justify-center text-lg font-bold shadow-md">
+                                <i class="fa-solid fa-money-bill-wave"></i>
+                            </div>
                         </div>
                     </div>
 
@@ -454,7 +479,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: MEMBER REPORT -->
+                <!-- TAB 5: MEMBER REPORT (SISA SALDOPRIBADI DITAMPILKAN BESAR) -->
                 <section id="view-member-report" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-2xs space-y-6 printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
@@ -539,7 +564,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 6: REKENING ADMIN KOPERASI -->
+                <!-- TAB 6: REKENING ADMIN KOPERASI (DENGAN TOMBOL SALIN REKENING) -->
                 <section id="view-bank-accounts" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
                         <div class="text-center space-y-2">
@@ -555,9 +580,15 @@
                                 <span class="text-xs uppercase font-extrabold tracking-wider text-blue-300">Bank Central Asia (BCA)</span>
                                 <span class="px-2.5 py-0.5 bg-blue-500/30 text-cyan-300 text-[10px] font-bold rounded border border-blue-400/30">Utama</span>
                             </div>
-                            <div class="space-y-1">
-                                <p class="text-[11px] text-blue-200 uppercase font-bold">Nomor Rekening</p>
-                                <p class="text-2xl sm:text-3xl font-black font-mono tracking-wider text-white">8881103281</p>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div class="space-y-1">
+                                    <p class="text-[11px] text-blue-200 uppercase font-bold">Nomor Rekening</p>
+                                    <p id="bca-account-number" class="text-2xl sm:text-3xl font-black font-mono tracking-wider text-white">8881103281</p>
+                                </div>
+                                <button onclick="copyRekeningNumber()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-md shrink-0">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span id="copy-btn-text">Salin No. Rekening</span>
+                                </button>
                             </div>
                             <div class="pt-2 flex items-center justify-between border-t border-blue-800/60 text-xs">
                                 <span class="text-blue-200 font-semibold">Atas Nama:</span>
@@ -575,13 +606,70 @@
                     </div>
                 </section>
 
-                <!-- TAB 7: FINANCIAL REPORTS -->
+                <!-- TAB 7: PENGAJUAN PINJAMAN KE WHATSAPP (+6285311252227) -->
+                <section id="view-loan-submission" class="hidden space-y-6">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
+                        <div class="text-center space-y-2">
+                            <div class="w-16 h-16 bg-emerald-600 text-white rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold shadow-lg shadow-emerald-600/30">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <h3 class="text-lg font-black text-slate-900">Formulir Pengajuan Pinjaman via WhatsApp</h3>
+                            <p class="text-xs text-slate-500">Isi data di bawah ini untuk mengajukan pinjaman secara instan langsung ke WhatsApp Bendahara.</p>
+                        </div>
+
+                        <form onsubmit="sendLoanWhatsApp(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">👤 Nama Lengkap Peminjam</label>
+                                <input type="text" id="wa-name" required placeholder="Masukkan nama Anda" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600">
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">📅 Tanggal Pengajuan</label>
+                                    <input type="date" id="wa-date" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">💵 Nominal Pinjaman (Rp)</label>
+                                    <input type="number" id="wa-amount" required placeholder="Contoh: 3000000" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">⏱️ Tenor (Bulan)</label>
+                                    <select id="wa-tenor" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600">
+                                        <option value="1 Bulan">1 Bulan</option>
+                                        <option value="3 Bulan">3 Bulan</option>
+                                        <option value="6 Bulan" selected>6 Bulan</option>
+                                        <option value="12 Bulan">12 Bulan</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">🏦 Nomor Rekening Penerima & Bank</label>
+                                    <input type="text" id="wa-rek" required placeholder="Contoh: 3194139581 BCA" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">📝 Keperluan Pinjaman</label>
+                                <textarea id="wa-purpose" rows="3" required placeholder="Contoh: Untuk biaya renovasi rumah / keperluan mendesak..." class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2 text-sm">
+                                <i class="fa-brands fa-whatsapp text-base"></i>
+                                <span>Kirim Pengajuan via WhatsApp (+6285311252227)</span>
+                            </button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- TAB 8: FINANCIAL REPORTS (DENGAN RINCIAN SELISIH CA, WA, TB, KA, PJ) -->
                 <section id="view-reports" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-slate-200 gap-4 no-print">
                             <div>
                                 <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">📈 Rekap Saldo Keuangan & Kas</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Analisis arus kas global, rekening bank, dan cash operasional koperasi</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Analisis arus kas global, rekening bank, dan rincian selisih komprehensif</p>
                             </div>
                             <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
                                 <i class="fa-solid fa-print"></i>
@@ -619,6 +707,14 @@
                             </div>
                         </div>
 
+                        <!-- RINCIAN SELISIH KOMPREHENSIF SESUAI PERMINTAAN -->
+                        <div class="pt-4">
+                            <h4 class="font-bold text-slate-900 text-sm mb-3">🔍 Rincian Analisis Selisih & Komponen Transaksi</h4>
+                            <div id="breakdown-selisih-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                                <!-- Dinamis diisi via JavaScript -->
+                            </div>
+                        </div>
+
                         <div class="pt-2">
                             <h4 class="font-bold text-slate-900 text-sm mb-3">Ringkasan Sistem & Master Data</h4>
                             <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-xs text-slate-800 space-y-3 font-medium">
@@ -639,7 +735,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 8: ADMIN UPLOAD SYNC -->
+                <!-- TAB 9: ADMIN UPLOAD SYNC -->
                 <section id="view-admin-upload" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
                         <div class="text-center space-y-2">
@@ -714,12 +810,12 @@
 
         function loadDefaultDataForTesting(isLoggedIn) {
             appData.members = [
-                { noMasuk: "001/REG/VI/2026", noKeluar: "001/KEL/VIII/2026", tglGabung: "01-Jun-2026", noAgt: "1", nik: "3603181009710017", nama: "A. Syamsul Falah", tglLahir: "09-Oct-1971", bagian: "PPIC", jabatan: "PENGAWAS", rek: "3194139581", bank: "BCA", hp: "08111221867", alamat: "Kp. Cirewed - Cikupa", jk: "L", tglKeluar: "15-Aug-2026", status: "KELUAR" },
+                { noMasuk: "001/REG/VI/2026", noKeluar: "-", tglGabung: "01-Jun-2026", noAgt: "1", nik: "3603181009710017", nama: "A. Syamsul Falah", tglLahir: "09-Oct-1971", bagian: "PPIC", jabatan: "PENGAWAS", rek: "3194139581", bank: "BCA", hp: "08111221867", alamat: "Kp. Cirewed - Cikupa", jk: "L", tglKeluar: "-", status: "AKTIF" },
                 { noMasuk: "002/REG/VI/2026", noKeluar: "-", tglGabung: "01-Jun-2026", noAgt: "2", nik: "1803042308890003", nama: "Adi Muhtar", tglLahir: "23-Aug-1989", bagian: "QC Lab", jabatan: "BENDAHARA", rek: "0231177484", bank: "BCA", hp: "085311254227", alamat: "Dusun Jambe - Jambe", jk: "L", tglKeluar: "-", status: "AKTIF" }
             ];
             appData.transactions = [
-                { noTrx: "TX0001", tgl: "30-May-2026", noAgt: "1", noReff: "0", kodeTrans: "WA", masuk: 300000, keluar: 0, ket: "Wajib 2 Bulan", kodeSaldo: "R", nama: "A. Syamsul Falah", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 300000, saldoRek: 300000, saldoCash: 0 },
-                { noTrx: "TX0002", tgl: "30-May-2026", noAgt: "2", noReff: "0", kodeTrans: "WA", masuk: 900000, keluar: 0, ket: "Wajib 6 Bulan", kodeSaldo: "R", nama: "Adi Muhtar", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 1200000, saldoRek: 1200000, saldoCash: 0 }
+                { noTrx: "TX0001", tgl: "30-May-2026", noAgt: "1", noReff: "0", kodeTrans: "WA", masuk: 150000, keluar: 0, ket: "Wajib Juni", kodeSaldo: "R", nama: "A. Syamsul Falah", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 150000, saldoRek: 150000, saldoCash: 0 },
+                { noTrx: "TX0002", tgl: "30-May-2026", noAgt: "2", noReff: "0", kodeTrans: "CA", masuk: 25000, keluar: 0, ket: "Adm Pinjaman", kodeSaldo: "R", nama: "Adi Muhtar", jenisSimpanan: "CA - Cicilan Adm", saldoGlobal: 175000, saldoRek: 175000, saldoCash: 0 }
             ];
             appData.loans = [];
 
@@ -888,6 +984,7 @@
                 return;
             }
 
+            errorDiv.classList.add('hidden');
             errorDiv.classList.remove('hidden');
         }
 
@@ -899,6 +996,15 @@
             document.getElementById('logged-user-role').innerText = appData.currentUser.role;
             document.getElementById('mobile-user-name').innerText = appData.currentUser.name;
             document.getElementById('marquee-user-name').innerText = appData.currentUser.name;
+            
+            // Otomatis isi nama pemohon di form WhatsApp jika login sebagai anggota
+            if (appData.currentUser.role === 'Anggota') {
+                const waNameInput = document.getElementById('wa-name');
+                if (waNameInput) waNameInput.value = appData.currentUser.name;
+                const today = new Date().toISOString().split('T')[0];
+                const waDateInput = document.getElementById('wa-date');
+                if (waDateInput) waDateInput.value = today;
+            }
 
             if (String(appData.currentUser.id) === '2' || appData.currentUser.role === 'Administrator') {
                 document.getElementById('admin-menu-sync').classList.remove('hidden');
@@ -1009,12 +1115,15 @@
                 lastCash = lastTrx.saldoCash;
             }
 
+            document.getElementById('dash-saldo-global').innerText = formatRupiah(lastGlobal);
+            document.getElementById('dash-active-count').innerText = activeMembers;
+            document.getElementById('dash-trx-count').innerText = totalTrx;
+
             document.getElementById('stat-active-members').innerText = activeMembers;
             document.getElementById('stat-total-trx').innerText = totalTrx;
             document.getElementById('stat-total-in').innerText = formatRupiah(totalIn);
             document.getElementById('stat-total-out').innerText = formatRupiah(totalOut);
 
-            document.getElementById('dash-saldo-global').innerText = formatRupiah(lastGlobal);
             document.getElementById('dash-saldo-rek').innerText = formatRupiah(lastRek);
             document.getElementById('dash-saldo-cash').innerText = formatRupiah(lastCash);
 
@@ -1039,6 +1148,7 @@
             renderLoansTable(appData.loans);
             populateMemberReportSelector();
 
+            // RENDER FINANCIAL REPORTS & DETAIL SELISIH COMPREHENSIVE
             document.getElementById('report-total-in').innerText = formatRupiah(totalIn);
             document.getElementById('report-total-out').innerText = formatRupiah(totalOut);
             document.getElementById('report-net-cash').innerText = formatRupiah(totalIn - totalOut);
@@ -1047,6 +1157,49 @@
             document.getElementById('report-saldo-cash').innerText = formatRupiah(lastCash);
             document.getElementById('rep-total-members').innerText = `${appData.members.length} Anggota`;
             document.getElementById('rep-total-trx').innerText = `${appData.transactions.length} Transaksi`;
+
+            // HITUNG TOTAL CA, WA, TB, KA, PJ
+            let totalCA = 0, totalWA = 0, totalAW = 0, totalTB = 0, totalAT = 0, totalKA = 0, totalBA = 0, totalPJ = 0, totalCI = 0;
+            appData.transactions.forEach(t => {
+                const kt = String(t.kodeTrans).toUpperCase();
+                if (kt === 'CA') totalCA += t.masuk;
+                if (kt === 'WA') totalWA += t.masuk;
+                if (kt === 'AW') totalAW += (t.keluar || t.masuk);
+                if (kt === 'TB') totalTB += t.masuk;
+                if (kt === 'AT') totalAT += (t.keluar || t.masuk);
+                if (kt === 'KA') totalKA += t.keluar;
+                if (kt === 'BA') totalBA += t.masuk;
+                if (kt === 'PJ') totalPJ += t.keluar;
+                if (kt === 'CI') totalCI += t.masuk;
+            });
+
+            document.getElementById('breakdown-selisih-grid').innerHTML = `
+                <div class="bg-blue-50/70 p-3.5 rounded-xl border border-blue-200 space-y-1">
+                    <span class="text-blue-900 font-bold uppercase text-[10px]">Simpanan Wajib (WA - AW)</span>
+                    <p class="text-sm font-black text-blue-950">${formatRupiah(totalWA - totalAW)}</p>
+                    <p class="text-[10px] text-slate-500">Total WA: ${formatRupiah(totalWA)} | AW: ${formatRupiah(totalAW)}</p>
+                </div>
+                <div class="bg-indigo-50/70 p-3.5 rounded-xl border border-indigo-200 space-y-1">
+                    <span class="text-indigo-900 font-bold uppercase text-[10px]">Tabungan (TB - AT)</span>
+                    <p class="text-sm font-black text-indigo-950">${formatRupiah(totalTB - totalAT)}</p>
+                    <p class="text-[10px] text-slate-500">Total TB: ${formatRupiah(totalTB)} | AT: ${formatRupiah(totalAT)}</p>
+                </div>
+                <div class="bg-amber-50/70 p-3.5 rounded-xl border border-amber-200 space-y-1">
+                    <span class="text-amber-900 font-bold uppercase text-[10px]">Kasbon Bersih (KA - BA)</span>
+                    <p class="text-sm font-black text-amber-950">${formatRupiah(totalKA - totalBA)}</p>
+                    <p class="text-[10px] text-slate-500">Total KA: ${formatRupiah(totalKA)} | BA: ${formatRupiah(totalBA)}</p>
+                </div>
+                <div class="bg-rose-50/70 p-3.5 rounded-xl border border-rose-200 space-y-1">
+                    <span class="text-rose-900 font-bold uppercase text-[10px]">Pinjaman Bersih (PJ - CI)</span>
+                    <p class="text-sm font-black text-rose-950">${formatRupiah(totalPJ - totalCI)}</p>
+                    <p class="text-[10px] text-slate-500">Total PJ: ${formatRupiah(totalPJ)} | CI: ${formatRupiah(totalCI)}</p>
+                </div>
+                <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200 space-y-1 sm:col-span-2">
+                    <span class="text-emerald-900 font-bold uppercase text-[10px]">Total Cicilan Administrasi (CA)</span>
+                    <p class="text-sm font-black text-emerald-950">${formatRupiah(totalCA)}</p>
+                    <p class="text-[10px] text-slate-500">Akumulasi penerimaan dari transaksi kode CA pada tabel transaksi.</p>
+                </div>
+            `;
         }
 
         function renderMembersBalanceTable(data) {
@@ -1240,6 +1393,7 @@
             selector.innerHTML = html;
         }
 
+        // BAGIAN LAPORAN RINCI PER ANGGOTA (SISA SALDO PRIBADI DITAMPILKAN BESAR)
         function renderMemberDetail() {
             const noAgt = document.getElementById('member-selector').value;
             const cardsContainer = document.getElementById('member-loan-kasbon-cards');
@@ -1301,6 +1455,7 @@
 
             const sisaPinjamanMember = Math.max(0, totalPinjamanPlafon - totalBayarPinjamanCI);
             const sisaKasbonMember = Math.max(0, totalKasbonPlafon - totalBayarKasbonBA);
+            const sisaSaldoPribadiNet = totalMasuk - totalKeluar;
 
             document.getElementById('member-loan-total').innerText = formatRupiah(totalPinjamanPlafon);
             document.getElementById('member-loan-paid').innerText = formatRupiah(totalBayarPinjamanCI);
@@ -1312,6 +1467,7 @@
             document.getElementById('member-kasbon-remaining').innerText = formatRupiah(sisaKasbonMember);
             document.getElementById('member-kasbon-payments-list').innerHTML = bayarKasbonListHtml;
 
+            // SISA SALDO PRIBADI DITAMPILKAN BESAR
             document.getElementById('member-profile-card').innerHTML = `
                 <div class="space-y-1.5 bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
                     <span class="text-blue-600 uppercase font-extrabold text-[10px] tracking-wider block">👤 Identitas Anggota</span>
@@ -1326,11 +1482,15 @@
                     <div class="flex justify-between"><span class="text-slate-600 font-medium">Tabungan:</span><strong class="text-indigo-600 font-mono">${formatRupiah(bal.tabungan)}</strong></div>
                     <p class="text-slate-400 font-medium italic text-[10px] pt-1 border-t border-slate-100">*Pinjaman & Kasbon terpisah di kartu khusus.</p>
                 </div>
-                <div class="space-y-1.5 bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
-                    <span class="text-emerald-600 uppercase font-extrabold text-[10px] tracking-wider block">📊 Ringkasan Arus Kas Net</span>
-                    <div class="flex justify-between"><span class="text-slate-600 font-medium">Total Masuk:</span><strong class="text-blue-600 font-mono">${formatRupiah(totalMasuk)}</strong></div>
-                    <div class="flex justify-between"><span class="text-slate-600 font-medium">Total Keluar:</span><strong class="text-rose-600 font-mono">${formatRupiah(totalKeluar)}</strong></div>
-                    <div class="flex justify-between pt-1 border-t border-slate-100"><span class="text-slate-900 font-black">Sisa Saldo Pribadi:</span><strong class="text-blue-700 font-mono font-black text-sm">${formatRupiah(totalMasuk - totalKeluar)}</strong></div>
+                <div class="space-y-2 bg-gradient-to-br from-blue-900 to-indigo-900 text-white p-4 rounded-xl shadow-md flex flex-col justify-between">
+                    <div>
+                        <span class="text-cyan-300 uppercase font-black text-[10px] tracking-wider block">📊 Sisa Saldo Pribadi Net</span>
+                        <h3 class="text-2xl sm:text-3xl font-black font-mono text-white mt-1">${formatRupiah(sisaSaldoPribadiNet)}</h3>
+                    </div>
+                    <div class="text-[11px] text-blue-200 font-medium border-t border-blue-800 pt-2 flex justify-between">
+                        <span>Masuk: ${formatRupiah(totalMasuk)}</span>
+                        <span>Keluar: ${formatRupiah(totalKeluar)}</span>
+                    </div>
                 </div>
             `;
 
@@ -1353,6 +1513,36 @@
             });
 
             document.getElementById('member-trx-tbody').innerHTML = trxHtml || `<tr><td colspan="7" class="p-4 text-center text-slate-400 font-semibold">Belum ada riwayat transaksi.</td></tr>`;
+        }
+
+        // FUNGSI SALIN NOMOR REKENING
+        function copyRekeningNumber() {
+            const rekText = document.getElementById('bca-account-number').innerText.trim();
+            navigator.clipboard.writeText(rekText).then(() => {
+                const btnText = document.getElementById('copy-btn-text');
+                btnText.innerText = 'Berhasil Disalin!';
+                setTimeout(() => {
+                    btnText.innerText = 'Salin No. Rekening';
+                }, 2000);
+            }).catch(err => {
+                alert('Gagal menyalin nomor rekening.');
+            });
+        }
+
+        // FUNGSI KIRIM PENGAJUAN PINJAMAN KE WHATSAPP
+        function sendLoanWhatsApp(e) {
+            e.preventDefault();
+            const name = document.getElementById('wa-name').value.trim();
+            const date = document.getElementById('wa-date').value.trim();
+            const amount = document.getElementById('wa-amount').value.trim();
+            const tenor = document.getElementById('wa-tenor').value;
+            const rek = document.getElementById('wa-rek').value.trim();
+            const purpose = document.getElementById('wa-purpose').value.trim();
+
+            const message = `Halo Pengurus Koperasi Jamaya,\n\nSaya ingin mengajukan permohonan pinjaman dengan rincian berikut:\n\n*Nama Anggota:* ${name}\n*Tanggal Pengajuan:* ${date}\n*Nominal Pinjaman:* Rp ${parseInt(amount).toLocaleString('id-ID')}\n*Tenor (Jangka Waktu):* ${tenor}\n*No Rekening & Bank Penerima:* ${rek}\n*Keperluan:* ${purpose}\n\nMohon konfirmasi dan bantuannya. Terima kasih!`;
+
+            const waUrl = `https://wa.me/6285311252227?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
         }
 
         function handleAdminUploadFile(e) {
@@ -1401,12 +1591,13 @@
             'loans': ['Data Pinjaman', 'Daftar rincian pinjaman anggota lengkap beserta angsuran masuk dan sisa pinjaman.'],
             'member-report': ['Laporan Per Anggota', 'Profil pribadi lengkap, pemisahan pinjaman, kasbon, dan riwayat pembayarannya.'],
             'bank-accounts': ['Rekening Admin Koperasi', 'Informasi rekening resmi transfer pembayaran simpanan wajib dan angsuran.'],
+            'loan-submission': ['Pengajuan Pinjaman (WA)', 'Formulir pengajuan pinjaman online instan terhubung ke WhatsApp Bendahara.'],
             'reports': ['Rekap Saldo & Laporan', 'Analisis keuangan mendalam, saldo global, rekening, dan cash.'],
             'admin-upload': ['Upload File Sync', 'Menu khusus Administrator untuk memperbarui file database Excel di server.']
         };
 
         function switchTab(tabId) {
-            const tabs = ['dashboard', 'members', 'transactions', 'loans', 'member-report', 'bank-accounts', 'reports', 'admin-upload'];
+            const tabs = ['dashboard', 'members', 'transactions', 'loans', 'member-report', 'bank-accounts', 'loan-submission', 'reports', 'admin-upload'];
             tabs.forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 if (view) view.classList.add('hidden');
