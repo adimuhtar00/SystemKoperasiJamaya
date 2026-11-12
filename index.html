@@ -1616,7 +1616,7 @@
             selector.innerHTML = html;
         }
 
-        // PERBAIKAN UTAMA: MURNI KODE TRANSAKSI "PJ" DAN "KA" (MENGHINDARI BUG STRING "Pinjam" PADA KASBON)
+        // 3D MEGAH ENTERPRISE - PERBAIKAN FILTER PINJAMAN & PLAFON MURNI TRANSAKSI
         function renderMemberDetail() {
             const noAgt = document.getElementById('member-selector').value;
 
@@ -1666,17 +1666,8 @@
             document.getElementById('rep-box-pinjaman').innerText = formatRupiah(fin.pinjamanBersih);
             document.getElementById('rep-box-kasbon').innerText = formatRupiah(fin.kasbonBersih);
 
-            // 1. DAFTAR PINJAMAN MURNI BERDASARKAN KODE TRANSAKSI "PJ"
+            // 1. DAFTAR PINJAMAN MURNI BERDASARKAN KODE TRANSAKSI "PJ" (TANPA GANDA DARI SHEET PINJAMAN)
             let loansMap = {};
-
-            appData.loans.forEach(l => {
-                if (String(l.noAgt) === String(noAgt) || l.nama.toLowerCase() === member.nama.toLowerCase()) {
-                    let pId = l.noPj;
-                    if (!loansMap[pId]) {
-                        loansMap[pId] = { noPj: pId, tgl: l.tgl, plafon: l.jumlah, keperluan: l.keperluan, bayar: 0, payments: [] };
-                    }
-                }
-            });
 
             memTrx.forEach(t => {
                 const kt = String(t.kodeTrans).toUpperCase();
