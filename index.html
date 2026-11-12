@@ -100,7 +100,8 @@
                         </span>
                         <input type="password" id="login-pass" required placeholder="Masukkan password Anda" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/10 transition">
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-1">💡 Anggota: <strong class="text-blue-600">12345</strong></p>
+                    <!-- PASSWORD ADMIN DISEMBUNYIKAN, PASSWORD ANGGOTA TETAP TAMPIL 12345 -->
+                    <p class="text-[11px] text-slate-500 mt-1">💡 Password Anggota: <strong class="text-blue-600">12345</strong></p>
                 </div>
 
                 <div id="login-error" class="hidden text-xs text-rose-700 bg-rose-50 p-3 rounded-xl font-bold border border-rose-200 flex items-center gap-2">
@@ -169,7 +170,7 @@
                     <span class="whitespace-nowrap">📈 Rekap Saldo & Kas</span>
                 </button>
 
-                <!-- MENU UPLOAD SYNC KHUSUS ADMIN NO 2 -->
+                <!-- MENU UPLOAD SYNC KHUSUS ADMIN -->
                 <div id="admin-menu-sync" class="hidden pt-2 border-t border-slate-800">
                     <button onclick="switchTab('admin-upload')" id="tab-admin-upload" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-amber-400 hover:bg-amber-950/40 hover:text-amber-300 border border-amber-500/20">
                         <i class="fa-solid fa-cloud-arrow-up w-5 text-center"></i>
@@ -192,7 +193,7 @@
         <!-- CONTENT AREA -->
         <div class="flex-1 flex flex-col min-w-0">
             
-            <!-- TOP BAR DENGAN MARQUEE BERJALAN SESUAI PERMINTAAN -->
+            <!-- TOP BAR DENGAN MARQUEE BERJALAN -->
             <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-25 flex flex-col shadow-2xs no-print">
                 <div class="bg-gradient-to-r from-blue-900 via-blue-700 to-indigo-800 text-white text-[11px] font-bold py-1.5 px-4 overflow-hidden flex items-center">
                     <span class="bg-blue-950 text-blue-200 px-2 py-0.5 rounded text-[9px] uppercase tracking-wider mr-3 shrink-0 shadow-xs">📢 Info Koperasi</span>
@@ -284,7 +285,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 2: MEMBERS DATA (DENGAN TGL KELUAR KOLOM AC, STATUS KOLOM AD, & KEKURANGAN WAJIB 0 JIKA KELUAR) -->
+                <!-- TAB 2: MEMBERS DATA -->
                 <section id="view-members" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs printable-area">
                         <div class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
@@ -453,7 +454,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: MEMBER REPORT (DIPERBAIKI PROFILNYA MENJADI SANGAT RAPI, PRESISI, DAN PROFESIONAL) -->
+                <!-- TAB 5: MEMBER REPORT -->
                 <section id="view-member-report" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-2xs space-y-6 printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
@@ -471,7 +472,7 @@
                             </div>
                         </div>
 
-                        <!-- PROFILE & KARTU UTAMA (DIKERJAKAN PRESISI DAN PROFESIONAL) -->
+                        <!-- PROFILE & KARTU UTAMA -->
                         <div id="member-profile-card" class="bg-gradient-to-br from-slate-50 to-blue-50/40 border border-slate-200 rounded-2xl p-5 shadow-xs grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
                             <div class="text-slate-400 italic">Silakan pilih nama anggota terlebih dahulu pada pilihan di atas.</div>
                         </div>
@@ -538,7 +539,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 6: REKENING ADMIN KOPERASI (HALAMAN BARU) -->
+                <!-- TAB 6: REKENING ADMIN KOPERASI -->
                 <section id="view-bank-accounts" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
                         <div class="text-center space-y-2">
@@ -638,7 +639,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 8: ADMIN UPLOAD SYNC (KHUSUS ADMIN NO 2) -->
+                <!-- TAB 8: ADMIN UPLOAD SYNC -->
                 <section id="view-admin-upload" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
                         <div class="text-center space-y-2">
@@ -673,7 +674,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC DIRECT READ FILE SYNC.XLSX -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         let appData = {
             members: [],
@@ -697,7 +698,6 @@
         };
 
         function fetchDatabaseAndInit(isLoggedIn) {
-            // Murni membaca langsung dari FILE SYNC.xlsx di server
             fetch('FILE SYNC.xlsx?t=' + new Date().getTime())
                 .then(response => {
                     if (!response.ok) throw new Error("FILE SYNC.xlsx tidak ditemukan di server.");
@@ -746,7 +746,6 @@
                         const r = rowsA[i];
                         const nama = r[5] ? String(r[5]).trim() : '';
                         if (nama) {
-                            // Kolom AC adalah index 28 (TGL KELUAR), Kolom AD adalah index 29 (STATUS)
                             let tglKeluarVal = r[28] !== undefined && r[28] !== null ? String(r[28]).trim() : '-';
                             if (!isNaN(r[28])) tglKeluarVal = excelDateToJSDate(r[28]);
 
@@ -844,7 +843,7 @@
                 if (isLoggedIn) {
                     initAppSession();
                 } else {
-                    document.getElementById('login-view').classList.add('hidden');
+                    document.getElementById('login-view').classList.remove('hidden');
                 }
             } catch (err) {
                 console.error("Error parsing workbook:", err);
@@ -1050,7 +1049,6 @@
             document.getElementById('rep-total-trx').innerText = `${appData.transactions.length} Transaksi`;
         }
 
-        // TAB DAFTAR ANGGOTA (JIKA KELUAR MAKA KEKURANGAN WAJIB DISET 0)
         function renderMembersBalanceTable(data) {
             let html = '';
             data.forEach(m => {
@@ -1063,7 +1061,6 @@
                 const bulanAktif = calculateBulanBerjalanInklusif(m.tglGabung, tglKeluarVal);
                 const simpananWajibBersih = calculateSimpananWajibBersih(m.noAgt, m.nama);
                 
-                // JIKA ANGGOTA SUDAH KELUAR MAKA KEKURANGAN WAJIB DISET 0
                 let kekuranganHtml = `<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">Lunas</span>`;
                 if (!isKeluar) {
                     const kewajibanSeharusnya = bulanAktif * 150000;
@@ -1243,7 +1240,6 @@
             selector.innerHTML = html;
         }
 
-        // BAGIAN LAPORAN RINCI PER ANGGOTA: PROFIL DIRAPIHKAN PRESISI DAN PROFESIONAL
         function renderMemberDetail() {
             const noAgt = document.getElementById('member-selector').value;
             const cardsContainer = document.getElementById('member-loan-kasbon-cards');
@@ -1316,7 +1312,6 @@
             document.getElementById('member-kasbon-remaining').innerText = formatRupiah(sisaKasbonMember);
             document.getElementById('member-kasbon-payments-list').innerHTML = bayarKasbonListHtml;
 
-            // PROFIL DIRAPIHKAN PRESISI DAN PROFESIONAL
             document.getElementById('member-profile-card').innerHTML = `
                 <div class="space-y-1.5 bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
                     <span class="text-blue-600 uppercase font-extrabold text-[10px] tracking-wider block">👤 Identitas Anggota</span>
