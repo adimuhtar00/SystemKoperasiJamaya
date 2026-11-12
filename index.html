@@ -16,7 +16,6 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: radial-gradient(circle at top, #0f172a, #020617); color: #f8fafc; min-height: 100vh; }
         
-        /* 3D SUPER MEGAH ANIMATIONS & TRANSITIONS */
         @keyframes menuSlideIn {
             0% { opacity: 0; transform: translateY(15px) scale(0.97); filter: blur(4px); }
             100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
@@ -222,7 +221,6 @@
         <!-- CONTENT AREA -->
         <div class="flex-1 flex flex-col min-w-0 bg-slate-900 text-slate-100">
             
-            <!-- TOP BAR DENGAN MARQUEE BERJALAN -->
             <header class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 sticky top-0 z-25 flex flex-col shadow-lg no-print">
                 <div class="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-950 text-white text-[11px] font-bold py-1.5 px-4 overflow-hidden flex items-center border-b border-blue-700/30">
                     <span class="bg-blue-950 text-blue-300 px-2 py-0.5 rounded text-[9px] uppercase tracking-wider mr-3 shrink-0 shadow-sm border border-blue-500/30">Info Koperasi</span>
@@ -547,14 +545,14 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: MEMBER REPORT (BAGIAN ATAS PROFIL + KOTAK SALDO BESAR, BAWAH PINJAMAN & KASBON KLOP + KOLOM REFF DI MUTASI) -->
+                <!-- TAB 5: MEMBER REPORT (LIST PJ MURNI DARI KODE "PJ" BESERTA ANGSURAN CI NO REFF PJ) -->
                 <section id="view-member-report" class="hidden space-y-6 tab-content-active">
                     <div class="card-3d-megah rounded-3xl p-5 sm:p-8 shadow-2xl space-y-6 printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print border-b border-slate-200 pb-5">
                             <div>
                                 <span class="px-3 py-1 bg-amber-100 text-amber-900 rounded-xl text-[10px] font-extrabold uppercase">Laporan Spesifik Karyawan</span>
                                 <h3 class="font-black text-slate-900 text-lg sm:text-xl mt-1">Laporan Rinci Per Anggota</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Analisis profil lengkap, saldo pribadi besar, cek klop pinjaman (PJ-CI), dan kasbon (KA-BA).</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Analisis profil lengkap, saldo pribadi besar, daftar pinjaman (PJ & CI No Reff), dan kasbon.</p>
                             </div>
                             <div class="flex items-center gap-3 w-full sm:w-auto">
                                 <select id="member-selector" onchange="renderMemberDetail()" class="w-full sm:w-72 px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-blue-600 shadow-sm">
@@ -568,7 +566,6 @@
 
                         <!-- 1. BAGIAN ATAS: PROFIL LENGKAP & KOTAK SALDO PRIBADI UKURAN BESAR -->
                         <div id="member-top-section" class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                            <!-- Info Profil -->
                             <div class="lg:col-span-1 bg-gradient-to-br from-slate-900 to-indigo-950 text-white p-5 rounded-2xl shadow-lg border border-slate-800 space-y-3">
                                 <span class="px-2.5 py-0.5 bg-blue-500/20 text-cyan-300 rounded text-[10px] font-extrabold uppercase border border-blue-400/30">Identitas Anggota</span>
                                 <div>
@@ -583,7 +580,6 @@
                                 </div>
                             </div>
 
-                            <!-- Kotak Saldo Pribadi Ukuran Besar -->
                             <div class="lg:col-span-2 bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 text-white p-6 rounded-2xl shadow-xl border border-blue-600/40 flex flex-col justify-between space-y-4">
                                 <div class="flex items-center justify-between border-b border-blue-800/80 pb-3">
                                     <div>
@@ -613,16 +609,16 @@
                             </div>
                         </div>
 
-                        <!-- 2. BAGIAN BAWAH: DAFTAR PINJAMAN (CEK KLOP PJ & CI) & KASBON (KA & BA) -->
+                        <!-- 2. BAGIAN BAWAH: DAFTAR PINJAMAN (KODE PJ + ANGSURAN CI NO REFF PJ) & KASBON -->
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <!-- Daftar Pinjaman Berjalan / Pernah Ada (Cek Klop CI & PJ) -->
+                            <!-- Daftar Pinjaman (Kode PJ & Angsuran CI No Reff) -->
                             <div class="bg-rose-50/70 border border-rose-200 rounded-2xl p-5 space-y-4 shadow-sm">
                                 <div class="flex items-center justify-between border-b border-rose-200 pb-3">
                                     <h4 class="font-black text-rose-900 text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
                                         <i class="fa-solid fa-hand-holding-dollar text-rose-700"></i>
-                                        <span>Daftar Pinjaman (Cek Klop PJ & CI)</span>
+                                        <span>Daftar Pinjaman (Kode PJ & Angsuran CI No. Reff)</span>
                                     </h4>
-                                    <span class="text-[11px] font-bold text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-full">Angsuran CI Sesuai No. Reff</span>
+                                    <span class="text-[11px] font-bold text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-full">Sesuai Kode Transaksi PJ</span>
                                 </div>
                                 <div id="member-loans-breakdown-container" class="space-y-3 max-h-[420px] overflow-y-auto pr-1">
                                     <div class="text-slate-400 italic text-xs">Pilih anggota terlebih dahulu.</div>
@@ -1622,10 +1618,9 @@
 
         /* 
           PENYEMPURNAAN LAPORAN RINCI PER ANGGOTA:
-          - Bagian atas: Profil lengkap + kotak saldo pribadi ukuran besar.
-          - Bagian bawah: Daftar pinjaman (cek klop PJ dan CI melalui No. Reff atau No PJ) -> LUNAS jika klop.
-          - Bagian kasbon: Kode transaksi KA jika belum ada pembayaran BA maka menunggak, jika sudah lunas maka lunas.
-          - Mutasi mutasi per anggota: Tambahkan kolom Reff.
+          - Bagian pinjaman: List murni berdasarkan transaksi kode "PJ", lalu lampirkan angsuran "CI" yang ber-No Reff sama dengan No PJ tersebut.
+          - Bagian kasbon: KA dan BA (Sudah OK).
+          - Kolom Reff di mutasi.
         */
         function renderMemberDetail() {
             const noAgt = document.getElementById('member-selector').value;
@@ -1652,7 +1647,6 @@
             const member = appData.members.find(m => String(m.noAgt) === String(noAgt));
             if (!member) return;
 
-            // 1. ISI PROFIL ATAS
             document.getElementById('rep-name').innerText = member.nama;
             document.getElementById('rep-meta').innerText = `${member.jabatan} / ${member.bagian} • No. Anggota #${member.noAgt}`;
             document.getElementById('rep-reg').innerText = member.noMasuk;
@@ -1660,7 +1654,6 @@
             document.getElementById('rep-tgl').innerText = member.tglGabung;
             document.getElementById('rep-rek').innerText = member.rek !== '-' ? `${member.rek} (${member.bank})` : '-';
 
-            // Ambil semua mutasi transaksi anggota ini
             const memTrx = appData.transactions.filter(t => {
                 const matchAgt = String(t.noAgt) === String(noAgt) || t.nama.toLowerCase() === member.nama.toLowerCase();
                 const isCA = String(t.kodeTrans).toUpperCase() === 'CA';
@@ -1678,19 +1671,20 @@
             document.getElementById('rep-box-pinjaman').innerText = formatRupiah(fin.pinjamanBersih);
             document.getElementById('rep-box-kasbon').innerText = formatRupiah(fin.kasbonBersih);
 
-            // 2. BREAKDOWN PINJAMAN (CEK KLOP PJ & CI)
+            // 1. DAFTAR PINJAMAN MURNI DARI KODE "PJ" BESERTA ANGSURAN CI NO REFF PJ
             let loansMap = {};
-            // Ambil dari master PINJAMAN
+
+            // Masukkan data dari master PINJAMAN jika ada
             appData.loans.forEach(l => {
                 if (String(l.noAgt) === String(noAgt) || l.nama.toLowerCase() === member.nama.toLowerCase()) {
                     let pId = l.noPj;
                     if (!loansMap[pId]) {
-                        loansMap[pId] = { noPj: pId, tgl: l.tgl, plafon: l.jumlah, bayar: 0, payments: [] };
+                        loansMap[pId] = { noPj: pId, tgl: l.tgl, plafon: l.jumlah, keperluan: l.keperluan, bayar: 0, payments: [] };
                     }
                 }
             });
 
-            // Ambil dari TRANSAKSI (PJ dan CI)
+            // Ambil dari transaksi dengan kode "PJ"
             memTrx.forEach(t => {
                 const kt = String(t.kodeTrans).toUpperCase();
                 const js = String(t.jenisSimpanan).toUpperCase();
@@ -1698,22 +1692,28 @@
                 if (kt === 'PJ' || js.includes('PINJAMAN')) {
                     let pId = t.noReff && t.noReff !== '0' ? t.noReff : t.noTrx;
                     if (!loansMap[pId]) {
-                        loansMap[pId] = { noPj: pId, tgl: t.tgl, plafon: 0, bayar: 0, payments: [] };
+                        loansMap[pId] = { noPj: pId, tgl: t.tgl, plafon: 0, keperluan: t.ket || 'Pinjaman Koperasi', bayar: 0, payments: [] };
                     }
                     loansMap[pId].plafon += t.keluar;
                 }
-                if (kt === 'CI' || js.includes('CICILAN')) {
-                    let pId = t.noReff && t.noReff !== '0' ? t.noReff : '';
-                    if (!pId || pId === '0') {
-                        // Cari pinjaman aktif pertama jika noReff kosong
-                        let firstKey = Object.keys(loansMap)[0] || 'PJ-UMUM';
-                        pId = firstKey;
+            });
+
+            // Masukkan angsuran "CI" yang ber-No Reff sama dengan No PJ tersebut
+            memTrx.forEach(t => {
+                const kt = String(t.kodeTrans).toUpperCase();
+                if (kt === 'CI') {
+                    let refKey = t.noReff ? String(t.noReff).trim() : '';
+                    if (loansMap[refKey]) {
+                        loansMap[refKey].bayar += t.masuk;
+                        loansMap[refKey].payments.push(t);
+                    } else {
+                        // Jika noReff tidak langsung cocok, coba cocokkan ke pinjaman pertama atau buat list umum
+                        let firstKey = Object.keys(loansMap)[0];
+                        if (firstKey) {
+                            loansMap[firstKey].bayar += t.masuk;
+                            loansMap[firstKey].payments.push(t);
+                        }
                     }
-                    if (!loansMap[pId]) {
-                        loansMap[pId] = { noPj: pId, tgl: t.tgl, plafon: 0, bayar: 0, payments: [] };
-                    }
-                    loansMap[pId].bayar += t.masuk;
-                    loansMap[pId].payments.push(t);
                 }
             });
 
@@ -1722,7 +1722,6 @@
             if (loansArr.length > 0) {
                 loansArr.forEach(l => {
                     let sisa = Math.max(0, l.plafon - l.bayar);
-                    // Cek klop lunas: jika sisa <= 0 atau total angsuran bayar >= plafon pinjaman
                     let isLunas = sisa <= 0 && l.plafon > 0;
                     
                     let payList = l.payments.map(p => `
@@ -1731,32 +1730,33 @@
                             <strong class="text-emerald-700">${formatRupiah(p.masuk)}</strong>
                         </div>
                     `).join('');
-                    if (!payList) payList = `<div class="text-[10px] text-slate-400 italic pl-2">Belum ada angsuran CI tercatat untuk No. PJ ini.</div>`;
+                    if (!payList) payList = `<div class="text-[10px] text-slate-400 italic pl-2">Belum ada angsuran CI (No. Reff ${l.noPj}) tercatat.</div>`;
 
                     loansHtml += `
                         <div class="bg-white p-4 rounded-xl border ${isLunas ? 'border-emerald-300 bg-emerald-50/30' : 'border-rose-300 shadow-sm'} space-y-2 text-xs">
                             <div class="flex justify-between items-center font-bold border-b border-slate-100 pb-2">
-                                <span class="text-slate-900">No. Pinjaman: <strong class="text-rose-700 font-mono text-sm">${l.noPj}</strong></span>
+                                <span class="text-slate-900">No. PJ: <strong class="text-rose-700 font-mono text-sm">${l.noPj}</strong></span>
                                 <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase ${isLunas ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
                                     ${isLunas ? 'LUNAS (Klop)' : 'BERJALAN'}
                                 </span>
                             </div>
-                            <div class="flex justify-between"><span class="text-slate-600 font-semibold">Plafon Pinjaman:</span><strong class="font-mono text-slate-900">${formatRupiah(l.plafon)}</strong></div>
+                            <div class="flex justify-between"><span class="text-slate-600 font-semibold">Tgl / Keperluan:</span><span class="text-slate-900 font-semibold">${l.tgl} - ${l.keperluan}</span></div>
+                            <div class="flex justify-between"><span class="text-slate-600 font-semibold">Plafon Pinjam (PJ):</span><strong class="font-mono text-slate-900">${formatRupiah(l.plafon)}</strong></div>
                             <div class="flex justify-between"><span class="text-slate-600 font-semibold">Total Angsuran (CI):</span><strong class="font-mono text-emerald-700">${formatRupiah(l.bayar)}</strong></div>
                             <div class="flex justify-between border-t border-slate-100 pt-1.5"><span class="font-bold text-slate-900">Sisa Pinjaman:</span><strong class="font-black font-mono ${isLunas ? 'text-emerald-700' : 'text-rose-700'}">${formatRupiah(sisa)}</strong></div>
                             <div class="pt-2 border-t border-slate-100">
-                                <span class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Histori Angsuran CI (Sesuai No. Reff):</span>
+                                <span class="text-[10px] font-bold text-slate-500 uppercase block mb-1">Histori Angsuran CI (No. Reff = ${l.noPj}):</span>
                                 <div class="max-h-28 overflow-y-auto space-y-1">${payList}</div>
                             </div>
                         </div>
                     `;
                 });
             } else {
-                loansHtml = `<div class="text-slate-400 italic text-xs">Tidak ada riwayat pinjaman atas nama anggota ini.</div>`;
+                loansHtml = `<div class="text-slate-400 italic text-xs">Tidak ada riwayat pinjaman (PJ) atas nama anggota ini.</div>`;
             }
             document.getElementById('member-loans-breakdown-container').innerHTML = loansHtml;
 
-            // 3. BREAKDOWN KASBON (KA & BA)
+            // 2. DAFTAR KASBON (KA & BA)
             let kasbonMap = {};
             memTrx.forEach(t => {
                 const kt = String(t.kodeTrans).toUpperCase();
@@ -1788,7 +1788,6 @@
             if (kasbonArr.length > 0) {
                 kasbonArr.forEach(k => {
                     let sisa = Math.max(0, k.plafon - k.bayar);
-                    // Cek lunas kasbon: jika sudah ada pembayaran BA dan sisa <= 0
                     let isLunas = sisa <= 0 && k.plafon > 0;
 
                     let payList = k.payments.map(p => `
@@ -1822,7 +1821,7 @@
             }
             document.getElementById('member-kasbon-breakdown-container').innerHTML = kasbonHtml;
 
-            // 4. TABEL MUTASI DENGAN KOLOM REFF
+            // 3. TABEL MUTASI DENGAN KOLOM REFF
             let runningBalance = 0;
             let trxHtml = '';
             const chronoTrx = [...memTrx].reverse();
@@ -1878,7 +1877,7 @@
             'members': ['Daftar Anggota', 'Daftar lengkap master anggota koperasi beserta evaluasi simpanan wajib.'],
             'transactions': ['Data Transaksi', 'Seluruh catatan arus kas masuk dan keluar beserta jenis saldo.'],
             'loans': ['Data Pinjaman', 'Daftar rincian pinjaman anggota lengkap beserta angsuran masuk dan sisa pinjaman.'],
-            'member-report': ['Laporan Per Anggota', 'Profil pribadi lengkap, saldo pribadi besar, pemisahan pinjaman klop PJ-CI, dan kasbon KA-BA.'],
+            'member-report': ['Laporan Per Anggota', 'Profil pribadi lengkap, saldo pribadi besar, daftar pinjaman (PJ & CI No Reff), dan kasbon.'],
             'bank-accounts': ['Rekening Admin Koperasi', 'Informasi rekening resmi transfer pembayaran simpanan wajib dan angsuran.'],
             'loan-submission': ['Pengajuan Pinjaman (WA)', 'Formulir pengajuan pinjaman online instan terhubung ke WhatsApp Bendahara.'],
             'reports': ['Rekap Saldo & Laporan', 'Analisis keuangan mendalam, saldo global, rekening, dan cash.'],
@@ -1902,7 +1901,7 @@
             const activeView = document.getElementById(`view-${tabId}`);
             if (activeView) {
                 activeView.classList.remove('hidden');
-                void activeView.offsetWidth; // Trigger reflow untuk animasi 3D slide-in
+                void activeView.offsetWidth;
                 activeView.classList.add('tab-content-active');
             }
             const activeBtn = document.getElementById(`tab-${tabId}`);
