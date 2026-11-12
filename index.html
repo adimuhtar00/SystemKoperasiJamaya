@@ -681,7 +681,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 8: FINANCIAL REPORTS (DENGAN RINCIAN STANDAR: WA, AW, TB, AT, KA, BA, PJ, CI, CA) -->
+                <!-- TAB 8: FINANCIAL REPORTS (DENGAN RINCIAN STANDAR: WA, AW, TA, AM, KA, BA, PJ, CI, CA) -->
                 <section id="view-reports" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-slate-200 gap-4 no-print">
@@ -725,7 +725,7 @@
                             </div>
                         </div>
 
-                        <!-- RINCIAN ANALISIS SELISIH STANDAR (WA, AW, TB, AT, KA, BA, PJ, CI, CA) -->
+                        <!-- RINCIAN ANALISIS SELISIH STANDAR (WA, AW, TA, AM, KA, BA, PJ, CI, CA) -->
                         <div class="pt-4">
                             <h4 class="font-bold text-slate-900 text-sm mb-3">🔍 Rincian Analisis Selisih & Komponen Transaksi</h4>
                             <div id="breakdown-selisih-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
@@ -1082,7 +1082,7 @@
                     const js = String(t.jenisSimpanan).toUpperCase();
                     const kt = String(t.kodeTrans).toUpperCase();
                     if (js.includes('WAJIB') || kt === 'WA') simpananWajib += t.masuk;
-                    if (js.includes('TABUNGAN') || js.includes('TB') || kt === 'TB') tabungan += t.masuk;
+                    if (js.includes('TABUNGAN') || kt === 'TA') tabungan += t.masuk;
                     if (js.includes('PINJAMAN') || kt === 'PJ') pinjaman += t.keluar;
                     if (js.includes('KASBON') || kt === 'KA') kasbon += t.keluar;
                 }
@@ -1207,14 +1207,14 @@
             document.getElementById('rep-total-members').innerText = `${appData.members.length} Anggota`;
             document.getElementById('rep-total-trx').innerText = `${appData.transactions.length} Transaksi`;
 
-            // HITUNG KOMPONEN STANDAR: WA, AW, TB, AT, KA, BA, PJ, CI, CA
-            let totalWA = 0, totalAW = 0, totalTB = 0, totalAT = 0, totalKA = 0, totalBA = 0, totalPJ = 0, totalCI = 0, totalCA = 0;
+            // HITUNG KOMPONEN STANDAR: WA, AW, TA, AM, KA, BA, PJ, CI, CA
+            let totalWA = 0, totalAW = 0, totalTA = 0, totalAM = 0, totalKA = 0, totalBA = 0, totalPJ = 0, totalCI = 0, totalCA = 0;
             appData.transactions.forEach(t => {
                 const kt = String(t.kodeTrans).toUpperCase();
                 if (kt === 'WA') totalWA += t.masuk;
                 if (kt === 'AW') totalAW += (t.keluar || t.masuk);
-                if (kt === 'TB') totalTB += t.masuk;
-                if (kt === 'AT') totalAT += (t.keluar || t.masuk);
+                if (kt === 'TA') totalTA += t.masuk;
+                if (kt === 'AM') totalAM += (t.keluar || t.masuk);
                 if (kt === 'KA') totalKA += t.keluar;
                 if (kt === 'BA') totalBA += t.masuk;
                 if (kt === 'PJ') totalPJ += t.keluar;
@@ -1233,11 +1233,11 @@
                 </div>
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <span class="text-slate-500 font-bold uppercase text-[10px]">Tabungan</span>
-                    <p class="text-sm font-black text-indigo-700">${formatRupiah(totalTB)}</p>
+                    <p class="text-sm font-black text-indigo-700">${formatRupiah(totalTA)}</p>
                 </div>
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <span class="text-slate-500 font-bold uppercase text-[10px]">Ambil Tabungan</span>
-                    <p class="text-sm font-black text-rose-600">${formatRupiah(totalAT)}</p>
+                    <p class="text-sm font-black text-rose-600">${formatRupiah(totalAM)}</p>
                 </div>
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <span class="text-slate-500 font-bold uppercase text-[10px]">Kasbon</span>
