@@ -223,8 +223,26 @@
             <!-- MAIN CONTAINER -->
             <main class="p-3 sm:p-6 lg:p-8 space-y-6 flex-1">
 
-                <!-- TAB 1: DASHBOARD (SISA SALDO GLOBAL PALING ATAS DENGAN UKURAN BESAR) -->
+                <!-- TAB 1: DASHBOARD -->
                 <section id="view-dashboard" class="space-y-6">
+                    <!-- ALERT PEMBATASAN / KURANG BAYAR SIMPANAN WAJIB (KHUSUS ANGGOTA) -->
+                    <div id="member-alert-box" class="hidden bg-rose-50 border border-rose-200 p-4 sm:p-5 rounded-2xl shadow-sm flex items-start gap-3.5">
+                        <div class="w-10 h-10 bg-rose-600 text-white rounded-xl flex items-center justify-center shrink-0 font-bold text-lg mt-0.5 shadow-sm">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="space-y-1 flex-1">
+                            <h4 class="font-extrabold text-rose-900 text-sm">Perhatian: Kekurangan Simpanan Wajib Terdeteksi!</h4>
+                            <p id="member-alert-message" class="text-xs text-rose-800 font-semibold leading-relaxed">
+                                Halo Bang Adi, Anda memiliki kekurangan pembayaran simpanan wajib sebesar <strong id="alert-shortage-amount">Rp 0</strong>. Mohon segera lakukan pelunasan untuk menjaga kedisiplinan dan status keaktifan di koperasi.
+                            </p>
+                            <div class="pt-2">
+                                <button onclick="switchTab('bank-accounts')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition shadow-xs inline-flex items-center gap-1.5">
+                                    <i class="fa-solid fa-credit-card"></i> Lihat Info Rekening Pelunasan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- SISA SALDO GLOBAL UTAMA BESAR DI ATAS -->
                     <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 border border-blue-700 p-6 sm:p-8 rounded-3xl shadow-xl text-white">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -479,7 +497,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: MEMBER REPORT (SISA SALDOPRIBADI DITAMPILKAN BESAR) -->
+                <!-- TAB 5: MEMBER REPORT -->
                 <section id="view-member-report" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-2xs space-y-6 printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
@@ -564,7 +582,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 6: REKENING ADMIN KOPERASI (DENGAN TOMBOL SALIN REKENING) -->
+                <!-- TAB 6: REKENING ADMIN KOPERASI -->
                 <section id="view-bank-accounts" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
                         <div class="text-center space-y-2">
@@ -606,7 +624,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 7: PENGAJUAN PINJAMAN KE WHATSAPP (+6285311252227) -->
+                <!-- TAB 7: PENGAJUAN PINJAMAN KE WHATSAPP (+6285311254227) -->
                 <section id="view-loan-submission" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
                         <div class="text-center space-y-2">
@@ -657,19 +675,19 @@
 
                             <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-2 text-sm">
                                 <i class="fa-brands fa-whatsapp text-base"></i>
-                                <span>Kirim Pengajuan via WhatsApp (+6285311252227)</span>
+                                <span>Kirim Pengajuan via WhatsApp (+6285311254227)</span>
                             </button>
                         </form>
                     </div>
                 </section>
 
-                <!-- TAB 8: FINANCIAL REPORTS (DENGAN RINCIAN SELISIH CA, WA, TB, KA, PJ) -->
+                <!-- TAB 8: FINANCIAL REPORTS (DENGAN RINCIAN STANDAR: WA, AW, TB, AT, KA, BA, PJ, CI, CA) -->
                 <section id="view-reports" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-slate-200 gap-4 no-print">
                             <div>
                                 <h3 class="font-extrabold text-slate-900 text-base sm:text-lg">📈 Rekap Saldo Keuangan & Kas</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Analisis arus kas global, rekening bank, dan rincian selisih komprehensif</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Analisis arus kas global, rekening bank, dan rincian standar komponen transaksi</p>
                             </div>
                             <button onclick="window.print()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
                                 <i class="fa-solid fa-print"></i>
@@ -707,10 +725,10 @@
                             </div>
                         </div>
 
-                        <!-- RINCIAN SELISIH KOMPREHENSIF SESUAI PERMINTAAN -->
+                        <!-- RINCIAN ANALISIS SELISIH STANDAR (WA, AW, TB, AT, KA, BA, PJ, CI, CA) -->
                         <div class="pt-4">
                             <h4 class="font-bold text-slate-900 text-sm mb-3">🔍 Rincian Analisis Selisih & Komponen Transaksi</h4>
-                            <div id="breakdown-selisih-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                            <div id="breakdown-selisih-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                                 <!-- Dinamis diisi via JavaScript -->
                             </div>
                         </div>
@@ -984,7 +1002,6 @@
                 return;
             }
 
-            errorDiv.classList.add('hidden');
             errorDiv.classList.remove('hidden');
         }
 
@@ -997,13 +1014,17 @@
             document.getElementById('mobile-user-name').innerText = appData.currentUser.name;
             document.getElementById('marquee-user-name').innerText = appData.currentUser.name;
             
-            // Otomatis isi nama pemohon di form WhatsApp jika login sebagai anggota
             if (appData.currentUser.role === 'Anggota') {
                 const waNameInput = document.getElementById('wa-name');
                 if (waNameInput) waNameInput.value = appData.currentUser.name;
                 const today = new Date().toISOString().split('T')[0];
                 const waDateInput = document.getElementById('wa-date');
                 if (waDateInput) waDateInput.value = today;
+
+                // Cek kekurangan simpanan wajib untuk alert login anggota
+                checkMemberAlertStatus(appData.currentUser.id, appData.currentUser.name);
+            } else {
+                document.getElementById('member-alert-box').classList.add('hidden');
             }
 
             if (String(appData.currentUser.id) === '2' || appData.currentUser.role === 'Administrator') {
@@ -1013,6 +1034,35 @@
             }
 
             renderAllViews();
+        }
+
+        // FUNGSI CEK STATUS KURANG BAYAR WAJIB UNTUK ALERT
+        function checkMemberAlertStatus(noAgt, name) {
+            const member = appData.members.find(m => String(m.noAgt) === String(noAgt));
+            const alertBox = document.getElementById('member-alert-box');
+            if (!member) {
+                alertBox.classList.add('hidden');
+                return;
+            }
+
+            const isKeluar = member.status === 'KELUAR' || (member.tglKeluar && member.tglKeluar !== '-' && member.tglKeluar !== '0');
+            if (isKeluar) {
+                alertBox.classList.add('hidden');
+                return;
+            }
+
+            const bulanAktif = calculateBulanBerjalanInklusif(member.tglGabung, member.tglKeluar);
+            const simpananWajibBersih = calculateSimpananWajibBersih(member.noAgt, member.nama);
+            const kewajibanSeharusnya = bulanAktif * 150000;
+            const selisihWajib = kewajibanSeharusnya - simpananWajibBersih;
+
+            if (selisihWajib > 0) {
+                document.getElementById('alert-shortage-amount').innerText = formatRupiah(selisihWajib);
+                document.getElementById('member-alert-message').innerHTML = `Halo <strong>${name}</strong>, berdasarkan catatan hingga bulan aktif ke-${bulanAktif}, Anda memiliki kekurangan pembayaran simpanan wajib sebesar <strong class="text-rose-700">${formatRupiah(selisihWajib)}</strong>. Mohon segera lakukan pelunasan.`;
+                alertBox.classList.remove('hidden');
+            } else {
+                alertBox.classList.add('hidden');
+            }
         }
 
         function handleLogout() {
@@ -1148,7 +1198,6 @@
             renderLoansTable(appData.loans);
             populateMemberReportSelector();
 
-            // RENDER FINANCIAL REPORTS & DETAIL SELISIH COMPREHENSIVE
             document.getElementById('report-total-in').innerText = formatRupiah(totalIn);
             document.getElementById('report-total-out').innerText = formatRupiah(totalOut);
             document.getElementById('report-net-cash').innerText = formatRupiah(totalIn - totalOut);
@@ -1158,11 +1207,10 @@
             document.getElementById('rep-total-members').innerText = `${appData.members.length} Anggota`;
             document.getElementById('rep-total-trx').innerText = `${appData.transactions.length} Transaksi`;
 
-            // HITUNG TOTAL CA, WA, TB, KA, PJ
-            let totalCA = 0, totalWA = 0, totalAW = 0, totalTB = 0, totalAT = 0, totalKA = 0, totalBA = 0, totalPJ = 0, totalCI = 0;
+            // HITUNG KOMPONEN STANDAR: WA, AW, TB, AT, KA, BA, PJ, CI, CA
+            let totalWA = 0, totalAW = 0, totalTB = 0, totalAT = 0, totalKA = 0, totalBA = 0, totalPJ = 0, totalCI = 0, totalCA = 0;
             appData.transactions.forEach(t => {
                 const kt = String(t.kodeTrans).toUpperCase();
-                if (kt === 'CA') totalCA += t.masuk;
                 if (kt === 'WA') totalWA += t.masuk;
                 if (kt === 'AW') totalAW += (t.keluar || t.masuk);
                 if (kt === 'TB') totalTB += t.masuk;
@@ -1171,33 +1219,45 @@
                 if (kt === 'BA') totalBA += t.masuk;
                 if (kt === 'PJ') totalPJ += t.keluar;
                 if (kt === 'CI') totalCI += t.masuk;
+                if (kt === 'CA') totalCA += t.masuk;
             });
 
             document.getElementById('breakdown-selisih-grid').innerHTML = `
-                <div class="bg-blue-50/70 p-3.5 rounded-xl border border-blue-200 space-y-1">
-                    <span class="text-blue-900 font-bold uppercase text-[10px]">Simpanan Wajib (WA - AW)</span>
-                    <p class="text-sm font-black text-blue-950">${formatRupiah(totalWA - totalAW)}</p>
-                    <p class="text-[10px] text-slate-500">Total WA: ${formatRupiah(totalWA)} | AW: ${formatRupiah(totalAW)}</p>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 font-bold uppercase text-[10px]">Wajib</span>
+                    <p class="text-sm font-black text-blue-700">${formatRupiah(totalWA)}</p>
                 </div>
-                <div class="bg-indigo-50/70 p-3.5 rounded-xl border border-indigo-200 space-y-1">
-                    <span class="text-indigo-900 font-bold uppercase text-[10px]">Tabungan (TB - AT)</span>
-                    <p class="text-sm font-black text-indigo-950">${formatRupiah(totalTB - totalAT)}</p>
-                    <p class="text-[10px] text-slate-500">Total TB: ${formatRupiah(totalTB)} | AT: ${formatRupiah(totalAT)}</p>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 font-bold uppercase text-[10px]">Ambil Wajib</span>
+                    <p class="text-sm font-black text-rose-600">${formatRupiah(totalAW)}</p>
                 </div>
-                <div class="bg-amber-50/70 p-3.5 rounded-xl border border-amber-200 space-y-1">
-                    <span class="text-amber-900 font-bold uppercase text-[10px]">Kasbon Bersih (KA - BA)</span>
-                    <p class="text-sm font-black text-amber-950">${formatRupiah(totalKA - totalBA)}</p>
-                    <p class="text-[10px] text-slate-500">Total KA: ${formatRupiah(totalKA)} | BA: ${formatRupiah(totalBA)}</p>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 font-bold uppercase text-[10px]">Tabungan</span>
+                    <p class="text-sm font-black text-indigo-700">${formatRupiah(totalTB)}</p>
                 </div>
-                <div class="bg-rose-50/70 p-3.5 rounded-xl border border-rose-200 space-y-1">
-                    <span class="text-rose-900 font-bold uppercase text-[10px]">Pinjaman Bersih (PJ - CI)</span>
-                    <p class="text-sm font-black text-rose-950">${formatRupiah(totalPJ - totalCI)}</p>
-                    <p class="text-[10px] text-slate-500">Total PJ: ${formatRupiah(totalPJ)} | CI: ${formatRupiah(totalCI)}</p>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 font-bold uppercase text-[10px]">Ambil Tabungan</span>
+                    <p class="text-sm font-black text-rose-600">${formatRupiah(totalAT)}</p>
                 </div>
-                <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200 space-y-1 sm:col-span-2">
-                    <span class="text-emerald-900 font-bold uppercase text-[10px]">Total Cicilan Administrasi (CA)</span>
-                    <p class="text-sm font-black text-emerald-950">${formatRupiah(totalCA)}</p>
-                    <p class="text-[10px] text-slate-500">Akumulasi penerimaan dari transaksi kode CA pada tabel transaksi.</p>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 font-bold uppercase text-[10px]">Kasbon</span>
+                    <p class="text-sm font-black text-amber-700">${formatRupiah(totalKA)}</p>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 font-bold uppercase text-[10px]">Bayar Kasbon</span>
+                    <p class="text-sm font-black text-emerald-700">${formatRupiah(totalBA)}</p>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 font-bold uppercase text-[10px]">Pinjaman</span>
+                    <p class="text-sm font-black text-rose-700">${formatRupiah(totalPJ)}</p>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 font-bold uppercase text-[10px]">Cicilan Pokok</span>
+                    <p class="text-sm font-black text-emerald-700">${formatRupiah(totalCI)}</p>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <span class="text-slate-500 font-bold uppercase text-[10px]">Cicilan Admin</span>
+                    <p class="text-sm font-black text-cyan-700">${formatRupiah(totalCA)}</p>
                 </div>
             `;
         }
@@ -1393,7 +1453,6 @@
             selector.innerHTML = html;
         }
 
-        // BAGIAN LAPORAN RINCI PER ANGGOTA (SISA SALDO PRIBADI DITAMPILKAN BESAR)
         function renderMemberDetail() {
             const noAgt = document.getElementById('member-selector').value;
             const cardsContainer = document.getElementById('member-loan-kasbon-cards');
@@ -1467,7 +1526,6 @@
             document.getElementById('member-kasbon-remaining').innerText = formatRupiah(sisaKasbonMember);
             document.getElementById('member-kasbon-payments-list').innerHTML = bayarKasbonListHtml;
 
-            // SISA SALDO PRIBADI DITAMPILKAN BESAR
             document.getElementById('member-profile-card').innerHTML = `
                 <div class="space-y-1.5 bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
                     <span class="text-blue-600 uppercase font-extrabold text-[10px] tracking-wider block">👤 Identitas Anggota</span>
@@ -1515,7 +1573,6 @@
             document.getElementById('member-trx-tbody').innerHTML = trxHtml || `<tr><td colspan="7" class="p-4 text-center text-slate-400 font-semibold">Belum ada riwayat transaksi.</td></tr>`;
         }
 
-        // FUNGSI SALIN NOMOR REKENING
         function copyRekeningNumber() {
             const rekText = document.getElementById('bca-account-number').innerText.trim();
             navigator.clipboard.writeText(rekText).then(() => {
@@ -1529,7 +1586,7 @@
             });
         }
 
-        // FUNGSI KIRIM PENGAJUAN PINJAMAN KE WHATSAPP
+        // FUNGSI KIRIM PENGAJUAN PINJAMAN KE WHATSAPP (NOMOR +6285311254227)
         function sendLoanWhatsApp(e) {
             e.preventDefault();
             const name = document.getElementById('wa-name').value.trim();
