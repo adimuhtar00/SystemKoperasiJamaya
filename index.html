@@ -41,9 +41,9 @@
         table th, table td {
             padding-top: 7px !important;
             padding-bottom: 7px !important;
-            padding-left: 10px !important;
-            padding-right: 10px !important;
-            font-size: 11.5px !important;
+            padding-left: 9px !important;
+            padding-right: 9px !important;
+            font-size: 11px !important;
         }
 
         @media print {
@@ -65,7 +65,7 @@
             }
             .no-print { display: none !important; }
             table { width: 100% !important; border-collapse: collapse !important; }
-            th, td { border: 1px solid #334155 !important; color: #000000 !important; padding: 5px 6px !important; font-size: 10.5px !important; }
+            th, td { border: 1px solid #334155 !important; color: #000000 !important; padding: 5px 6px !important; font-size: 10px !important; }
             th { background-color: #e2e8f0 !important; font-weight: 700 !important; }
         }
     </style>
@@ -191,9 +191,9 @@
             <!-- TOP BAR DENGAN MARQUEE BERJALAN -->
             <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-25 flex flex-col shadow-2xs no-print">
                 <div class="bg-gradient-to-r from-blue-900 via-blue-700 to-indigo-800 text-white text-[11px] font-bold py-1.5 px-4 overflow-hidden flex items-center">
-                    <span class="bg-blue-950 text-blue-200 px-2 py-0.5 rounded text-[9px] uppercase tracking-wider mr-3 shrink-0 shadow-xs">📢 Pengumuman</span>
+                    <span class="bg-blue-950 text-blue-200 px-2 py-0.5 rounded text-[9px] uppercase tracking-wider mr-3 shrink-0 shadow-xs">📢 Info Koperasi</span>
                     <marquee scrollamount="5" class="text-blue-100">
-                        ✨ Selamat datang di Sistem Koperasi Jamaya Professional Edition! | 👋 Halo, <span id="marquee-user-name" class="underline font-extrabold text-cyan-300">Pengguna</span> | 💼 Mari kelola simpanan, pinjaman, dan rekap keuangan dengan cepat, akurat, dan transparan.
+                        👋 Selamat datang, <span id="marquee-user-name" class="underline font-extrabold text-cyan-300">Anggota</span> di Sistem Koperasi Jamaya | 💼 Kelola keuangan dengan transparan | 🌱 Wujudkan koperasi yang sehat dengan selalu aktif, disiplin berkontribusi, dan tertib kewajiban demi kemajuan bersama.
                     </marquee>
                 </div>
 
@@ -280,13 +280,13 @@
                     </div>
                 </section>
 
-                <!-- TAB 2: MEMBERS DATA (DENGAN TANGGAL GABUNG, SIMPANAN WAJIB BERSIH, BULAN AKTIF, TANGGAL KELUAR, STATUS) -->
+                <!-- TAB 2: MEMBERS DATA (DENGAN TANGGAL GABUNG, SIMPANAN WAJIB, BULAN BERJALAN, KEKURANGAN WAJIB, TGL KELUAR, STATUS) -->
                 <section id="view-members" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs printable-area">
                         <div class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
                             <div>
-                                <h3 class="font-bold text-slate-900 text-sm sm:text-base">👥 Daftar Anggota & Status Keaktifan</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Dilengkapi tanggal gabung, simpanan wajib bersih (WA - AW), bulan aktif, dan status.</p>
+                                <h3 class="font-bold text-slate-900 text-sm sm:text-base">👥 Daftar Anggota & Evaluasi Simpanan Wajib</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Kewajiban Rp 150.000/bulan dihitung inklusif dari tanggal gabung s.d. bulan berjalan.</p>
                             </div>
                             <div class="flex items-center gap-3 w-full sm:w-auto">
                                 <input type="text" id="member-search" onkeyup="filterMembers()" placeholder="Cari nama atau NIK..." class="w-full sm:w-64 px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-blue-600">
@@ -304,8 +304,9 @@
                                         <th>Nama Lengkap</th>
                                         <th>Jabatan / Bagian</th>
                                         <th>Tgl Gabung</th>
-                                        <th class="text-right">Simpanan Wajib (Bersih)</th>
                                         <th class="text-center">Bulan Aktif</th>
+                                        <th class="text-right">Simpanan Wajib (WA-AW)</th>
+                                        <th class="text-right">Kekurangan Wajib</th>
                                         <th>Tgl Keluar</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center pr-4 no-print">Aksi</th>
@@ -597,25 +598,25 @@
                     </div>
                 </section>
 
-                <!-- TAB 7: ADMIN UPLOAD SYNC (KHUSUS ADMIN NO 2) -->
+                <!-- TAB 7: ADMIN UPLOAD SYNC (KHUSUS ADMIN NO 2 DENGAN BACKUP TIMESTAMP) -->
                 <section id="view-admin-upload" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
                         <div class="text-center space-y-2">
                             <div class="w-14 h-14 bg-amber-500 text-white rounded-2xl mx-auto flex items-center justify-center text-xl font-bold shadow-lg shadow-amber-500/20">
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
                             </div>
-                            <h3 class="text-lg font-black text-slate-900">Upload / Timpa File Data Koperasi (FILE SYNC.xlsx)</h3>
-                            <p class="text-xs text-slate-500">Menu khusus Administrator untuk memperbarui database server secara real-time.</p>
+                            <h3 class="text-lg font-black text-slate-900">Upload & Arsip Otomatis (FILE SYNC.xlsx)</h3>
+                            <p class="text-xs text-slate-500">File lama di server akan otomatis di-rename dengan stempel waktu (Tanggal_Jam-Menit-Detik) sebelum diganti dengan file baru.</p>
                         </div>
 
                         <div class="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center space-y-4 bg-slate-50">
                             <input type="file" id="admin-file-upload-input" accept=".xlsx, .xls" class="hidden" onchange="handleAdminUploadFile(event)">
                             <div class="space-y-1">
                                 <p class="text-xs font-bold text-slate-700">Pilih file Excel database terbaru (.xlsx)</p>
-                                <p class="text-[11px] text-slate-400">File akan otomatis menimpa file sync di server.</p>
+                                <p class="text-[11px] text-slate-400">Terhubung otomatis ke endpoint server: <code>upload_sync.php</code></p>
                             </div>
                             <button onclick="document.getElementById('admin-file-upload-input').click()" class="px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-md text-xs transition inline-flex items-center gap-2">
-                                <i class="fa-solid fa-folder-open"></i> Pilih File Excel
+                                <i class="fa-solid fa-folder-open"></i> Pilih & Unggah File Excel
                             </button>
                         </div>
 
@@ -629,24 +630,6 @@
             <footer class="bg-white border-t border-slate-200 py-5 px-6 text-center text-xs text-slate-400 font-semibold no-print">
                 Koperasi Jamaya &bull; Dikelola oleh Pengurus & Bendahara &bull; Versi 2026 (Luxury Professional Edition)
             </footer>
-        </div>
-    </div>
-
-    <!-- TRANSACTION DETAIL PRINT MODAL -->
-    <div id="trx-print-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-        <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-xl">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-200">
-                <h3 class="font-extrabold text-slate-900 text-base">Bukti / Detil Transaksi Resmi</h3>
-                <button onclick="closeTrxModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 hover:text-slate-900 flex items-center justify-center font-bold">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div id="trx-modal-content" class="space-y-2.5 text-xs text-slate-800 font-semibold"></div>
-            <div class="pt-3 flex justify-end gap-3 no-print">
-                <button onclick="window.print()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-sm">
-                    <i class="fa-solid fa-print"></i> Cetak Bukti Transaksi
-                </button>
-            </div>
         </div>
     </div>
 
@@ -674,7 +657,7 @@
         };
 
         function fetchDatabaseAndInit(isLoggedIn) {
-            fetch('FILE SYNC.xlsx')
+            fetch('FILE SYNC.xlsx?t=' + new Date().getTime())
                 .then(response => {
                     if (!response.ok) throw new Error("File tidak ditemukan otomatis.");
                     return response.arrayBuffer();
@@ -690,12 +673,12 @@
 
         function loadDefaultDataForTesting(isLoggedIn) {
             appData.members = [
-                { noMasuk: "001/REG/VI/2026", noKeluar: "-", tglGabung: "30-May-2026", noAgt: "1", nik: "3603181009710017", nama: "A. Syamsul Falah", tglLahir: "09-Oct-1971", bagian: "PPIC", jabatan: "PENGAWAS", rek: "3194139581", bank: "BCA", hp: "08111221867", alamat: "Kp. Cirewed - Cikupa", jk: "L" },
-                { noMasuk: "002/REG/VI/2026", noKeluar: "-", tglGabung: "30-May-2026", noAgt: "2", nik: "1803042308890003", nama: "Adi Muhtar", tglLahir: "23-Aug-1989", bagian: "QC Lab", jabatan: "BENDAHARA", rek: "0231177484", bank: "BCA", hp: "085311254227", alamat: "Dusun Jambe - Jambe", jk: "L" }
+                { noMasuk: "001/REG/VI/2026", noKeluar: "-", tglGabung: "01-Jun-2026", noAgt: "1", nik: "3603181009710017", nama: "A. Syamsul Falah", tglLahir: "09-Oct-1971", bagian: "PPIC", jabatan: "PENGAWAS", rek: "3194139581", bank: "BCA", hp: "08111221867", alamat: "Kp. Cirewed - Cikupa", jk: "L" },
+                { noMasuk: "002/REG/VI/2026", noKeluar: "-", tglGabung: "01-Jun-2026", noAgt: "2", nik: "1803042308890003", nama: "Adi Muhtar", tglLahir: "23-Aug-1989", bagian: "QC Lab", jabatan: "BENDAHARA", rek: "0231177484", bank: "BCA", hp: "085311254227", alamat: "Dusun Jambe - Jambe", jk: "L" }
             ];
             appData.transactions = [
-                { noTrx: "TX0001", tgl: "30-May-2026", noAgt: "1", noReff: "0", kodeTrans: "WA", masuk: 150000, keluar: 0, ket: "Wajib 1 Jun 2026", kodeSaldo: "R", nama: "A. Syamsul Falah", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 150000, saldoRek: 150000, saldoCash: 0 },
-                { noTrx: "TX0039", tgl: "15-Jun-2026", noAgt: "1", noReff: "PJ0001", kodeTrans: "CI", masuk: 835000, keluar: 0, ket: "Angsuran ke-1 dari 6", kodeSaldo: "C", nama: "A. Syamsul Falah", jenisSimpanan: "CI - Cicilan Pokok", saldoGlobal: 3061008, saldoRek: 2226008, saldoCash: 835000 }
+                { noTrx: "TX0001", tgl: "30-May-2026", noAgt: "1", noReff: "0", kodeTrans: "WA", masuk: 750000, keluar: 0, ket: "Wajib 5 Bulan", kodeSaldo: "R", nama: "A. Syamsul Falah", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 750000, saldoRek: 750000, saldoCash: 0 },
+                { noTrx: "TX0002", tgl: "30-May-2026", noAgt: "2", noReff: "0", kodeTrans: "WA", masuk: 900000, keluar: 0, ket: "Wajib 6 Bulan", kodeSaldo: "R", nama: "Adi Muhtar", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 1650000, saldoRek: 1650000, saldoCash: 0 }
             ];
             appData.loans = [
                 { noPj: "PJ0001", kodeTr: "TX0026", tgl: "05-Jun-2026", noAgt: "1", nama: "A. Syamsul Falah", jumlah: 5000000, keperluan: "Buat tambahan acara Besanan", tenor: 6, angsuranPokok: 833333, angsuranAdm: 25000, jumlahPerBulan: 858333, totalPengembalian: 5150000, pembayaran: "Cash", ttd: "Supandi", jaminan: "Sertifikat / ATM", potPj: "-", potWajib: "-", potKasbon: "-", tenorAwal: 6, catatan: "Lancar", angsuranMasuk: 835000 }
@@ -868,7 +851,6 @@
             document.getElementById('mobile-user-name').innerText = appData.currentUser.name;
             document.getElementById('marquee-user-name').innerText = appData.currentUser.name;
 
-            // KONTROL MENU UPLOAD SYNC HANYA UNTUK ADMIN NO 2
             if (String(appData.currentUser.id) === '2' || appData.currentUser.role === 'Administrator') {
                 document.getElementById('admin-menu-sync').classList.remove('hidden');
             } else {
@@ -911,25 +893,66 @@
                 if (match) {
                     const kt = String(t.kodeTrans).toUpperCase();
                     if (kt === 'WA') totalWA += t.masuk;
-                    if (kt === 'AW') totalAW += t.masuk; // atau keluar tergantung entry, anggap masuk/keluar
+                    if (kt === 'AW') totalAW += (t.keluar || t.masuk);
                 }
             });
             return totalWA - totalAW;
         }
 
-        function calculateBulanAktif(tglGabung) {
-            if (!tglGabung || tglGabung === '-') return 1;
-            try {
-                // Parsing tanggal gabung sederhana
-                let parts = tglGabung.split(/[\s-]/);
-                let d = new Date(tglGabung);
-                if (isNaN(d)) return 1;
-                let now = new Date();
-                let diffMonths = (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
-                return Math.max(1, diffMonths);
-            } catch(e) {
-                return 1;
+        // PARSER TANGGAL INDONESIA / EXCEL KE JS DATE OBJECT
+        function parseIndonesianDate(dateStr) {
+            if (!dateStr || dateStr === '-' || dateStr === '0') return null;
+            const monthMap = {
+                'jan': 0, 'januari': 0,
+                'feb': 1, 'februari': 1,
+                'mar': 2, 'maret': 2,
+                'apr': 3, 'april': 3,
+                'mei': 4, 'may': 4,
+                'jun': 5, 'juni': 5,
+                'jul': 6, 'juli': 6,
+                'agu': 7, 'agt': 7, 'agustus': 7, 'aug': 7,
+                'sep': 8, 'september': 8,
+                'okt': 9, 'oktober': 9, 'oct': 9,
+                'nov': 10, 'nop': 10, 'november': 10, 'nopember': 10,
+                'des': 11, 'desember': 11, 'dec': 11
+            };
+
+            let cleanStr = String(dateStr).trim();
+            // Cek format DD-MMM-YYYY atau DD MMM YYYY atau DD/MM/YYYY
+            let parts = cleanStr.split(/[\s\-\/]+/);
+            if (parts.length === 3) {
+                let day = parseInt(parts[0], 10);
+                let monthPart = parts[1].toLowerCase();
+                let year = parseInt(parts[2], 10);
+
+                if (!isNaN(day) && !isNaN(year)) {
+                    if (year < 100) year += 2000;
+                    let monthIdx = isNaN(parseInt(monthPart, 10)) ? monthMap[monthPart] : (parseInt(monthPart, 10) - 1);
+                    if (monthIdx !== undefined) {
+                        return new Date(year, monthIdx, day);
+                    }
+                }
             }
+            let fallback = new Date(cleanStr);
+            return isNaN(fallback.getTime()) ? null : fallback;
+        }
+
+        // HITUNG BULAN BERJALAN SECARA INKLUSIF (MISAL 1 JUN 2026 S.D. NOV 2026 = 6 BULAN)
+        function calculateBulanBerjalanInklusif(tglGabung, tglKeluar) {
+            const startDate = parseIndonesianDate(tglGabung);
+            if (!startDate) return 1;
+
+            let endDate = new Date();
+            if (tglKeluar && tglKeluar !== '-' && tglKeluar !== '0') {
+                const parsedKeluar = parseIndonesianDate(tglKeluar);
+                if (parsedKeluar) endDate = parsedKeluar;
+            }
+
+            const diffYears = endDate.getFullYear() - startDate.getFullYear();
+            const diffMonths = endDate.getMonth() - startDate.getMonth();
+            const totalInclusiveMonths = (diffYears * 12) + diffMonths + 1;
+
+            return Math.max(1, totalInclusiveMonths);
         }
 
         function renderAllViews() {
@@ -986,17 +1009,28 @@
             document.getElementById('rep-total-trx').innerText = `${appData.transactions.length} Transaksi`;
         }
 
-        // TAB DAFTAR ANGGOTA: TANGGAL GABUNG, SIMPANAN WAJIB (WA - AW), BULAN AKTIF, TANGGAL KELUAR, STATUS
+        // TAB DAFTAR ANGGOTA DENGAN BULAN AKTIF INKLUSIF & KEKURANGAN SIMPANAN WAJIB (RP 150.000/BLN)
         function renderMembersBalanceTable(data) {
             let html = '';
             data.forEach(m => {
-                const simpananWajibBersih = calculateSimpananWajibBersih(m.noAgt, m.nama);
-                const bulanAktif = calculateBulanAktif(m.tglGabung);
                 const isKeluar = m.noKeluar && m.noKeluar !== '-' && m.noKeluar !== '0';
+                const tglKeluarVal = isKeluar ? m.noKeluar : '-';
+                
+                const bulanAktif = calculateBulanBerjalanInklusif(m.tglGabung, tglKeluarVal);
+                const simpananWajibBersih = calculateSimpananWajibBersih(m.noAgt, m.nama);
+                
+                // Kewajiban 150rb per bulan
+                const kewajibanSeharusnya = bulanAktif * 150000;
+                const selisihWajib = kewajibanSeharusnya - simpananWajibBersih;
+
+                let kekuranganHtml = `<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">Lunas</span>`;
+                if (selisihWajib > 0) {
+                    kekuranganHtml = `<span class="font-mono font-black text-rose-600">-${formatRupiah(selisihWajib)}</span>`;
+                }
+
                 const statusBadge = isKeluar 
                     ? `<span class="px-2 py-0.5 bg-rose-100 text-rose-700 rounded text-[10px] font-extrabold uppercase">Keluar</span>`
                     : `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[10px] font-extrabold uppercase">Aktif</span>`;
-                const tglKeluarVal = isKeluar ? m.noKeluar : '-';
 
                 html += `
                     <tr class="hover:bg-slate-50 transition">
@@ -1004,8 +1038,9 @@
                         <td class="font-bold text-slate-900">${m.nama}</td>
                         <td class="text-slate-600 font-semibold">${m.jabatan} (${m.bagian})</td>
                         <td class="text-slate-600 font-semibold">${m.tglGabung}</td>
-                        <td class="text-right font-mono text-blue-600 font-bold">${formatRupiah(simpananWajibBersih)}</td>
                         <td class="text-center font-bold text-slate-800">${bulanAktif} Bln</td>
+                        <td class="text-right font-mono text-blue-600 font-bold">${formatRupiah(simpananWajibBersih)}</td>
+                        <td class="text-right">${kekuranganHtml}</td>
                         <td class="text-slate-600 font-semibold">${tglKeluarVal}</td>
                         <td class="text-center">${statusBadge}</td>
                         <td class="text-center pr-4 no-print">
@@ -1016,7 +1051,7 @@
                     </tr>
                 `;
             });
-            document.getElementById('members-balance-tbody').innerHTML = html || `<tr><td colspan="9" class="p-6 text-center text-slate-400 font-semibold">Tidak ada data anggota.</td></tr>`;
+            document.getElementById('members-balance-tbody').innerHTML = html || `<tr><td colspan="10" class="p-6 text-center text-slate-400 font-semibold">Tidak ada data anggota.</td></tr>`;
         }
 
         function selectMemberForReport(noAgt) {
@@ -1279,32 +1314,57 @@
             document.getElementById('member-trx-tbody').innerHTML = trxHtml || `<tr><td colspan="7" class="p-4 text-center text-slate-400 font-semibold">Belum ada riwayat transaksi.</td></tr>`;
         }
 
-        // FUNGSI UPLOAD FILE SYNC KHUSUS ADMIN
+        // FUNGSI UPLOAD FILE KE SERVER (DENGAN RENAME FILE LAMA VIA upload_sync.php + REALTIME RENDER)
         function handleAdminUploadFile(e) {
             const file = e.target.files[0];
             if (!file) return;
 
+            const statusBox = document.getElementById('upload-status-box');
+            statusBox.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200', 'bg-rose-50', 'text-rose-700', 'border-rose-200');
+            statusBox.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-200');
+            statusBox.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengunggah <strong>${file.name}</strong> ke server & mengarsipkan file lama...`;
+
+            // 1. Proses baca langsung di layar
             const reader = new FileReader();
-            reader.onload = function(e) {
-                const buffer = e.target.result;
-                processWorkbook(buffer, true);
-                
-                const statusBox = document.getElementById('upload-status-box');
-                statusBox.classList.remove('hidden', 'bg-rose-50', 'text-rose-700', 'border-rose-200');
-                statusBox.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
-                statusBox.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> File <strong>${file.name}</strong> berhasil diunggah dan database aplikasi diperbarui secara real-time!`;
+            reader.onload = function(evt) {
+                processWorkbook(evt.target.result, true);
             };
             reader.readAsArrayBuffer(file);
+
+            // 2. Kirim file ke server via FormData ke upload_sync.php
+            const formData = new FormData();
+            formData.append('sync_file', file);
+
+            fetch('upload_sync.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    statusBox.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-200');
+                    statusBox.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+                    statusBox.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> ${data.message}`;
+                } else {
+                    throw new Error(data.message || "Gagal menyimpan di server.");
+                }
+            })
+            .catch(err => {
+                // Jika dijalankan tanpa server PHP (misalnya langsung klik file HTML lokal), tetap tampilkan informasi jelas
+                statusBox.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-200');
+                statusBox.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                statusBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i> Data pada layar berhasil diperbarui! <br><span class="font-normal text-[11px]">(Catatan: Untuk penyimpanan permanen dan rename otomatis file lama di folder server, pastikan file <code>upload_sync.php</code> berada di folder yang sama pada server PHP/hosting Anda).</span>`;
+            });
         }
 
         const tabTitles = {
             'dashboard': ['Dashboard Utama', 'Ringkasan cepat aktivitas dan sisa saldo keuangan koperasi.'],
-            'members': ['Daftar Anggota', 'Daftar lengkap master anggota koperasi beserta status keaktifan.'],
+            'members': ['Daftar Anggota', 'Daftar lengkap master anggota koperasi beserta evaluasi simpanan wajib.'],
             'transactions': ['Data Transaksi', 'Seluruh catatan arus kas masuk dan keluar beserta jenis saldo.'],
             'loans': ['Data Pinjaman', 'Daftar rincian pinjaman anggota lengkap beserta angsuran masuk dan sisa pinjaman.'],
             'member-report': ['Laporan Per Anggota', 'Profil pribadi lengkap, pemisahan pinjaman, kasbon, dan riwayat pembayarannya.'],
             'reports': ['Rekap Saldo & Laporan', 'Analisis keuangan mendalam, saldo global, rekening, dan cash.'],
-            'admin-upload': ['Upload File Sync', 'Menu khusus Administrator untuk memperbarui file database Excel.']
+            'admin-upload': ['Upload File Sync', 'Menu khusus Administrator untuk memperbarui file database Excel di server.']
         };
 
         function switchTab(tabId) {
