@@ -1,2 +1,0 @@
-# SystemKoperasiJamaya
-System Koperasi Jamaya
