@@ -1164,10 +1164,10 @@
                     if (kt === 'AW') ambilWajibTotal += (t.keluar || t.masuk);
                     if (kt === 'TA') tabungan += t.masuk;
                     if (kt === 'AM') ambilTabungan += (t.keluar || t.masuk);
-                    if (kt === 'PJ' || js.includes('PINJAMAN')) pinjamanPlafon += t.keluar;
-                    if (kt === 'CI' || js.includes('CICILAN')) cicilanPokok += t.masuk;
-                    if (kt === 'KA' || js.includes('KASBON')) kasbonPlafon += t.keluar;
-                    if (kt === 'BA' || js.includes('BAYAR KASBON')) bayarKasbon += t.masuk;
+                    if (kt === 'PJ') pinjamanPlafon += t.keluar;
+                    if (kt === 'CI') cicilanPokok += t.masuk;
+                    if (kt === 'KA') kasbonPlafon += t.keluar;
+                    if (kt === 'BA') bayarKasbon += t.masuk;
                 }
             });
 
@@ -1616,12 +1616,7 @@
             selector.innerHTML = html;
         }
 
-        /* 
-          PENYEMPURNAAN LAPORAN RINCI PER ANGGOTA:
-          - Bagian pinjaman: List murni berdasarkan transaksi kode "PJ", lalu lampirkan angsuran "CI" yang ber-No Reff sama dengan No PJ tersebut.
-          - Bagian kasbon: KA dan BA (Sudah OK).
-          - Kolom Reff di mutasi.
-        */
+        // PERBAIKAN UTAMA: MURNI KODE TRANSAKSI "PJ" DAN "KA" (MENGHINDARI BUG STRING "Pinjam" PADA KASBON)
         function renderMemberDetail() {
             const noAgt = document.getElementById('member-selector').value;
 
@@ -1671,10 +1666,9 @@
             document.getElementById('rep-box-pinjaman').innerText = formatRupiah(fin.pinjamanBersih);
             document.getElementById('rep-box-kasbon').innerText = formatRupiah(fin.kasbonBersih);
 
-            // 1. DAFTAR PINJAMAN MURNI DARI KODE "PJ" BESERTA ANGSURAN CI NO REFF PJ
+            // 1. DAFTAR PINJAMAN MURNI BERDASARKAN KODE TRANSAKSI "PJ"
             let loansMap = {};
 
-            // Masukkan data dari master PINJAMAN jika ada
             appData.loans.forEach(l => {
                 if (String(l.noAgt) === String(noAgt) || l.nama.toLowerCase() === member.nama.toLowerCase()) {
                     let pId = l.noPj;
@@ -1684,12 +1678,10 @@
                 }
             });
 
-            // Ambil dari transaksi dengan kode "PJ"
             memTrx.forEach(t => {
                 const kt = String(t.kodeTrans).toUpperCase();
-                const js = String(t.jenisSimpanan).toUpperCase();
 
-                if (kt === 'PJ' || js.includes('PINJAMAN')) {
+                if (kt === 'PJ') {
                     let pId = t.noReff && t.noReff !== '0' ? t.noReff : t.noTrx;
                     if (!loansMap[pId]) {
                         loansMap[pId] = { noPj: pId, tgl: t.tgl, plafon: 0, keperluan: t.ket || 'Pinjaman Koperasi', bayar: 0, payments: [] };
@@ -1698,7 +1690,6 @@
                 }
             });
 
-            // Masukkan angsuran "CI" yang ber-No Reff sama dengan No PJ tersebut
             memTrx.forEach(t => {
                 const kt = String(t.kodeTrans).toUpperCase();
                 if (kt === 'CI') {
@@ -1707,7 +1698,6 @@
                         loansMap[refKey].bayar += t.masuk;
                         loansMap[refKey].payments.push(t);
                     } else {
-                        // Jika noReff tidak langsung cocok, coba cocokkan ke pinjaman pertama atau buat list umum
                         let firstKey = Object.keys(loansMap)[0];
                         if (firstKey) {
                             loansMap[firstKey].bayar += t.masuk;
@@ -1756,30 +1746,24 @@
             }
             document.getElementById('member-loans-breakdown-container').innerHTML = loansHtml;
 
-            // 2. DAFTAR KASBON (KA & BA)
+            // 2. DAFTAR KASBON (MURNI KODE "KA" & "BA")
             let kasbonMap = {};
             memTrx.forEach(t => {
                 const kt = String(t.kodeTrans).toUpperCase();
-                const js = String(t.jenisSimpanan).toUpperCase();
 
-                if (kt === 'KA' || js.includes('KASBON')) {
+                if (kt === 'KA') {
                     let kId = t.noReff && t.noReff !== '0' ? t.noReff : t.noTrx;
                     if (!kasbonMap[kId]) {
                         kasbonMap[kId] = { noKasbon: kId, tgl: t.tgl, plafon: 0, bayar: 0, payments: [] };
                     }
                     kasbonMap[kId].plafon += t.keluar;
                 }
-                if (kt === 'BA' || js.includes('BAYAR KASBON')) {
-                    let kId = t.noReff && t.noReff !== '0' ? t.noReff : '';
-                    if (!kId || kId === '0') {
-                        let firstKey = Object.keys(kasbonMap)[0] || 'KA-UMUM';
-                        kId = firstKey;
+                if (kt === 'BA') {
+                    let kId = t.noReff ? String(t.noReff).trim() : '';
+                    if (kasbonMap[kId]) {
+                        kasbonMap[kId].bayar += t.masuk;
+                        kasbonMap[kId].payments.push(t);
                     }
-                    if (!kasbonMap[kId]) {
-                        kasbonMap[kId] = { noKasbon: kId, tgl: t.tgl, plafon: 0, bayar: 0, payments: [] };
-                    }
-                    kasbonMap[kId].bayar += t.masuk;
-                    kasbonMap[kId].payments.push(t);
                 }
             });
 
