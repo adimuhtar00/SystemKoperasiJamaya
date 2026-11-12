@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koperasi Jamaya - Luxury Professional Edition</title>
+    <title>Koperasi Jamaya - Professional Edition</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- SheetJS CDN -->
@@ -80,7 +80,7 @@
                     <i class="fa-solid fa-vault"></i>
                 </div>
                 <h1 class="text-2xl font-black text-slate-900 tracking-tight">Koperasi Jamaya</h1>
-                <p class="text-slate-500 text-xs mt-1">✨ Sistem Manajemen Keuangan Profesional & Terpadu</p>
+                <p class="text-slate-500 text-xs mt-1">Sistem Manajemen Keuangan Profesional & Terpadu</p>
             </div>
 
             <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
@@ -132,7 +132,7 @@
                     </div>
                     <div>
                         <h2 class="font-black text-white text-sm tracking-tight">Koperasi Jamaya</h2>
-                        <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-extrabold rounded border border-blue-500/30 uppercase">✨ Luxury Edition</span>
+                        <span class="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-extrabold rounded border border-blue-500/30 uppercase">Professional Edition</span>
                     </div>
                 </div>
             </div>
@@ -159,6 +159,10 @@
                 <button onclick="switchTab('member-report')" id="tab-member-report" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-id-badge w-5 text-center"></i>
                     <span class="whitespace-nowrap">📑 Laporan Per Anggota</span>
+                </button>
+                <button onclick="switchTab('bank-accounts')" id="tab-bank-accounts" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
+                    <i class="fa-solid fa-credit-card w-5 text-center"></i>
+                    <span class="whitespace-nowrap">💳 Rekening Admin</span>
                 </button>
                 <button onclick="switchTab('reports')" id="tab-reports" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:bg-slate-800 hover:text-white">
                     <i class="fa-solid fa-file-invoice-dollar w-5 text-center"></i>
@@ -188,7 +192,7 @@
         <!-- CONTENT AREA -->
         <div class="flex-1 flex flex-col min-w-0">
             
-            <!-- TOP BAR DENGAN MARQUEE BERJALAN -->
+            <!-- TOP BAR DENGAN MARQUEE BERJALAN SESUAI PERMINTAAN -->
             <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-25 flex flex-col shadow-2xs no-print">
                 <div class="bg-gradient-to-r from-blue-900 via-blue-700 to-indigo-800 text-white text-[11px] font-bold py-1.5 px-4 overflow-hidden flex items-center">
                     <span class="bg-blue-950 text-blue-200 px-2 py-0.5 rounded text-[9px] uppercase tracking-wider mr-3 shrink-0 shadow-xs">📢 Info Koperasi</span>
@@ -280,13 +284,13 @@
                     </div>
                 </section>
 
-                <!-- TAB 2: MEMBERS DATA (DENGAN TANGGAL GABUNG, SIMPANAN WAJIB, BULAN BERJALAN, KEKURANGAN WAJIB, TGL KELUAR, STATUS) -->
+                <!-- TAB 2: MEMBERS DATA (DENGAN TGL KELUAR KOLOM AC, STATUS KOLOM AD, & KEKURANGAN WAJIB 0 JIKA KELUAR) -->
                 <section id="view-members" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs printable-area">
                         <div class="p-4 sm:p-5 border-b border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
                             <div>
                                 <h3 class="font-bold text-slate-900 text-sm sm:text-base">👥 Daftar Anggota & Evaluasi Simpanan Wajib</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">Kewajiban Rp 150.000/bulan dihitung inklusif dari tanggal gabung s.d. bulan berjalan.</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Kewajiban Rp 150.000/bulan (Anggota keluar otomatis bernilai 0).</p>
                             </div>
                             <div class="flex items-center gap-3 w-full sm:w-auto">
                                 <input type="text" id="member-search" onkeyup="filterMembers()" placeholder="Cari nama atau NIK..." class="w-full sm:w-64 px-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-blue-600">
@@ -307,8 +311,8 @@
                                         <th class="text-center">Bulan Aktif</th>
                                         <th class="text-right">Simpanan Wajib (WA-AW)</th>
                                         <th class="text-right">Kekurangan Wajib</th>
-                                        <th>Tgl Keluar</th>
-                                        <th class="text-center">Status</th>
+                                        <th>Tgl Keluar (Kolom AC)</th>
+                                        <th class="text-center">Status (Kolom AD)</th>
                                         <th class="text-center pr-4 no-print">Aksi</th>
                                     </tr>
                                 </thead>
@@ -449,7 +453,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: MEMBER REPORT -->
+                <!-- TAB 5: MEMBER REPORT (DIPERBAIKI PROFILNYA MENJADI SANGAT RAPI, PRESISI, DAN PROFESIONAL) -->
                 <section id="view-member-report" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-2xs space-y-6 printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print">
@@ -467,8 +471,8 @@
                             </div>
                         </div>
 
-                        <!-- PROFILE & KARTU UTAMA -->
-                        <div id="member-profile-card" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <!-- PROFILE & KARTU UTAMA (DIKERJAKAN PRESISI DAN PROFESIONAL) -->
+                        <div id="member-profile-card" class="bg-gradient-to-br from-slate-50 to-blue-50/40 border border-slate-200 rounded-2xl p-5 shadow-xs grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
                             <div class="text-slate-400 italic">Silakan pilih nama anggota terlebih dahulu pada pilihan di atas.</div>
                         </div>
 
@@ -534,7 +538,43 @@
                     </div>
                 </section>
 
-                <!-- TAB 6: FINANCIAL REPORTS -->
+                <!-- TAB 6: REKENING ADMIN KOPERASI (HALAMAN BARU) -->
+                <section id="view-bank-accounts" class="hidden space-y-6">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
+                        <div class="text-center space-y-2">
+                            <div class="w-16 h-16 bg-gradient-to-tr from-blue-700 to-cyan-500 text-white rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold shadow-lg shadow-blue-600/30">
+                                <i class="fa-solid fa-credit-card"></i>
+                            </div>
+                            <h3 class="text-lg font-black text-slate-900">Rekening Resmi Pembayaran Koperasi</h3>
+                            <p class="text-xs text-slate-500">Anggota yang ingin membayar simpanan wajib, angsuran pinjaman, atau kasbon dapat melakukan transfer melalui rekening berikut.</p>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-blue-900 to-indigo-900 rounded-2xl p-6 text-white shadow-xl space-y-4 border border-blue-800">
+                            <div class="flex items-center justify-between border-b border-blue-800 pb-3">
+                                <span class="text-xs uppercase font-extrabold tracking-wider text-blue-300">Bank Central Asia (BCA)</span>
+                                <span class="px-2.5 py-0.5 bg-blue-500/30 text-cyan-300 text-[10px] font-bold rounded border border-blue-400/30">Utama</span>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[11px] text-blue-200 uppercase font-bold">Nomor Rekening</p>
+                                <p class="text-2xl sm:text-3xl font-black font-mono tracking-wider text-white">8881103281</p>
+                            </div>
+                            <div class="pt-2 flex items-center justify-between border-t border-blue-800/60 text-xs">
+                                <span class="text-blue-200 font-semibold">Atas Nama:</span>
+                                <strong class="text-cyan-300 text-sm tracking-wide">Adi Muhtar</strong>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 space-y-1 font-semibold">
+                            <div class="flex items-center gap-2 font-bold text-amber-950 mb-1">
+                                <i class="fa-solid fa-circle-info"></i> Petunjuk Konfirmasi Transfer:
+                            </div>
+                            <p>1. Setelah melakukan transfer, harap kirimkan bukti foto/screenshot transfer ke Bendahara Koperasi (Adi Muhtar).</p>
+                            <p>2. Sertakan keterangan nama lengkap dan jenis pembayaran (contoh: *Wajib Juni 2026* atau *Angsuran Pokok ke-1*).</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 7: FINANCIAL REPORTS -->
                 <section id="view-reports" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-slate-200 gap-4 no-print">
@@ -598,7 +638,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 7: ADMIN UPLOAD SYNC (KHUSUS ADMIN NO 2 DENGAN BACKUP TIMESTAMP) -->
+                <!-- TAB 8: ADMIN UPLOAD SYNC (KHUSUS ADMIN NO 2) -->
                 <section id="view-admin-upload" class="hidden space-y-6">
                     <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xs max-w-2xl mx-auto">
                         <div class="text-center space-y-2">
@@ -606,14 +646,14 @@
                                 <i class="fa-solid fa-cloud-arrow-up"></i>
                             </div>
                             <h3 class="text-lg font-black text-slate-900">Upload & Arsip Otomatis (FILE SYNC.xlsx)</h3>
-                            <p class="text-xs text-slate-500">File lama di server akan otomatis di-rename dengan stempel waktu (Tanggal_Jam-Menit-Detik) sebelum diganti dengan file baru.</p>
+                            <p class="text-xs text-slate-500">File lama di server akan otomatis di-rename dengan stempel waktu sebelum diganti dengan file baru.</p>
                         </div>
 
                         <div class="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center space-y-4 bg-slate-50">
                             <input type="file" id="admin-file-upload-input" accept=".xlsx, .xls" class="hidden" onchange="handleAdminUploadFile(event)">
                             <div class="space-y-1">
                                 <p class="text-xs font-bold text-slate-700">Pilih file Excel database terbaru (.xlsx)</p>
-                                <p class="text-[11px] text-slate-400">Terhubung otomatis ke endpoint server: <code>upload_sync.php</code></p>
+                                <p class="text-[11px] text-slate-400">Terhubung ke endpoint: <code>upload_sync.php</code></p>
                             </div>
                             <button onclick="document.getElementById('admin-file-upload-input').click()" class="px-5 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-md text-xs transition inline-flex items-center gap-2">
                                 <i class="fa-solid fa-folder-open"></i> Pilih & Unggah File Excel
@@ -628,12 +668,12 @@
 
             <!-- FOOTER -->
             <footer class="bg-white border-t border-slate-200 py-5 px-6 text-center text-xs text-slate-400 font-semibold no-print">
-                Koperasi Jamaya &bull; Dikelola oleh Pengurus & Bendahara &bull; Versi 2026 (Luxury Professional Edition)
+                Koperasi Jamaya &bull; Dikelola oleh Pengurus & Bendahara &bull; Versi 2026 (Professional Edition)
             </footer>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC DIRECT READ FILE SYNC.XLSX -->
     <script>
         let appData = {
             members: [],
@@ -657,32 +697,31 @@
         };
 
         function fetchDatabaseAndInit(isLoggedIn) {
+            // Murni membaca langsung dari FILE SYNC.xlsx di server
             fetch('FILE SYNC.xlsx?t=' + new Date().getTime())
                 .then(response => {
-                    if (!response.ok) throw new Error("File tidak ditemukan otomatis.");
+                    if (!response.ok) throw new Error("FILE SYNC.xlsx tidak ditemukan di server.");
                     return response.arrayBuffer();
                 })
                 .then(buffer => {
                     processWorkbook(buffer, isLoggedIn);
                 })
                 .catch(err => {
-                    console.log("Auto-load file lokal diblokir browser. Menggunakan data default.");
+                    console.log("Gagal memuat FILE SYNC.xlsx secara otomatis:", err);
                     loadDefaultDataForTesting(isLoggedIn);
                 });
         }
 
         function loadDefaultDataForTesting(isLoggedIn) {
             appData.members = [
-                { noMasuk: "001/REG/VI/2026", noKeluar: "-", tglGabung: "01-Jun-2026", noAgt: "1", nik: "3603181009710017", nama: "A. Syamsul Falah", tglLahir: "09-Oct-1971", bagian: "PPIC", jabatan: "PENGAWAS", rek: "3194139581", bank: "BCA", hp: "08111221867", alamat: "Kp. Cirewed - Cikupa", jk: "L" },
-                { noMasuk: "002/REG/VI/2026", noKeluar: "-", tglGabung: "01-Jun-2026", noAgt: "2", nik: "1803042308890003", nama: "Adi Muhtar", tglLahir: "23-Aug-1989", bagian: "QC Lab", jabatan: "BENDAHARA", rek: "0231177484", bank: "BCA", hp: "085311254227", alamat: "Dusun Jambe - Jambe", jk: "L" }
+                { noMasuk: "001/REG/VI/2026", noKeluar: "001/KEL/VIII/2026", tglGabung: "01-Jun-2026", noAgt: "1", nik: "3603181009710017", nama: "A. Syamsul Falah", tglLahir: "09-Oct-1971", bagian: "PPIC", jabatan: "PENGAWAS", rek: "3194139581", bank: "BCA", hp: "08111221867", alamat: "Kp. Cirewed - Cikupa", jk: "L", tglKeluar: "15-Aug-2026", status: "KELUAR" },
+                { noMasuk: "002/REG/VI/2026", noKeluar: "-", tglGabung: "01-Jun-2026", noAgt: "2", nik: "1803042308890003", nama: "Adi Muhtar", tglLahir: "23-Aug-1989", bagian: "QC Lab", jabatan: "BENDAHARA", rek: "0231177484", bank: "BCA", hp: "085311254227", alamat: "Dusun Jambe - Jambe", jk: "L", tglKeluar: "-", status: "AKTIF" }
             ];
             appData.transactions = [
-                { noTrx: "TX0001", tgl: "30-May-2026", noAgt: "1", noReff: "0", kodeTrans: "WA", masuk: 750000, keluar: 0, ket: "Wajib 5 Bulan", kodeSaldo: "R", nama: "A. Syamsul Falah", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 750000, saldoRek: 750000, saldoCash: 0 },
-                { noTrx: "TX0002", tgl: "30-May-2026", noAgt: "2", noReff: "0", kodeTrans: "WA", masuk: 900000, keluar: 0, ket: "Wajib 6 Bulan", kodeSaldo: "R", nama: "Adi Muhtar", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 1650000, saldoRek: 1650000, saldoCash: 0 }
+                { noTrx: "TX0001", tgl: "30-May-2026", noAgt: "1", noReff: "0", kodeTrans: "WA", masuk: 300000, keluar: 0, ket: "Wajib 2 Bulan", kodeSaldo: "R", nama: "A. Syamsul Falah", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 300000, saldoRek: 300000, saldoCash: 0 },
+                { noTrx: "TX0002", tgl: "30-May-2026", noAgt: "2", noReff: "0", kodeTrans: "WA", masuk: 900000, keluar: 0, ket: "Wajib 6 Bulan", kodeSaldo: "R", nama: "Adi Muhtar", jenisSimpanan: "WJ (Iuran Wajib)", saldoGlobal: 1200000, saldoRek: 1200000, saldoCash: 0 }
             ];
-            appData.loans = [
-                { noPj: "PJ0001", kodeTr: "TX0026", tgl: "05-Jun-2026", noAgt: "1", nama: "A. Syamsul Falah", jumlah: 5000000, keperluan: "Buat tambahan acara Besanan", tenor: 6, angsuranPokok: 833333, angsuranAdm: 25000, jumlahPerBulan: 858333, totalPengembalian: 5150000, pembayaran: "Cash", ttd: "Supandi", jaminan: "Sertifikat / ATM", potPj: "-", potWajib: "-", potKasbon: "-", tenorAwal: 6, catatan: "Lancar", angsuranMasuk: 835000 }
-            ];
+            appData.loans = [];
 
             populateLoginDropdown();
             if (isLoggedIn) {
@@ -707,6 +746,15 @@
                         const r = rowsA[i];
                         const nama = r[5] ? String(r[5]).trim() : '';
                         if (nama) {
+                            // Kolom AC adalah index 28 (TGL KELUAR), Kolom AD adalah index 29 (STATUS)
+                            let tglKeluarVal = r[28] !== undefined && r[28] !== null ? String(r[28]).trim() : '-';
+                            if (!isNaN(r[28])) tglKeluarVal = excelDateToJSDate(r[28]);
+
+                            let statusVal = r[29] !== undefined && r[29] !== null ? String(r[29]).trim().toUpperCase() : 'AKTIF';
+                            if (!statusVal || statusVal === '-' || statusVal === '0') {
+                                statusVal = (tglKeluarVal && tglKeluarVal !== '-') ? 'KELUAR' : 'AKTIF';
+                            }
+
                             parsedMembers.push({
                                 noMasuk: r[0] ? String(r[0]).trim() : '-',
                                 noKeluar: r[1] ? String(r[1]).trim() : '-',
@@ -721,7 +769,9 @@
                                 bank: r[10] ? String(r[10]).trim() : '-',
                                 hp: r[11] ? String(r[11]).trim() : '-',
                                 alamat: r[12] ? String(r[12]).trim() : '-',
-                                jk: r[13] ? String(r[13]).trim() : '-'
+                                jk: r[13] ? String(r[13]).trim() : '-',
+                                tglKeluar: tglKeluarVal,
+                                status: statusVal
                             });
                         }
                     }
@@ -794,10 +844,10 @@
                 if (isLoggedIn) {
                     initAppSession();
                 } else {
-                    document.getElementById('login-view').classList.remove('hidden');
+                    document.getElementById('login-view').classList.add('hidden');
                 }
             } catch (err) {
-                console.error(err);
+                console.error("Error parsing workbook:", err);
                 loadDefaultDataForTesting(isLoggedIn);
             }
         }
@@ -899,26 +949,18 @@
             return totalWA - totalAW;
         }
 
-        // PARSER TANGGAL INDONESIA / EXCEL KE JS DATE OBJECT
         function parseIndonesianDate(dateStr) {
             if (!dateStr || dateStr === '-' || dateStr === '0') return null;
             const monthMap = {
-                'jan': 0, 'januari': 0,
-                'feb': 1, 'februari': 1,
-                'mar': 2, 'maret': 2,
-                'apr': 3, 'april': 3,
-                'mei': 4, 'may': 4,
-                'jun': 5, 'juni': 5,
-                'jul': 6, 'juli': 6,
-                'agu': 7, 'agt': 7, 'agustus': 7, 'aug': 7,
-                'sep': 8, 'september': 8,
-                'okt': 9, 'oktober': 9, 'oct': 9,
+                'jan': 0, 'januari': 0, 'feb': 1, 'februari': 1, 'mar': 2, 'maret': 2,
+                'apr': 3, 'april': 3, 'mei': 4, 'may': 4, 'jun': 5, 'juni': 5,
+                'jul': 6, 'juli': 6, 'agu': 7, 'agt': 7, 'agustus': 7, 'aug': 7,
+                'sep': 8, 'september': 8, 'okt': 9, 'oktober': 9, 'oct': 9,
                 'nov': 10, 'nop': 10, 'november': 10, 'nopember': 10,
                 'des': 11, 'desember': 11, 'dec': 11
             };
 
             let cleanStr = String(dateStr).trim();
-            // Cek format DD-MMM-YYYY atau DD MMM YYYY atau DD/MM/YYYY
             let parts = cleanStr.split(/[\s\-\/]+/);
             if (parts.length === 3) {
                 let day = parseInt(parts[0], 10);
@@ -937,7 +979,6 @@
             return isNaN(fallback.getTime()) ? null : fallback;
         }
 
-        // HITUNG BULAN BERJALAN SECARA INKLUSIF (MISAL 1 JUN 2026 S.D. NOV 2026 = 6 BULAN)
         function calculateBulanBerjalanInklusif(tglGabung, tglKeluar) {
             const startDate = parseIndonesianDate(tglGabung);
             if (!startDate) return 1;
@@ -1009,28 +1050,30 @@
             document.getElementById('rep-total-trx').innerText = `${appData.transactions.length} Transaksi`;
         }
 
-        // TAB DAFTAR ANGGOTA DENGAN BULAN AKTIF INKLUSIF & KEKURANGAN SIMPANAN WAJIB (RP 150.000/BLN)
+        // TAB DAFTAR ANGGOTA (JIKA KELUAR MAKA KEKURANGAN WAJIB DISET 0)
         function renderMembersBalanceTable(data) {
             let html = '';
             data.forEach(m => {
-                const isKeluar = m.noKeluar && m.noKeluar !== '-' && m.noKeluar !== '0';
-                const tglKeluarVal = isKeluar ? m.noKeluar : '-';
-                
-                const bulanAktif = calculateBulanBerjalanInklusif(m.tglGabung, tglKeluarVal);
-                const simpananWajibBersih = calculateSimpananWajibBersih(m.noAgt, m.nama);
-                
-                // Kewajiban 150rb per bulan
-                const kewajibanSeharusnya = bulanAktif * 150000;
-                const selisihWajib = kewajibanSeharusnya - simpananWajibBersih;
-
-                let kekuranganHtml = `<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">Lunas</span>`;
-                if (selisihWajib > 0) {
-                    kekuranganHtml = `<span class="font-mono font-black text-rose-600">-${formatRupiah(selisihWajib)}</span>`;
-                }
-
+                const isKeluar = m.status === 'KELUAR' || (m.tglKeluar && m.tglKeluar !== '-' && m.tglKeluar !== '0');
+                const tglKeluarVal = isKeluar ? m.tglKeluar : '-';
                 const statusBadge = isKeluar 
                     ? `<span class="px-2 py-0.5 bg-rose-100 text-rose-700 rounded text-[10px] font-extrabold uppercase">Keluar</span>`
                     : `<span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[10px] font-extrabold uppercase">Aktif</span>`;
+
+                const bulanAktif = calculateBulanBerjalanInklusif(m.tglGabung, tglKeluarVal);
+                const simpananWajibBersih = calculateSimpananWajibBersih(m.noAgt, m.nama);
+                
+                // JIKA ANGGOTA SUDAH KELUAR MAKA KEKURANGAN WAJIB DISET 0
+                let kekuranganHtml = `<span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded text-[10px] font-bold">Lunas</span>`;
+                if (!isKeluar) {
+                    const kewajibanSeharusnya = bulanAktif * 150000;
+                    const selisihWajib = kewajibanSeharusnya - simpananWajibBersih;
+                    if (selisihWajib > 0) {
+                        kekuranganHtml = `<span class="font-mono font-black text-rose-600">-${formatRupiah(selisihWajib)}</span>`;
+                    }
+                } else {
+                    kekuranganHtml = `<span class="font-mono font-bold text-slate-400">Rp 0 (Keluar)</span>`;
+                }
 
                 html += `
                     <tr class="hover:bg-slate-50 transition">
@@ -1200,6 +1243,7 @@
             selector.innerHTML = html;
         }
 
+        // BAGIAN LAPORAN RINCI PER ANGGOTA: PROFIL DIRAPIHKAN PRESISI DAN PROFESIONAL
         function renderMemberDetail() {
             const noAgt = document.getElementById('member-selector').value;
             const cardsContainer = document.getElementById('member-loan-kasbon-cards');
@@ -1272,24 +1316,26 @@
             document.getElementById('member-kasbon-remaining').innerText = formatRupiah(sisaKasbonMember);
             document.getElementById('member-kasbon-payments-list').innerHTML = bayarKasbonListHtml;
 
+            // PROFIL DIRAPIHKAN PRESISI DAN PROFESIONAL
             document.getElementById('member-profile-card').innerHTML = `
-                <div class="space-y-1">
-                    <span class="text-slate-400 uppercase font-bold text-[10px]">Profil Anggota</span>
+                <div class="space-y-1.5 bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
+                    <span class="text-blue-600 uppercase font-extrabold text-[10px] tracking-wider block">👤 Identitas Anggota</span>
                     <h4 class="text-slate-900 font-black text-sm">${member.nama}</h4>
-                    <p class="text-slate-600 font-semibold">No Agt: <strong class="text-blue-600">${member.noAgt}</strong> | Reg: ${member.noMasuk}</p>
-                    <p class="text-slate-700 font-semibold">Bagian: ${member.bagian} (${member.jabatan})</p>
+                    <p class="text-slate-600 font-semibold">No Anggota: <strong class="text-blue-700">#${member.noAgt}</strong> | Reg: ${member.noMasuk}</p>
+                    <p class="text-slate-600 font-semibold">Bagian: <span class="text-slate-900">${member.bagian}</span> (${member.jabatan})</p>
+                    <p class="text-slate-600 font-semibold">No Rek: <span class="font-mono text-slate-900">${member.rek} (${member.bank})</span></p>
                 </div>
-                <div class="space-y-1 border-y md:border-y-0 md:border-x border-slate-200 py-3 md:py-0 md:px-4">
-                    <span class="text-slate-400 uppercase font-bold text-[10px]">Sub-Total Simpanan & Tabungan</span>
-                    <p class="text-blue-600 font-bold">Simpanan Wajib: ${formatRupiah(bal.simpananWajib)}</p>
-                    <p class="text-indigo-600 font-bold">Tabungan: ${formatRupiah(bal.tabungan)}</p>
-                    <p class="text-slate-500 font-medium italic text-[11px] mt-1">*Pinjaman & Kasbon dipisah pada kartu khusus di bawah.</p>
+                <div class="space-y-1.5 bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
+                    <span class="text-indigo-600 uppercase font-extrabold text-[10px] tracking-wider block">💰 Akumulasi Simpanan & Tabungan</span>
+                    <div class="flex justify-between"><span class="text-slate-600 font-medium">Simpanan Wajib:</span><strong class="text-blue-600 font-mono">${formatRupiah(bal.simpananWajib)}</strong></div>
+                    <div class="flex justify-between"><span class="text-slate-600 font-medium">Tabungan:</span><strong class="text-indigo-600 font-mono">${formatRupiah(bal.tabungan)}</strong></div>
+                    <p class="text-slate-400 font-medium italic text-[10px] pt-1 border-t border-slate-100">*Pinjaman & Kasbon terpisah di kartu khusus.</p>
                 </div>
-                <div class="space-y-1">
-                    <span class="text-slate-400 uppercase font-bold text-[10px]">Ringkasan Arus Kas Member</span>
-                    <p class="text-slate-900 font-semibold">Total Setoran Masuk: <span class="font-bold text-blue-600">${formatRupiah(totalMasuk)}</span></p>
-                    <p class="text-slate-900 font-semibold">Total Pencairan Keluar: <span class="font-bold text-rose-600">${formatRupiah(totalKeluar)}</span></p>
-                    <p class="text-blue-700 font-black mt-1">Sisa Saldo Pribadi (Net): ${formatRupiah(totalMasuk - totalKeluar)}</p>
+                <div class="space-y-1.5 bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-2xs">
+                    <span class="text-emerald-600 uppercase font-extrabold text-[10px] tracking-wider block">📊 Ringkasan Arus Kas Net</span>
+                    <div class="flex justify-between"><span class="text-slate-600 font-medium">Total Masuk:</span><strong class="text-blue-600 font-mono">${formatRupiah(totalMasuk)}</strong></div>
+                    <div class="flex justify-between"><span class="text-slate-600 font-medium">Total Keluar:</span><strong class="text-rose-600 font-mono">${formatRupiah(totalKeluar)}</strong></div>
+                    <div class="flex justify-between pt-1 border-t border-slate-100"><span class="text-slate-900 font-black">Sisa Saldo Pribadi:</span><strong class="text-blue-700 font-mono font-black text-sm">${formatRupiah(totalMasuk - totalKeluar)}</strong></div>
                 </div>
             `;
 
@@ -1314,7 +1360,6 @@
             document.getElementById('member-trx-tbody').innerHTML = trxHtml || `<tr><td colspan="7" class="p-4 text-center text-slate-400 font-semibold">Belum ada riwayat transaksi.</td></tr>`;
         }
 
-        // FUNGSI UPLOAD FILE KE SERVER (DENGAN RENAME FILE LAMA VIA upload_sync.php + REALTIME RENDER)
         function handleAdminUploadFile(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -1324,14 +1369,12 @@
             statusBox.classList.add('bg-blue-50', 'text-blue-700', 'border-blue-200');
             statusBox.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengunggah <strong>${file.name}</strong> ke server & mengarsipkan file lama...`;
 
-            // 1. Proses baca langsung di layar
             const reader = new FileReader();
             reader.onload = function(evt) {
                 processWorkbook(evt.target.result, true);
             };
             reader.readAsArrayBuffer(file);
 
-            // 2. Kirim file ke server via FormData ke upload_sync.php
             const formData = new FormData();
             formData.append('sync_file', file);
 
@@ -1350,10 +1393,9 @@
                 }
             })
             .catch(err => {
-                // Jika dijalankan tanpa server PHP (misalnya langsung klik file HTML lokal), tetap tampilkan informasi jelas
                 statusBox.classList.remove('bg-blue-50', 'text-blue-700', 'border-blue-200');
                 statusBox.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
-                statusBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i> Data pada layar berhasil diperbarui! <br><span class="font-normal text-[11px]">(Catatan: Untuk penyimpanan permanen dan rename otomatis file lama di folder server, pastikan file <code>upload_sync.php</code> berada di folder yang sama pada server PHP/hosting Anda).</span>`;
+                statusBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-2"></i> Data pada layar berhasil diperbarui! <br><span class="font-normal text-[11px]">(Catatan: Pastikan file <code>upload_sync.php</code> berada di folder yang sama pada server PHP Anda untuk backup & rename otomatis).</span>`;
             });
         }
 
@@ -1363,12 +1405,13 @@
             'transactions': ['Data Transaksi', 'Seluruh catatan arus kas masuk dan keluar beserta jenis saldo.'],
             'loans': ['Data Pinjaman', 'Daftar rincian pinjaman anggota lengkap beserta angsuran masuk dan sisa pinjaman.'],
             'member-report': ['Laporan Per Anggota', 'Profil pribadi lengkap, pemisahan pinjaman, kasbon, dan riwayat pembayarannya.'],
+            'bank-accounts': ['Rekening Admin Koperasi', 'Informasi rekening resmi transfer pembayaran simpanan wajib dan angsuran.'],
             'reports': ['Rekap Saldo & Laporan', 'Analisis keuangan mendalam, saldo global, rekening, dan cash.'],
             'admin-upload': ['Upload File Sync', 'Menu khusus Administrator untuk memperbarui file database Excel di server.']
         };
 
         function switchTab(tabId) {
-            const tabs = ['dashboard', 'members', 'transactions', 'loans', 'member-report', 'reports', 'admin-upload'];
+            const tabs = ['dashboard', 'members', 'transactions', 'loans', 'member-report', 'bank-accounts', 'reports', 'admin-upload'];
             tabs.forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 if (view) view.classList.add('hidden');
