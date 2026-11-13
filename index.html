@@ -10,12 +10,16 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts (Plus Jakarta Sans & Merriweather/Times Formal untuk AD/ART) -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         html { scroll-behavior: smooth; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: radial-gradient(circle at top, #0f172a, #020617); color: #f8fafc; min-height: 100vh; }
         
+        .font-formal {
+            font-family: 'Merriweather', 'Times New Roman', Georgia, serif;
+        }
+
         @keyframes menuSlideIn {
             0% { opacity: 0; transform: translateY(15px) scale(0.97); filter: blur(4px); }
             100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
@@ -72,6 +76,13 @@
             font-size: 11px !important;
         }
 
+        /* Tabel Khusus Dokumen Formal AD/ART */
+        .ad-art-table th, .ad-art-table td {
+            padding: 10px 14px !important;
+            font-size: 13px !important;
+            border: 1px solid #1e293b;
+        }
+
         @media print {
             body * { visibility: hidden; }
             #loan-print-container, #loan-print-container *, 
@@ -93,6 +104,7 @@
             table { width: 100% !important; border-collapse: collapse !important; }
             th, td { border: 1px solid #334155 !important; color: #000000 !important; padding: 6px 8px !important; font-size: 10px !important; }
             th { background-color: #e2e8f0 !important; font-weight: 700 !important; }
+            .ad-art-table th, .ad-art-table td { font-size: 12px !important; padding: 8px 12px !important; }
         }
     </style>
 </head>
@@ -197,6 +209,10 @@
                 <button onclick="switchTab('reports')" id="tab-reports" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-300">
                     <i class="fa-solid fa-file-invoice-dollar w-5 text-center text-purple-400"></i>
                     <span class="whitespace-nowrap">Rekap Saldo & Kas</span>
+                </button>
+                <button onclick="switchTab('ad-art')" id="tab-ad-art" class="menu-btn shrink-0 lg:w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-slate-300">
+                    <i class="fa-solid fa-scale-balanced w-5 text-center text-amber-300"></i>
+                    <span class="whitespace-nowrap">AD & ART Koperasi</span>
                 </button>
 
                 <div id="admin-menu-reminder" class="hidden pt-2 border-t border-slate-800">
@@ -520,7 +536,7 @@
                             <div class="text-center pb-6 border-b-2 border-slate-900 space-y-1">
                                 <h2 class="text-base sm:text-xl font-black uppercase tracking-wider text-slate-900">KOPERASI KARYAWAN PT. JAMAYA PLASTIK INDUSTRI PERKASA</h2>
                                 <p class="text-xs font-bold text-slate-700">Jl. Industri Cikupa, Tangerang - Banten</p>
-                                <h3 id="print-header-title" class="text-sm sm:text-base font-extrabold uppercase mt-3 underline tracking-wide text-blue-900">DATA LENGKAP PINJAMAN & RIWAYAT ANGKUTAN ANGGOTA</h3>
+                                <h3 id="print-header-title" class="text-sm sm:text-base font-extrabold uppercase mt-3 underline tracking-wide text-blue-900">DATA LENGKAP PINJAMAN & RIWAYAT ANGSURAN ANGGOTA</h3>
                             </div>
 
                             <div id="loan-full-content" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm"></div>
@@ -545,7 +561,7 @@
                     </div>
                 </section>
 
-                <!-- TAB 5: MEMBER REPORT (LIST PJ MURNI DARI KODE "PJ" BESERTA ANGSURAN CI NO REFF PJ) -->
+                <!-- TAB 5: MEMBER REPORT -->
                 <section id="view-member-report" class="hidden space-y-6 tab-content-active">
                     <div class="card-3d-megah rounded-3xl p-5 sm:p-8 shadow-2xl space-y-6 printable-area">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 no-print border-b border-slate-200 pb-5">
@@ -564,7 +580,7 @@
                             </div>
                         </div>
 
-                        <!-- 1. BAGIAN ATAS: PROFIL LENGKAP & KOTAK SALDO PRIBADI UKURAN BESAR -->
+                        <!-- 1. BAGIAN ATAS -->
                         <div id="member-top-section" class="grid grid-cols-1 lg:grid-cols-3 gap-5">
                             <div class="lg:col-span-1 bg-gradient-to-br from-slate-900 to-indigo-950 text-white p-5 rounded-2xl shadow-lg border border-slate-800 space-y-3">
                                 <span class="px-2.5 py-0.5 bg-blue-500/20 text-cyan-300 rounded text-[10px] font-extrabold uppercase border border-blue-400/30">Identitas Anggota</span>
@@ -609,9 +625,8 @@
                             </div>
                         </div>
 
-                        <!-- 2. BAGIAN BAWAH: DAFTAR PINJAMAN (KODE PJ + ANGSURAN CI NO REFF PJ) & KASBON -->
+                        <!-- 2. BAGIAN BAWAH -->
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <!-- Daftar Pinjaman (Kode PJ & Angsuran CI No Reff) -->
                             <div class="bg-rose-50/70 border border-rose-200 rounded-2xl p-5 space-y-4 shadow-sm">
                                 <div class="flex items-center justify-between border-b border-rose-200 pb-3">
                                     <h4 class="font-black text-rose-900 text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
@@ -625,7 +640,6 @@
                                 </div>
                             </div>
 
-                            <!-- Daftar Kasbon (KA & BA) -->
                             <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-5 space-y-4 shadow-sm">
                                 <div class="flex items-center justify-between border-b border-amber-200 pb-3">
                                     <h4 class="font-black text-amber-900 text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2">
@@ -640,7 +654,7 @@
                             </div>
                         </div>
 
-                        <!-- 3. TABEL MUTASI TRANSAKSI LENGKAP DENGAN KOLOM REFF -->
+                        <!-- 3. TABEL MUTASI -->
                         <div class="space-y-3 pt-2">
                             <div class="flex items-center justify-between">
                                 <h4 class="font-black text-slate-900 text-xs sm:text-sm uppercase tracking-wider">Seluruh Mutasi Transaksi Anggota (Dilengkapi Kolom Reff)</h4>
@@ -818,7 +832,312 @@
                     </div>
                 </section>
 
-                <!-- TAB 9: ADMIN WHATSAPP REMINDER -->
+                <!-- TAB 9: AD & ART KOPERASI JAMAYA (DOKUMEN TEKS FORMAL & RINGAN) -->
+                <section id="view-ad-art" class="hidden space-y-6 tab-content-active">
+                    <div class="bg-white text-slate-900 rounded-2xl p-6 sm:p-12 shadow-2xl max-w-4xl mx-auto border border-slate-300 printable-area font-formal leading-relaxed">
+                        
+                        <!-- Tombol Cetak / Simpan PDF (Tidak ikut tercetak) -->
+                        <div class="flex justify-end mb-6 pb-4 border-b border-slate-200 no-print font-sans">
+                            <button onclick="window.print()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-2 shadow-sm">
+                                <i class="fa-solid fa-print"></i>
+                                <span>Cetak Dokumen AD & ART</span>
+                            </button>
+                        </div>
+
+                        <!-- KOP DOKUMEN -->
+                        <div class="text-center border-b-2 border-slate-900 pb-6 mb-8 space-y-1.5">
+                            <h2 class="text-lg sm:text-2xl font-black uppercase tracking-wide text-slate-950">ANGGARAN DASAR DAN ANGGARAN RUMAH TANGGA<br>KOPERASI JAMAYA</h2>
+                            <p class="text-sm sm:text-base font-bold uppercase tracking-wider text-slate-800">PT. JAMAYA PLASTIK INDUSTRI PERKASA</p>
+                            <p class="text-xs sm:text-sm text-slate-700 font-semibold">Wilayah Operasional: Tangerang</p>
+                        </div>
+
+                        <!-- BAGIAN I: ANGGARAN DASAR (AD) -->
+                        <div class="space-y-6 text-sm sm:text-[15px] text-slate-900 text-justify">
+                            <div class="text-center pt-2 pb-2">
+                                <h3 class="text-base sm:text-lg font-black uppercase underline tracking-wide">ANGGARAN DASAR (AD) KOPERASI JAMAYA</h3>
+                                <p class="text-xs sm:text-sm italic text-slate-700 mt-1">(Versi Ringkas, Modern &amp; Kekeluargaan)</p>
+                            </div>
+
+                            <!-- BAB I -->
+                            <div class="space-y-3">
+                                <div class="text-center font-bold uppercase pt-2">
+                                    <p>BAB I</p>
+                                    <p>NAMA, ALAMAT DAN SIFAT</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 1</p>
+                                    <p>Kelompok atau Koperasi ini bernama <strong>Koperasi Jamaya</strong>.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 2</p>
+                                    <p>Koperasi Jamaya berkedudukan dan beroperasi di wilayah Tangerang.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 3</p>
+                                    <p>Koperasi ini bersifat kekeluargaan, gotong royong, terbuka, dan transparan antar sesama anggota.</p>
+                                </div>
+                            </div>
+
+                            <!-- BAB II -->
+                            <div class="space-y-3">
+                                <div class="text-center font-bold uppercase pt-4">
+                                    <p>BAB II</p>
+                                    <p>KEANGGOTAAN</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 4</p>
+                                    <p>Anggota koperasi adalah mereka yang terdaftar resmi dengan jumlah anggota kurang dari 25 orang dan berkomitmen penuh mengikuti aturan kelompok.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 5</p>
+                                    <p><strong>Hak Anggota:</strong> Berhak mengajukan kasbon atau pinjaman, berhak menerima pembagian SHU tahunan, serta memiliki hak suara dalam pengambilan keputusan bersama via grup koordinasi.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 6</p>
+                                    <p><strong>Kewajiban Anggota:</strong> Membayar iuran wajib tepat waktu dan mematuhi keputusan atau kebijakan yang telah ditetapkan bersama.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 7</p>
+                                    <p>Keanggotaan berakhir jika anggota mengundurkan diri secara baik-baik, diberhentikan oleh pengurus karena melanggar aturan kelompok, atau meninggal dunia.</p>
+                                </div>
+                            </div>
+
+                            <!-- BAB III -->
+                            <div class="space-y-3">
+                                <div class="text-center font-bold uppercase pt-4">
+                                    <p>BAB III</p>
+                                    <p>SUSUNAN PENGURUS DAN PENGAWAS</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 8</p>
+                                    <p>Struktur kepengurusan Koperasi Jamaya dibentuk secara minimalis dan efisien demi kelancaran administrasi kelompok dengan susunan sebagai berikut:</p>
+                                    <ul class="list-disc pl-6 mt-1.5 space-y-1">
+                                        <li><strong>Pengawas / Pelindung:</strong> A. Syamsul Falah</li>
+                                        <li><strong>Ketua:</strong> Supandi</li>
+                                        <li><strong>Administrasi &amp; Bendahara:</strong> Adi Muhtar</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 9</p>
+                                    <p>Masa jabatan Pengawas dan Pengurus Koperasi Jamaya ditetapkan tetap atau tidak diubah dan tidak ada periodisasi guna menjaga stabilitas, kontinuitas administrasi, dan kepercayaan pengelolaan keuangan kelompok, kecuali yang bersangkutan mengundurkan diri atas kemauan sendiri atau terjadi hal-hal luar biasa.</p>
+                                </div>
+                            </div>
+
+                            <!-- BAB IV -->
+                            <div class="space-y-3">
+                                <div class="text-center font-bold uppercase pt-4">
+                                    <p>BAB IV</p>
+                                    <p>PERMODALAN</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 10</p>
+                                    <p>Modal Koperasi Jamaya berasal dari dana mandiri anggota, yang terdiri dari:</p>
+                                    <ol class="list-decimal pl-6 mt-1.5 space-y-1">
+                                        <li><strong>Simpanan Wajib:</strong> Iuran rutin bulanan yang bersifat mutlak dan mengikat bagi seluruh anggota sebagai modal utama koperasi.</li>
+                                        <li><strong>Simpanan Sukarela / Tabungan:</strong> Setoran bebas di luar uang wajib bulanan yang berfungsi sebagai tabungan tambahan anggota.</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <!-- BAB V -->
+                            <div class="space-y-3">
+                                <div class="text-center font-bold uppercase pt-4">
+                                    <p>BAB V</p>
+                                    <p>MEKANISME PENGAMBILAN KEPUTUSAN DAN LAPORAN</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 11</p>
+                                    <p>Koperasi Jamaya tidak mengadakan rapat anggota formal. Segala informasi penting, perubahan teknis, atau pengumuman akan disampaikan secara langsung melalui agenda berembuk santai atau tidak formal di pos bersama perwakilan anggota, atau disebarkan secara digital melalui Grup WhatsApp Koperasi.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 12</p>
+                                    <p>Pengambilan keputusan atau penyelesaian masalah di luar wewenang harian pengurus akan diambil melalui sistem Pemungutan Suara (Vote) di Grup WhatsApp, hasil rembukan di pos bersama perwakilan, atau diputuskan langsung secara mutlak melalui penunjukan atau kebijakan Pengurus.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 13</p>
+                                    <p>Laporan keuangan berkala dan pembagian SHU tahunan akan dihitung oleh Bendahara dan diumumkan secara transparan langsung ke seluruh anggota tanpa seremonial rapat.</p>
+                                </div>
+                            </div>
+
+                            <hr class="border-t-2 border-slate-900 my-8">
+
+                            <!-- BAGIAN II: ANGGARAN RUMAH TANGGA (ART) -->
+                            <div class="text-center pt-2 pb-2">
+                                <h3 class="text-base sm:text-lg font-black uppercase underline tracking-wide">ANGGARAN RUMAH TANGGA (ART) KOPERASI JAMAYA</h3>
+                                <p class="text-xs sm:text-sm italic text-slate-700 mt-1">(Aturan Operasional &amp; Teknis Harian)</p>
+                            </div>
+
+                            <!-- BAB VI -->
+                            <div class="space-y-3">
+                                <div class="text-center font-bold uppercase pt-2">
+                                    <p>BAB VI</p>
+                                    <p>ATURAN NOMINAL SIMPANAN DAN TABUNGAN</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 14</p>
+                                    <p><strong>Simpanan Wajib:</strong> Ditetapkan sebesar <strong>Rp 150.000,-</strong> (Seratus Lima Puluh Ribu Rupiah) per bulan untuk setiap anggota. Uang pokok ditiadakan dan langsung disatukan ke dalam komponen simpanan wajib bulanan ini sejak awal terdaftar sebagai anggota.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 15</p>
+                                    <p><strong>Simpanan Sukarela / Tabungan:</strong> Jika anggota ingin menyetor dana lebih dari nilai iuran wajib bulanan, maka kelebihan dana tersebut secara otomatis dimasukkan ke dalam rekening Tabungan Sukarela masing-masing anggota.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 16</p>
+                                    <p><strong>Syarat Khusus Poin SHU Sukarela:</strong> Dana Tabungan Sukarela yang berhak mendapatkan alokasi SHU adalah dana yang <strong>TIDAK DIAMBIL SAMA SEKALI</strong> selama periode berjalan dalam 1 (satu) tahun buku penuh (mulai dari 1 Januari sampai dengan 31 Desember). Jika dana sukarela tersebut diambil oleh anggota di tengah periode berjalan, maka poin SHU untuk komponen tabungan sukarela yang bersangkutan pada tahun tersebut dinyatakan gugur atau tidak dihitung.</p>
+                                </div>
+                            </div>
+
+                            <!-- BAB VII -->
+                            <div class="space-y-3">
+                                <div class="text-center font-bold uppercase pt-4">
+                                    <p>BAB VII</p>
+                                    <p>ATURAN KASBON DAN PINJAMAN BARU</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 17</p>
+                                    <p><strong>Ketentuan Kasbon (Tanpa Cicilan):</strong></p>
+                                    <ul class="list-disc pl-6 mt-1.5 space-y-1">
+                                        <li>Pengajuan kasbon hanya dapat dimulai sejak tanggal 10 pada bulan berjalan.</li>
+                                        <li>Seluruh nominal kasbon wajib dibayarkan lunas di akhir bulan yang sama secara utuh dan tidak boleh dicicil.</li>
+                                        <li>Jika anggota mengajukan pembayaran dengan sistem angsuran berjangka, maka pengajuan tersebut tidak masuk kategori kasbon, melainkan wajib dialihkan ke sistem Pinjaman.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 18</p>
+                                    <p><strong>Ketentuan Pinjaman (Sistem Cicilan, Administrasi &amp; Plafon):</strong></p>
+                                    <ul class="list-disc pl-6 mt-1.5 space-y-1">
+                                        <li>Setiap pinjaman dikenakan biaya administrasi sebesar <strong>0,5% per bulan</strong> (atau setara dengan <strong>6% per tahun</strong>).</li>
+                                        <li>Batas maksimal nominal pinjaman (plafon) yang boleh diajukan oleh setiap anggota akan ditinjau dan diputuskan secara mutlak oleh Pengurus dengan mempertimbangkan kapasitas kas koperasi serta kemampuan bayar anggota yang bersangkutan.</li>
+                                        <li>Pembayaran simpanan bulanan maupun angsuran pinjaman dilakukan melalui 2 (dua) metode: <strong>Potong Gaji secara otomatis</strong> atau <strong>tunai (Cash)</strong> langsung kepada Bendahara.</li>
+                                        <li>Bagi anggota yang menggunakan metode pembayaran Cash, penyetoran iuran wajib atau angsuran pinjaman wajib diserahkan kepada Bendahara paling lambat tanggal 1 pada awal bulan berikutnya. Keterlambatan tanpa alasan darurat dapat dikenakan sanksi berupa teguran tertulis atau penundaan hak pengajuan pinjaman untuk periode berikutnya.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 19</p>
+                                    <p><strong>Aturan Pinjaman Baru (Top-Up / Pelunasan Berjalan):</strong></p>
+                                    <ul class="list-disc pl-6 mt-1.5 space-y-1">
+                                        <li>Jika seorang anggota masih memiliki pinjaman yang sedang berjalan lalu ingin mengajukan Pinjaman Baru, maka sisa pinjaman yang pertama <strong>WAJIB</strong> ditutup atau dilunasi terlebih dahulu.</li>
+                                        <li>Nilai pelunasan untuk menutup pinjaman lama dihitung dari sisa pokok ditambah dengan biaya administrasi (adm) pada bulan yang sedang berjalan saja. Anggota tidak perlu membayar seluruh sisa admin bulan-bulan berikutnya yang belum terlewati.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- BAB VIII -->
+                            <div class="space-y-3">
+                                <div class="text-center font-bold uppercase pt-4">
+                                    <p>BAB VIII</p>
+                                    <p>MEKANISME ALOKASI DAN PEMBAGIAN SHU</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 20</p>
+                                    <p class="mb-3"><strong>Alokasi Global SHU Koperasi:</strong> Pendapatan bersih Koperasi Jamaya dalam 1 (satu) tahun buku <strong>WAJIB</strong> dialokasikan secara mutlak pada akhir tahun dengan rincian persentase sebagai berikut:</p>
+                                    <div class="overflow-x-auto my-2">
+                                        <table class="w-full border-collapse ad-art-table text-left">
+                                            <thead>
+                                                <tr class="bg-slate-100 font-bold text-slate-900">
+                                                    <th>Kategori Alokasi</th>
+                                                    <th class="text-center">Persentase</th>
+                                                    <th>Keterangan / Peruntukan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="font-bold">Dana Cadangan</td>
+                                                    <td class="text-center font-bold">35%</td>
+                                                    <td>Disimpan sebagai penguat modal koperasi</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-bold">Dana Anggota</td>
+                                                    <td class="text-center font-bold">50%</td>
+                                                    <td>Dibagikan kembali kepada anggota</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-bold">Dana Pengurus</td>
+                                                    <td class="text-center font-bold">15%</td>
+                                                    <td>Diberikan kepada pengurus selaku pengelola harian</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 21</p>
+                                    <p><strong>Rincian Pembagian Alokasi Dana Anggota (Porsi 50%):</strong> Nilai total dari 50% bagian SHU Anggota tersebut akan dihitung secara proporsional berdasarkan keaktifan masing-masing anggota dengan pembagian:</p>
+                                    <ul class="list-disc pl-6 mt-1.5 space-y-1">
+                                        <li><strong>Poin Simpanan Wajib:</strong> 45% dari total SHU Anggota</li>
+                                        <li><strong>Point Tabungan Sukarela:</strong> 15% dari total SHU Anggota <em>(Wajib memenuhi Syarat Khusus Pasal 16)</em></li>
+                                        <li><strong>Point Pinjaman:</strong> 40% dari total SHU Anggota</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 22</p>
+                                    <p><strong>Rincian Pembagian Alokasi Dana Pengurus (Porsi 15%):</strong> Nilai total dari 15% bagian SHU Pengurus tersebut akan dibagi secara merata kepada struktur kepengurusan aktif sebagai berikut:</p>
+                                    <ul class="list-disc pl-6 mt-1.5 space-y-1">
+                                        <li><strong>Pengawas / Pelindung (A. Syamsul Falah):</strong> 33% dari total SHU Pengurus</li>
+                                        <li><strong>Ketua (Supandi):</strong> 33% dari total SHU Pengurus</li>
+                                        <li><strong>Bendahara (Adi Muhtar):</strong> 33% dari total SHU Pengurus</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- BAB IX -->
+                            <div class="space-y-3">
+                                <div class="text-center font-bold uppercase pt-4">
+                                    <p>BAB IX</p>
+                                    <p>KETENTUAN ANGGOTA KELUAR DAN PENUTUPAN KOPERASI</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 23</p>
+                                    <p><strong>Anggota Keluar Mandiri:</strong> Jika ada anggota yang keluar atau mundur secara mandiri dari Koperasi Jamaya, seluruh hak dana miliknya (Simpanan Wajib dan Tabungan Sukarela) akan dikembalikan penuh 100%, setelah dikurangi jika anggota tersebut masih memiliki sisa tunggakan pinjaman atau kewajiban lain yang belum selesai.</p>
+                                </div>
+                                <div>
+                                    <p class="text-center font-bold">Pasal 24</p>
+                                    <p><strong>Ketentuan Pembubaran / Penutupan Koperasi:</strong> Jika di kemudian hari Koperasi Jamaya resmi ditutup atau dibubarkan, maka seluruh akumulasi Uang Dana Cadangan (35%) yang mengendap di kas koperasi akan dibagikan secara adil kepada seluruh anggota yang pada saat itu masih aktif bekerja di PT. Jamaya Plastik Industri Perkasa.</p>
+                                </div>
+                            </div>
+
+                            <!-- LEMBAR PENGESAHAN -->
+                            <div class="pt-10 mt-10 border-t border-slate-400">
+                                <div class="text-right mb-6 text-xs sm:text-sm">
+                                    <p>Ditetapkan di : <strong>Tangerang</strong></p>
+                                    <p>Pada Tanggal : <strong>29 Mei 2026</strong></p>
+                                </div>
+
+                                <div class="text-center font-bold uppercase mb-8">
+                                    <p>LEMBAR PENGESAHAN</p>
+                                    <p>PENGURUS KOPERASI JAMAYA</p>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center text-xs sm:text-sm pt-2">
+                                    <div class="space-y-16">
+                                        <p class="font-bold">A. Syamsul Falah</p>
+                                        <div>
+                                            <p>( .......................................... )</p>
+                                            <p class="font-semibold mt-1">Pengawas / Pelindung</p>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-16">
+                                        <p class="font-bold">Supandi</p>
+                                        <div>
+                                            <p>( .......................................... )</p>
+                                            <p class="font-semibold mt-1">Ketua</p>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-16">
+                                        <p class="font-bold">Adi Muhtar</p>
+                                        <div>
+                                            <p>( .......................................... )</p>
+                                            <p class="font-semibold mt-1">Bendahara &amp; Administrasi</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 10: ADMIN WHATSAPP REMINDER -->
                 <section id="view-admin-reminder" class="hidden space-y-6 tab-content-active">
                     <div class="card-3d-megah rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
@@ -1158,7 +1477,6 @@
                 const match = String(t.noAgt) === String(memberNoAgt) || t.nama.toLowerCase() === memberName.toLowerCase();
                 if (match) {
                     const kt = String(t.kodeTrans).toUpperCase();
-                    const js = String(t.jenisSimpanan).toUpperCase();
 
                     if (kt === 'WA') simpananWajibTotal += t.masuk;
                     if (kt === 'AW') ambilWajibTotal += (t.keluar || t.masuk);
@@ -1666,7 +1984,7 @@
             document.getElementById('rep-box-pinjaman').innerText = formatRupiah(fin.pinjamanBersih);
             document.getElementById('rep-box-kasbon').innerText = formatRupiah(fin.kasbonBersih);
 
-            // 1. DAFTAR PINJAMAN MURNI BERDASARKAN KODE TRANSAKSI "PJ" (TANPA GANDA DARI SHEET PINJAMAN)
+            // 1. DAFTAR PINJAMAN MURNI BERDASARKAN KODE TRANSAKSI "PJ"
             let loansMap = {};
 
             memTrx.forEach(t => {
@@ -1856,11 +2174,12 @@
             'bank-accounts': ['Rekening Admin Koperasi', 'Informasi rekening resmi transfer pembayaran simpanan wajib dan angsuran.'],
             'loan-submission': ['Pengajuan Pinjaman (WA)', 'Formulir pengajuan pinjaman online instan terhubung ke WhatsApp Bendahara.'],
             'reports': ['Rekap Saldo & Laporan', 'Analisis keuangan mendalam, saldo global, rekening, dan cash.'],
+            'ad-art': ['AD & ART Koperasi Jamaya', 'Anggaran Dasar & Anggaran Rumah Tangga Koperasi Jamaya (PT. Jamaya Plastik Industri Perkasa).'],
             'admin-reminder': ['WA Reminder Wajib', 'Daftar anggota yang memiliki kekurangan simpanan wajib dan tombol pengiriman WA instan.']
         };
 
         function switchTab(tabId) {
-            const tabs = ['dashboard', 'members', 'transactions', 'loans', 'member-report', 'bank-accounts', 'loan-submission', 'reports', 'admin-reminder'];
+            const tabs = ['dashboard', 'members', 'transactions', 'loans', 'member-report', 'bank-accounts', 'loan-submission', 'reports', 'ad-art', 'admin-reminder'];
             tabs.forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 if (view) {
